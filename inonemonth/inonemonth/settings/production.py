@@ -50,14 +50,23 @@ EMAIL_USE_TLS = True
 SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
-########## DATABASE CONFIGURATION
+########## HEROKU CONFIGURATION
 DATABASES['default'] =  dj_database_url.config()
-########## END DATABASE CONFIGURATION
 
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+########## END HEROKU CONFIGURATION
 
 ########## CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {}
+CACHES = {
+          'default': {
+                      'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                     }
+         }
 ########## END CACHE CONFIGURATION
 
 
@@ -66,8 +75,31 @@ CACHES = {}
 SECRET_KEY = get_env_setting('SECRET_KEY')
 ########## END SECRET CONFIGURATION
 
+
+########## STATIC FILES CONFIGURATION
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+AWS_STORAGE_BUCKET_NAME = 'inonemonth'
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/{0}/'.format(AWS_STORAGE_BUCKET_NAME)
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+AWS_ACCESS_KEY_ID = get_env_setting('AWS_ACCESS_KEY_ID')
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+AWS_SECRET_ACCESS_KEY = get_env_setting('AWS_SECRET_ACCESS_KEY')
+
+# See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
+STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+########## END STATIC FILES CONFIGURATION
+
+
 ########## INSTALLED APPS
 INSTALLED_APPS += (
     'gunicorn',
+    'storages',
 )
 ########## END INSTALLED APPS

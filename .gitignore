@@ -2,3 +2,4 @@
 *.swp
 *.swo
 coverage.xml
+heroku_env.txt

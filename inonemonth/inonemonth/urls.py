@@ -18,3 +18,19 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
+########### Sandbox mini view start ################
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def sandbox_mini(request):
+    raise Error
+    html = 'Heeey!'
+    return HttpResponse(content=html)
+    #return render(request=request, template_name='my_template.html',
+    #  dictionary={"message": "Heeeey!"})
+
+urlpatterns += patterns('',
+    url(regex=r'sbm/$', view=sandbox_mini, name="sandbox_mini"),
+)
+########### Sandbox mini view end ################

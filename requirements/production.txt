@@ -1,5 +1,9 @@
-# Pro-tip: Try not to put anything here. There should be no dependency in
-#	production that isn't in development.
+# Pro-tip: Try to put as little as possible here. There should be as few as possible dependencies in
+#	production that aren't in development.
 -r base.txt
 
-gunicorn==0.17.4
+gunicorn==18.0
+dj-database-url==0.2.2
+dj-static==0.0.5
+django-storages==1.1.8
+boto==2.19.0

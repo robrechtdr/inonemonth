@@ -103,3 +103,15 @@ INSTALLED_APPS += (
     'storages',
 )
 ########## END INSTALLED APPS
+
+########## SECURE COOKIES CONFIGURATION
+# Not in local because Django dev server doesn't readily support https:
+# http://stackoverflow.com/questions/7610394/
+# how-to-setup-ssl-on-a-local-django-server-to-test-a-facebook-app
+
+# See: https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
+SESSION_COOKIE_SECURE = True
+
+# See: https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
+CSRF_COOKIE_SECURE = True
+########## END SECURE COOKIES CONFIGURATION

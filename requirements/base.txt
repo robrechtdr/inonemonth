@@ -5,3 +5,4 @@ logutils==0.3.3
 psycopg2==2.5.1
 South==0.8.1
 Fabric==1.8.0
+django-sslify==0.2

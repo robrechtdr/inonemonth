@@ -196,11 +196,15 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
+    'userena',
+    'guardian',
+    'easy_thumbnails',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'core',
+    'accounts',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -245,3 +249,62 @@ LOGGING = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
 ########## END WSGI CONFIGURATION
+
+
+########## EMAIL CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-user
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'your_email@example.com')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_PORT = environ.get('EMAIL_PORT', 587)
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
+EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-use-tls
+EMAIL_USE_TLS = True
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = EMAIL_HOST_USER
+########## END EMAIL CONFIGURATION
+
+
+########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+#      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
+AUTHENTION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+########## END USERENA AUTHENTICATION BACKENDS CONFIGURATION
+
+
+########## GUARDIAN CONFIGURATION
+# See: http://django-guardian.readthedocs.org/en/latest/configuration.html
+ANONYMOUS_USER_ID = -1
+########## END GUARDIAN CONFIGURATION
+
+
+########## USERENA AUTH PROFILE CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+
+#AUTH_PROFILE_MODULE = MyProfile
+########## END USERENA AUTH PROFILE CONFIGURATION
+
+
+########## USERENA LOGIN LOGOUT CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+#LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
+#LOGIN_URL = '/accounts/signin/'
+#LOGOUT_URL = '/accounts/signout/'
+########## USERENA LOGIN LOGOUT CONFIGURATION

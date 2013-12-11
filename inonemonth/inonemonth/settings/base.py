@@ -48,8 +48,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'inonemonth',
-        'USER': 'my_username',
-        'PASSWORD': 'my_password',
+        'USER': environ.get('DBUSER', "my_username"),
+        'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
         'HOST': '',
         'PORT': '',
     }

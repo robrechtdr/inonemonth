@@ -6,4 +6,5 @@ psycopg2==2.5.1
 South==0.8.1
 Fabric==1.8.0
 django-userena==1.2.4
+django-authtools=0.2.1
 django-sslify==0.2

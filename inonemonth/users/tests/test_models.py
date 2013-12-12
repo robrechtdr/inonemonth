@@ -1,16 +1,11 @@
 import unittest
 import django.test
-from django.contrib.auth import get_user_model
 
 import core.tests.setups as tests_setups
 
-#from userena.tests.profiles.test import ProfileTestCase
-#from userena.models import UserenaSignup
+from django.contrib.auth import get_user_model
+from django.db.models.fields import FieldDoesNotExist
 
-#from apps.profiles.models import InvestorProfile, InvestorEntity
-#from apps.startups.models import Company
-
-#from ..models import Investment
 
 class InonemonthUserTestCase(unittest.TestCase):
     """
@@ -28,67 +23,36 @@ class InonemonthUserTestCase(unittest.TestCase):
         """
         Set up.
         """
-        #investor_profile = test_setups.get_investor_profile()
-        #tests_setups.InvestmentFactory(investor_profile=investor_profile)
         pass
 
     def test_first_name_attribute_is_removed(self):
         """
         Verify if the first_name attribute of the customized User is removed.
         """
-        user_field_classes = get_user_model()._meta.local_fields
-        user_fields = [field.name for field in user_field_classes]
-        #self.assertNotIn(hasattr(user_model, "first_name"))
-        self.assertTrue("first_name" not in user_fields)
+        # Alternative: (bit slower)
+        #user_field_classes = get_user_model()._meta.local_fields
+        #user_fields = [field.name for field in user_field_classes]
+        #self.assertTrue("first_name" not in user_fields)
+        self.assertRaises(FieldDoesNotExist, get_user_model()._meta.get_field, "first_name")
 
 
     def test_last_name_attribute_is_removed(self):
         """
         Verify if the last_name attribute of the customized User is removed.
         """
-        user_field_classes = get_user_model()._meta.local_fields
-        user_fields = [field.name for field in user_field_classes]
-        self.assertTrue("last_name" not in user_fields)
+        self.assertRaises(FieldDoesNotExist, get_user_model()._meta.get_field, "last_name")
 
 
-
-
-
-
-'''
-class InvestmentTestCase(TestCase):
-    """
-    Tests for Investment model.
-    """
-    def setUp(self):
+    def test_user_parameters_non_required_for_instantiation(self):
         """
-        Set up.
+        Verify if creating a custom user without passing field values
+        causes an Exception.
         """
-        investor_profile = test_setups.get_investor_profile()
-        tests_setups.InvestmentFactory(investor_profile=investor_profile)
-
-    def test_if_not_both_investor_types_simultaneously_set(self):
-        """
-        Verify if either investor_profile or investor_entity value is set and not both at the same time.
-
-        I will need to make 2 factories for that (use inhertance),
-        one that sets only profiles and one that sets only entities.
-        """
-        pass
-
-    def test_investor_identity_attribute(self):
-        """
-        Verify investory identity attribute.
-        """
-        investment = Investment.objects.get(pk=1)
-        # blablabla
-        pass
-
-    def test_unicode_attribute(self):
-        """
-        Verify unicode attribute.
-
-        Relies on previous tests. If they work this should work.
-        """
-        pass
-'''
+        user_model = get_user_model()
+        raised = False
+        try:
+            # If this causes an error, fail test.
+            user_model.objects.create()
+        except:
+            raised = True
+        self.assertFalse(raised)

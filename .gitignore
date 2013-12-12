@@ -2,6 +2,7 @@
 *.swp
 *.swo
 coverage.xml
+*/htmlcov/*
 heroku_env.txt
 local_env.txt
 .env

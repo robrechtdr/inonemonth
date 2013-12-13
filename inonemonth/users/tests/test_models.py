@@ -9,7 +9,7 @@ from django.db.models.fields import FieldDoesNotExist
 
 class InonemonthUserTestCase(unittest.TestCase):
     """
-    Tests for InonemonthUser model.
+    Test InonemonthUser model.
 
     With Postgresql backend:
     Run with django.test.TestCase: 9.4 secs

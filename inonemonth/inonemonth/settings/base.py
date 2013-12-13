@@ -5,6 +5,7 @@ from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
+#from accounts.models import BaseProfile
 
 ########## PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
@@ -200,14 +201,12 @@ THIRD_PARTY_APPS = (
     'userena',
     'guardian',
     'easy_thumbnails',
-    'authtools',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'core',
     'accounts',
-    'users',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -281,9 +280,6 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 
-AUTH_USER_MODEL = "users.User"
-
-
 ########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
 #      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
@@ -304,13 +300,13 @@ ANONYMOUS_USER_ID = -1
 ########## USERENA AUTH PROFILE CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
 
-#AUTH_PROFILE_MODULE = MyProfile
+AUTH_PROFILE_MODULE = "accounts.BaseProfile"
 ########## END USERENA AUTH PROFILE CONFIGURATION
 
 
 ########## USERENA LOGIN LOGOUT CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-#LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
-#LOGIN_URL = '/accounts/signin/'
-#LOGOUT_URL = '/accounts/signout/'
+LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
 ########## USERENA LOGIN LOGOUT CONFIGURATION

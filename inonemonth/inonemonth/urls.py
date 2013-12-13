@@ -8,7 +8,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='home.html')),
     url(r'^carousel$', TemplateView.as_view(template_name='carousel.html')),
-    url(r'^accounts/$', include('authtools.urls')),
 
     # Examples:
     # url(r'^$', 'inonemonth.views.home', name='home'),

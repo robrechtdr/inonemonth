@@ -5,7 +5,19 @@ from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
-#from accounts.models import BaseProfile
+# Normally you should not import ANYTHING from Django directly
+# into your settings, but ImproperlyConfigured is an exception.
+from django.core.exceptions import ImproperlyConfigured
+
+
+def get_env_setting(setting):
+    """ Get the environment setting or return exception """
+    try:
+        return environ[setting]
+    except KeyError:
+        error_msg = "Set the %s env variable" % setting
+        raise ImproperlyConfigured(error_msg)
+
 
 ########## PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
@@ -267,7 +279,7 @@ EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
 EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'your_email@example.com')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_PORT = environ.get('EMAIL_PORT', 587)
+EMAIL_PORT = 587
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
@@ -301,6 +313,7 @@ ANONYMOUS_USER_ID = -1
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
 
 AUTH_PROFILE_MODULE = "accounts.BaseProfile"
+USERENA_WITHOUT_USERNAMES = True
 ########## END USERENA AUTH PROFILE CONFIGURATION
 
 

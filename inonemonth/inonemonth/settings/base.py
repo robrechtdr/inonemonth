@@ -220,7 +220,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'core',
     'accounts',
-    'challenge',
+    'challenges',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

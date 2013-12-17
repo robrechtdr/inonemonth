@@ -295,7 +295,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
 #      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
-AUTHENTION_BACKENDS = (
+AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',

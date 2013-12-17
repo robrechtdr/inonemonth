@@ -8,6 +8,7 @@ from ..models import BaseProfile
 
 class BaseProfileTestCase(django.test.TestCase):
     """
+    BaseProfile TestCase
 
     This test should run after running profile tests. Otherwise some user tests redundant.
     """

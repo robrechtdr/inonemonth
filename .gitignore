@@ -6,3 +6,5 @@ coverage.xml
 heroku_env.txt
 local_env.txt
 .env
+PREP.rst
+*/media/*

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
-from challenges.views import challenge_create_view
+from challenges.views import challenge_create_view, ChallengeDetailView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('userena.urls')),
 
     url(r'^challenge/create', challenge_create_view, name="challenge_create_view"),
+    url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+
 
     # Examples:
     # url(r'^$', 'inonemonth.views.home', name='home'),

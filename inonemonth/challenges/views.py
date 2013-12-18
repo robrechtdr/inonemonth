@@ -1,7 +1,10 @@
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
-from .forms import ChallengeCreateModelForm
+from django.views.generic import DetailView
 
+from .forms import ChallengeCreateModelForm
+from .models import Challenge
 
 def challenge_create_view(request):
     if request.method == "POST":
@@ -16,9 +19,15 @@ def challenge_create_view(request):
             inst.save()
 
             # post processing
-            return HttpResponseRedirect(reverse_lazy("my_url_name"))
+            return HttpResponseRedirect(reverse_lazy("challenge_detail_view", kwargs={"pk": inst.pk}))
     else:
         form = ChallengeCreateModelForm()
 
-    return render(request=request, template_name='challenge_detail/challenge_create.html',
+    return render(request=request, template_name='challenge/challenge_create.html',
       dictionary={"form": form})
+
+
+class ChallengeDetailView(DetailView):
+    template_name = "challenge/challenge_detail.html"
+    model = Challenge
+    context_object_name = "model"

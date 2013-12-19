@@ -3,12 +3,12 @@ import django.test
 from django.contrib.auth import get_user_model
 
 from core.tests.setups import UserFactory, JimUserFactory
-from ..models import BaseProfile
+from ..models import Profile
 #import core.tests.setups as tests_setups
 
-class BaseProfileTestCase(django.test.TestCase):
+class ProfileTestCase(django.test.TestCase):
     """
-    BaseProfile TestCase
+    Profile TestCase
 
     This test should run after running profile tests. Otherwise some user tests redundant.
     """
@@ -29,7 +29,7 @@ class BaseProfileTestCase(django.test.TestCase):
         user_jim = get_user_model().objects.get(email="jim.klutz@gmail.com")
         try:
             # If this causes an error, fail test.
-            BaseProfile.objects.create(user=user_jim)
+            Profile.objects.create(user=user_jim)
         except:
             raised = True
         self.assertFalse(raised)

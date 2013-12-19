@@ -59,12 +59,22 @@ STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
 ########## END STATIC FILES CONFIGURATION
 
 
+########## MIDDLEWARE CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
+# Prepend ssl middleware
+MIDDLEWARE_CLASSES = (
+    'sslify.middleware.SSLifyMiddleware',
+) + MIDDLEWARE_CLASSES
+########## END MIDDLEWARE CONFIGURATION
+
+
 ########## INSTALLED APPS
 INSTALLED_APPS += (
     'gunicorn',
     'storages',
 )
 ########## END INSTALLED APPS
+
 
 ########## SECURE COOKIES CONFIGURATION
 # Not in local because Django dev server doesn't readily support https:

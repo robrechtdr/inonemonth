@@ -172,7 +172,6 @@ TEMPLATE_DIRS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
     # Default Django middleware.
-    'sslify.middleware.SSLifyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -219,7 +218,7 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'core',
-    'accounts',
+    'profiles',
     'challenges',
 )
 
@@ -314,14 +313,20 @@ ANONYMOUS_USER_ID = -1
 ########## USERENA AUTH PROFILE CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
 
-AUTH_PROFILE_MODULE = "accounts.BaseProfile"
+AUTH_PROFILE_MODULE = "profiles.Profile"
 USERENA_WITHOUT_USERNAMES = True
 ########## END USERENA AUTH PROFILE CONFIGURATION
 
 
 ########## USERENA LOGIN LOGOUT CONFIGURATION
 # See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
-LOGIN_URL = '/accounts/signin/'
-LOGOUT_URL = '/accounts/signout/'
+LOGIN_REDIRECT_URL = '/profile/%(username)s/'
+LOGIN_URL = '/profile/signin/'
+LOGOUT_URL = '/profile/signout/'
 ########## USERENA LOGIN LOGOUT CONFIGURATION
+
+
+########## APP CONFIGURATION
+# challenges
+CHALLENGE_KEY = environ.get('CHALLENGE_KEY', 'my_challenge_key')
+########## END APP CONFIGURATION

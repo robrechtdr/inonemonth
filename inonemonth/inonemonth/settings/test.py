@@ -1,6 +1,16 @@
 from .base import *
 
 
+# For functional tests
+########## DEBUG CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
+#DEBUG = True
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
+#TEMPLATE_DEBUG = DEBUG
+########## END DEBUG CONFIGURATION
+#ALLOWED_HOSTS = ['127.0.0.1']
+
 ########## IN-MEMORY TEST DATABASE CONFIGURATION
 # Time diff for 1 testcase, with PostgreSQL 9.4 secs, SQLite 0.5 secs.
 # However, run tests in local(with PostgreSQL) at least before merging into

@@ -46,6 +46,8 @@ class JamesUserFactory(UserFactory):
 
 class ProfilePseudoFactory(factory.DjangoModelFactory):
     """
+    Creates an inactive Profile.
+
     Profiles can't be created directly via Profiles,
     they need to be called via users.
 

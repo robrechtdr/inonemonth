@@ -3,7 +3,7 @@ import unittest
 
 from profiles.models import Profile
 
-from ..setups import ProfilePseudoFactory, UserFactory
+from ..setups import ProfilePseudoFactory, ProfilePseudoFactory, UserFactory
 from .utils import get_only_fields_defined_in_child_model
 
 

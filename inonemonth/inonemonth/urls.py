@@ -1,19 +1,31 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
-from challenges.views import challenge_create_view, ChallengeDetailView
+from challenges.views import challenge_create_view, challenge_detail_view, ChallengeDetailView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='home.html')),
-    url(r'^carousel$', TemplateView.as_view(template_name='carousel.html')),
-    url(r'^accounts/', include('userena.urls')),
+from userena import views as userena_views
 
-    url(r'^challenge/create', challenge_create_view, name="challenge_create_view"),
+
+urlpatterns = patterns('',
+    url(r'^basic$', TemplateView.as_view(template_name='home.html')),
+    url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home"),
+
+
+    url(r'^vrofile/$',
+       userena_views.ProfileListView.as_view(),
+       name='userena_profile_list'),
+
+    url(r'^profile/', include('userena.urls')),
+
+    url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
     url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    #url(r'^challenge/detail/(?P<pk>\d+)/$', challenge_detail_view, name="challenge_detail_view"),
+    #url(r'^challenge/(?P<username>\w+)/detail/(?P<challenge_id_code>\w+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    #url(r'^challenge/(?P<username>\w+)/create/', challenge_create_view, name="challenge_create_view"),
 
 
     # Examples:

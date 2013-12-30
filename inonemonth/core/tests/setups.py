@@ -68,8 +68,8 @@ class ProfilePseudoFactory(factory.DjangoModelFactory):
 
 class ChallengeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Challenge
-    title = factory.Sequence(lambda n: "This is the title of challenge{0}.".format(n))
-    description = factory.Sequence(lambda n: "This is the description of challenge{0}.".format(n))
+    title = factory.Sequence(lambda n: "This is the title description of challenge{0}.".format(n))
+    body = factory.Sequence(lambda n: "This is the body description of challenge{0}.".format(n))
     lincoln = factory.SubFactory(ProfilePseudoFactory)
 
     @factory.post_generation

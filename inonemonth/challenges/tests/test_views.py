@@ -34,7 +34,7 @@ class ChallengeCreateViewTestCase(django.test.TestCase):
         # Test if redirects to home page (which has login)
         full_url_redirect = response.redirect_chain[0][0]
         relative_url_redirect = urlparse(full_url_redirect).path
-        self.assertEqual(relative_url_redirect, reverse("home"))
+        self.assertEqual(relative_url_redirect, reverse("home_view"))
 
     def test_get_request_logged_in_user_does_not_redirect(self):
         url = reverse("challenge_create_view")
@@ -62,7 +62,7 @@ class ChallengeDetailViewTestCase(django.test.TestCase):
         inactive_user = UserFactory()
         active_user = UserenaSignup.objects.activate_user(inactive_user.userena_signup.activation_key)
         Challenge.objects.create(title="My challenge",
-                                 description="This is my challenge",
+                                 body="This is my challenge",
                                  lincoln=active_user.profile)
         ####################################################################
         url = reverse("challenge_detail_view", kwargs={"pk": 1})

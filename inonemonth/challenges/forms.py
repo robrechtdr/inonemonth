@@ -6,8 +6,8 @@ from pagedown.widgets import PagedownWidget
 from .models import Challenge
 
 class ChallengeCreateModelForm(forms.ModelForm):
-    description = forms.CharField(widget=PagedownWidget(), label="Description")
+    body = forms.CharField(widget=PagedownWidget(), label="Body")
 
     class Meta:
         model = Challenge
-        fields = ("title", "description")
+        fields = ("title", "body")

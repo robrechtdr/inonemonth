@@ -63,7 +63,7 @@ class ChallengeDetailViewTestCase(django.test.TestCase):
         active_user = UserenaSignup.objects.activate_user(inactive_user.userena_signup.activation_key)
         Challenge.objects.create(title="My challenge",
                                  body="This is my challenge",
-                                 lincoln=active_user.profile)
+                                 clencher=active_user.profile)
         ####################################################################
         url = reverse("challenge_detail_view", kwargs={"pk": 1})
         response = self.client.get(url)

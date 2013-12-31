@@ -23,8 +23,8 @@ def challenge_create_view(request):
             # Save data to challenge
             model = form.instance.__class__
             cleaned_dic = form.cleaned_data
-            inst = model.objects.create(lincoln=profile, **cleaned_dic)
-            # If Judge selection here done then also add judges to model here.
+            inst = model.objects.create(clencher=profile, **cleaned_dic)
+            # If Juror selection here done then also add jurors to model here.
             inst.save()
 
             return HttpResponseRedirect(reverse_lazy("challenge_detail_view",

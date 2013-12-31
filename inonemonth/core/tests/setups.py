@@ -70,10 +70,10 @@ class ChallengeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Challenge
     title = factory.Sequence(lambda n: "This is the title description of challenge{0}.".format(n))
     body = factory.Sequence(lambda n: "This is the body description of challenge{0}.".format(n))
-    lincoln = factory.SubFactory(ProfilePseudoFactory)
+    clencher = factory.SubFactory(ProfilePseudoFactory)
 
     @factory.post_generation
-    def judges(self, create, extracted, **kwargs):
+    def jurors(self, create, extracted, **kwargs):
         if not create:
             # Simple build, do nothing.
             return
@@ -81,5 +81,5 @@ class ChallengeFactory(factory.DjangoModelFactory):
         if extracted:
             # A list of groups were passed in, use them
             for judge in extracted:
-                self.judges.add(judge)
-    #judges = factory.SubFactory(ProfileFactory)
+                self.jurors.add(judge)
+    #jurors = factory.SubFactory(ProfileFactory)

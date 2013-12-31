@@ -11,7 +11,7 @@ def get_parent_model_fields_only(model):
                                     verbose_name=_('user'))
 
     > Profile._meta.get_all_field_names()
-    ['challenge_set_judges', 'challenge_set_lincoln', u'id', 'mugshot', 'privacy', 'user']
+    ['challenge_set_jurors', 'challenge_set_clencher', u'id', 'mugshot', 'privacy', 'user']
 
     Compare with
 
@@ -35,7 +35,7 @@ def get_reverse_relational_field_names(model):
     Collect relational field names pointing to model from other models.
 
     > get_reverse_relational_field_names(Profile)
-    ["challenge_set_lincoln", "challenge_set_judges"]
+    ["challenge_set_clencher", "challenge_set_jurors"]
     """
     reverse_field_names = []
     for related_field in model._meta.get_all_related_objects():
@@ -49,7 +49,7 @@ def get_non_reverse_relational_field_names(model):
     Get all non-reverse relation field names.
 
     > Profile._meta.get_all_field_names()
-    ['challenge_set_judges', 'challenge_set_lincoln', u'id', 'mugshot', 'privacy', 'user']
+    ['challenge_set_jurors', 'challenge_set_clencherdjango-admin.py', 'mugshot', 'privacy', 'user']
 
     Compare with
 
@@ -72,7 +72,7 @@ def get_only_fields_defined_in_child_model(model):
                                     verbose_name=_('user'))
 
     > Profile._meta.get_all_field_names()
-    ['challenge_set_judges', 'challenge_set_lincoln', u'id', 'mugshot', 'privacy', 'user']
+    ['challenge_set_jurors', 'challenge_set_clencher', u'id', 'mugshot', 'privacy', 'user']
 
     Compare with
 

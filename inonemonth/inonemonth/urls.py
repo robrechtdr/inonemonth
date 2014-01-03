@@ -5,9 +5,30 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover()
 
+from userena import views as userena_views
+
+from challenges.views import challenge_create_view, challenge_detail_view, ChallengeDetailView
+from core.forms import InonemonthAuthenticationForm
+
+
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='home.html')),
-    url(r'^carousel$', TemplateView.as_view(template_name='carousel.html')),
+    url(r'^basic$', TemplateView.as_view(template_name='home.html')),
+    #url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
+    url(r'^$', userena_views.signin, {"auth_form": InonemonthAuthenticationForm, "template_name":"carousel.html"},
+        name="home_view"),
+
+    url(r'^vrofile/$',
+       userena_views.ProfileListView.as_view(),
+       name='userena_profile_list'),
+
+    url(r'^profile/', include('userena.urls')),
+
+    url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
+    url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    #url(r'^challenge/detail/(?P<pk>\d+)/$', challenge_detail_view, name="challenge_detail_view"),
+    #url(r'^challenge/(?P<username>\w+)/detail/(?P<challenge_id_code>\w+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    #url(r'^challenge/(?P<username>\w+)/create/', challenge_create_view, name="challenge_create_view"),
+
 
     # Examples:
     # url(r'^$', 'inonemonth.views.home', name='home'),
@@ -19,6 +40,16 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
+########## To serve media files in development ##################################
+# See: https://docs.djangoproject.com/en/dev/howto/static-files/#serving-files-uploaded-by-a-user-during-development
+# This snippet only has an effect in debug mode:
+# https://github.com/django/django/blob/master/django/conf/urls/static.py
+from django.conf.urls.static import static
+from django.conf import settings
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+################################################################################
 
 ########### Sandbox mini view start ################
 from django.http import HttpResponse

@@ -1,8 +1,22 @@
 """Common settings and globals."""
 
 
+from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
+
+# Normally you should not import ANYTHING from Django directly
+# into your settings, but ImproperlyConfigured is an exception.
+from django.core.exceptions import ImproperlyConfigured
+
+
+def get_env_setting(setting):
+    """ Get the environment setting or return exception """
+    try:
+        return environ[setting]
+    except KeyError:
+        error_msg = "Set the %s env variable" % setting
+        raise ImproperlyConfigured(error_msg)
 
 
 ########## PATH CONFIGURATION
@@ -47,8 +61,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'inonemonth',
-        'USER': 'my_username',
-        'PASSWORD': 'my_password',
+        'USER': environ.get('DBUSER', "my_username"),
+        'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
         'HOST': '',
         'PORT': '',
     }
@@ -158,7 +172,6 @@ TEMPLATE_DIRS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
     # Default Django middleware.
-    'sslify.middleware.SSLifyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -196,11 +209,17 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
+    'userena',
+    'guardian',
+    'easy_thumbnails',
+    'pagedown',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'core',
+    'profiles',
+    'challenges',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -245,3 +264,69 @@ LOGGING = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
 ########## END WSGI CONFIGURATION
+
+
+########## EMAIL CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-user
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'your_email@example.com')
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_PORT = 587
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
+EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-use-tls
+EMAIL_USE_TLS = True
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = EMAIL_HOST_USER
+########## END EMAIL CONFIGURATION
+
+
+########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+#      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+########## END USERENA AUTHENTICATION BACKENDS CONFIGURATION
+
+
+########## GUARDIAN CONFIGURATION
+# See: http://django-guardian.readthedocs.org/en/latest/configuration.html
+ANONYMOUS_USER_ID = -1
+########## END GUARDIAN CONFIGURATION
+
+
+########## USERENA AUTH PROFILE CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+
+AUTH_PROFILE_MODULE = "profiles.Profile"
+USERENA_WITHOUT_USERNAMES = True
+########## END USERENA AUTH PROFILE CONFIGURATION
+
+
+########## USERENA LOGIN LOGOUT CONFIGURATION
+# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
+LOGIN_REDIRECT_URL = '/profile/%(username)s/'
+LOGIN_URL = '/profile/signin/'
+LOGOUT_URL = '/profile/signout/'
+########## USERENA LOGIN LOGOUT CONFIGURATION
+
+
+########## APP CONFIGURATION
+# challenges
+CHALLENGE_KEY = environ.get('CHALLENGE_KEY', 'my_challenge_key')
+########## END APP CONFIGURATION

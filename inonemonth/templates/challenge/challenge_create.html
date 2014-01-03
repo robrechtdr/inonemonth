@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block prepend_css %}
+  {{ form.media }}
+{% endblock prepend_css %}
+
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+
+    <h1>In One Month</h1>
+
+    <p>Set yourself a challenge to be completed in one month. </p>
+    <p><a class="btn btn-primary btn-lg" role="button">Set a challenge &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+          <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
+        <form action="" method="post"> {% csrf_token %}
+            {{ form }}   
+            <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div><!-- end div.row -->
+
+</div><!-- end div.container -->
+
+
+{% endblock content %}

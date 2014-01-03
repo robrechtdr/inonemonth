@@ -9,6 +9,8 @@
 
     <title>{% block title %}inonemonth{% endblock title %}</title>
 
+    {% block prepend_css %}
+    {% endblock prepend_css %}
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -18,8 +20,8 @@
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
     <!-- Use the following to quickly test CSS changes in a template,
       then move to project.css -->
-    {% block extra_css %}
-    {% endblock extra_css %}
+    {% block append_css %}
+    {% endblock append_css %}
   </head>
 
   <body>
@@ -49,9 +51,25 @@
       </div>
     </div>
 
+    
     <!-- # Page content -->
     {% block content %}
     {% endblock content %}
+
+    <!-- ## Bottom of page -->
+    <div class="container">
+      <hr>
+
+      <footer>
+        <p>&copy; Company 2013</p>
+      </footer>
+      <!--                                                
+      <img title="Test image" src="{{ STATIC_URL }}img/test_img.jpg">
+      -->
+    </div><!-- end div.container -->
+
+
+
 
     <!-- Javascript
     ================================================== -->

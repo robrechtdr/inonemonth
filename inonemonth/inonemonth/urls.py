@@ -1,19 +1,21 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
-from challenges.views import challenge_create_view, challenge_detail_view, ChallengeDetailView
-
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 from userena import views as userena_views
 
+from challenges.views import challenge_create_view, challenge_detail_view, ChallengeDetailView
+from core.forms import InonemonthAuthenticationForm
+
 
 urlpatterns = patterns('',
     url(r'^basic$', TemplateView.as_view(template_name='home.html')),
-    url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home"),
-
+    #url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
+    url(r'^$', userena_views.signin, {"auth_form": InonemonthAuthenticationForm, "template_name":"carousel.html"},
+        name="home_view"),
 
     url(r'^vrofile/$',
        userena_views.ProfileListView.as_view(),

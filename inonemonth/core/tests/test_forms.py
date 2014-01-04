@@ -1,4 +1,14 @@
 from django.test import TestCase
+from ..forms import InonemonthAuthenticationForm
+#from core.forms import InonemonthAuthenticationForm
+
+
+class InonemonthAuthenticationFormTestCase(TestCase):
+    def test_form_has_placeholder_and_css_class(self):
+        form = InonemonthAuthenticationForm()
+        self.assertIn("placeholder", form.as_p())
+        #self.assertIn("placeholder", form.fields["identification"].widget.attrs)
+        self.assertIn("class", form.as_p())
 
 '''
 from ..forms import InvestmentModelForm

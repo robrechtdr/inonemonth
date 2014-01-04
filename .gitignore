@@ -8,3 +8,5 @@ local_env.txt
 .env
 PREP.rst
 */media/*
+.dump/*
+.coverage

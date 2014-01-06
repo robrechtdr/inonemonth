@@ -5,23 +5,13 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover()
 
-from userena import views as userena_views
-
 from challenges.views import challenge_create_view, challenge_detail_view, ChallengeDetailView
-from core.forms import InonemonthAuthenticationForm
 
 
 urlpatterns = patterns('',
+    url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
     url(r'^basic$', TemplateView.as_view(template_name='home.html')),
     #url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
-    url(r'^$', userena_views.signin, {"auth_form": InonemonthAuthenticationForm, "template_name":"carousel.html"},
-        name="home_view"),
-
-    url(r'^vrofile/$',
-       userena_views.ProfileListView.as_view(),
-       name='userena_profile_list'),
-
-    url(r'^profile/', include('userena.urls')),
 
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
     url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),

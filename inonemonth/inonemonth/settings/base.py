@@ -209,16 +209,12 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
-    'userena',
-    'guardian',
-    'easy_thumbnails',
     'pagedown',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'core',
-    'profiles',
     'challenges',
 )
 
@@ -293,40 +289,9 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 
-########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-#      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
+########## AUTHENTICATION BACKENDS CONFIGURATION
+# See: https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-########## END USERENA AUTHENTICATION BACKENDS CONFIGURATION
-
-
-########## GUARDIAN CONFIGURATION
-# See: http://django-guardian.readthedocs.org/en/latest/configuration.html
-ANONYMOUS_USER_ID = -1
-########## END GUARDIAN CONFIGURATION
-
-
-########## USERENA AUTH PROFILE CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-
-AUTH_PROFILE_MODULE = "profiles.Profile"
-USERENA_WITHOUT_USERNAMES = True
-########## END USERENA AUTH PROFILE CONFIGURATION
-
-
-########## USERENA LOGIN LOGOUT CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-LOGIN_REDIRECT_URL = '/profile/%(username)s/'
-LOGIN_URL = '/profile/signin/'
-LOGOUT_URL = '/profile/signout/'
-########## USERENA LOGIN LOGOUT CONFIGURATION
-
-
-########## APP CONFIGURATION
-# challenges
-CHALLENGE_KEY = environ.get('CHALLENGE_KEY', 'my_challenge_key')
-########## END APP CONFIGURATION
+########## END AUTHENTICATION BACKENDS CONFIGURATION

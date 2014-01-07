@@ -47,7 +47,7 @@ TEMPLATE_DEBUG = DEBUG
 ########## MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Robrecht', 'de.rouck.robrecht@gmail.com'),
+('Robrecht', 'de.rouck.robrecht@gmail.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -58,21 +58,21 @@ MANAGERS = ADMINS
 ########## DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'inonemonth',
-        'USER': environ.get('DBUSER', "my_username"),
-        'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
-        'HOST': '',
-        'PORT': '',
-    }
+'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'inonemonth',
+    'USER': environ.get('DBUSER', "my_username"),
+    'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
+    'HOST': '',
+    'PORT': '',
+}
 }
 ########## END DATABASE CONFIGURATION
 
 
 ########## GENERAL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'Europe/London'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = 'en-us'
@@ -109,13 +109,13 @@ STATIC_URL = '/static/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = (
-    normpath(join(SITE_ROOT, 'static')),
+normpath(join(SITE_ROOT, 'static')),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+'django.contrib.staticfiles.finders.FileSystemFinder',
+'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 ########## END STATIC FILE CONFIGURATION
 
@@ -137,7 +137,7 @@ ALLOWED_HOSTS = []
 ########## FIXTURE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
-    normpath(join(SITE_ROOT, 'fixtures')),
+normpath(join(SITE_ROOT, 'fixtures')),
 )
 ########## END FIXTURE CONFIGURATION
 
@@ -145,25 +145,25 @@ FIXTURE_DIRS = (
 ########## TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
+'django.contrib.auth.context_processors.auth',
+'django.core.context_processors.debug',
+'django.core.context_processors.i18n',
+'django.core.context_processors.media',
+'django.core.context_processors.static',
+'django.core.context_processors.tz',
+'django.contrib.messages.context_processors.messages',
+'django.core.context_processors.request',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+'django.template.loaders.filesystem.Loader',
+'django.template.loaders.app_directories.Loader',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
 TEMPLATE_DIRS = (
-    normpath(join(SITE_ROOT, 'templates')),
+normpath(join(SITE_ROOT, 'templates')),
 )
 ########## END TEMPLATE CONFIGURATION
 
@@ -171,13 +171,13 @@ TEMPLATE_DIRS = (
 ########## MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
-    # Default Django middleware.
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# Default Django middleware.
+'django.middleware.common.CommonMiddleware',
+'django.contrib.sessions.middleware.SessionMiddleware',
+'django.middleware.csrf.CsrfViewMiddleware',
+'django.contrib.auth.middleware.AuthenticationMiddleware',
+'django.contrib.messages.middleware.MessageMiddleware',
+'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -190,40 +190,30 @@ ROOT_URLCONF = '%s.urls' % SITE_NAME
 
 ########## APP CONFIGURATION
 DJANGO_APPS = (
-    # Default Django apps:
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+# Default Django apps:
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.sites',
+'django.contrib.messages',
+'django.contrib.staticfiles',
 
-    # Useful template tags:
-    # 'django.contrib.humanize',
+# Useful template tags:
+# 'django.contrib.humanize',
 
-    # Admin panel and documentation:
-    'django.contrib.admin',
-    # 'django.contrib.admindocs',
-)
-
-THIRD_PARTY_APPS = (
-    # Database migration helpers:
-    'south',
-    'userena',
-    'guardian',
-    'easy_thumbnails',
-    'pagedown',
+# Admin panel and documentation:
+'django.contrib.admin',
+# 'django.contrib.admindocs',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'core',
-    'profiles',
-    'challenges',
+'core',
+'challenges',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 ########## END APP CONFIGURATION
 
 
@@ -235,27 +225,27 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
+'version': 1,
+'disable_existing_loggers': False,
+'filters': {
+    'require_debug_false': {
+        '()': 'django.utils.log.RequireDebugFalse'
     }
+},
+'handlers': {
+    'mail_admins': {
+        'level': 'ERROR',
+        'filters': ['require_debug_false'],
+        'class': 'django.utils.log.AdminEmailHandler'
+    }
+},
+'loggers': {
+    'django.request': {
+        'handlers': ['mail_admins'],
+        'level': 'ERROR',
+        'propagate': True,
+    },
+}
 }
 ########## END LOGGING CONFIGURATION
 
@@ -293,40 +283,70 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## END EMAIL CONFIGURATION
 
 
-########## USERENA AUTHENTICATION BACKENDS CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-#      https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
+########## AUTHENTICATION BACKENDS CONFIGURATION
+# See: https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
-    'django.contrib.auth.backends.ModelBackend',
+'django.contrib.auth.backends.ModelBackend',
 )
-########## END USERENA AUTHENTICATION BACKENDS CONFIGURATION
+########## END AUTHENTICATION BACKENDS CONFIGURATION
 
 
-########## GUARDIAN CONFIGURATION
-# See: http://django-guardian.readthedocs.org/en/latest/configuration.html
-ANONYMOUS_USER_ID = -1
-########## END GUARDIAN CONFIGURATION
+########## SOUTH CONFIGURATION
+INSTALLED_APPS += (
+'south',
+)
+########## END SOUTH CONFIGURATION
 
 
-########## USERENA AUTH PROFILE CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-
-AUTH_PROFILE_MODULE = "profiles.Profile"
-USERENA_WITHOUT_USERNAMES = True
-########## END USERENA AUTH PROFILE CONFIGURATION
-
-
-########## USERENA LOGIN LOGOUT CONFIGURATION
-# See: http://docs.django-userena.org/en/latest/installation.html#required-settings
-LOGIN_REDIRECT_URL = '/profile/%(username)s/'
-LOGIN_URL = '/profile/signin/'
-LOGOUT_URL = '/profile/signout/'
-########## USERENA LOGIN LOGOUT CONFIGURATION
+########## PAGEDOWN CONFIGURATION
+INSTALLED_APPS += (
+'pagedown',
+)
+########## END PAGEDOWN CONFIGURATION
 
 
-########## APP CONFIGURATION
-# challenges
-CHALLENGE_KEY = environ.get('CHALLENGE_KEY', 'my_challenge_key')
-########## END APP CONFIGURATION
+########## ALLAUTH CONFIGURATION
+TEMPLATE_CONTEXT_PROCESSORS += (
+    # Required by allauth template tags
+    "django.core.context_processors.request",
+
+    # allauth specific context processors
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
+)
+
+AUTHENTICATION_BACKENDS += (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+INSTALLED_APPS += (
+    # The Django sites framework is required
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.github',
+)
+
+##### Implement email as main user field and remove username
+# See: http://stackoverflow.com/questions/19683179/remove-username-field-from-django-allauth
+# Specifies the login method to use -- whether the
+# user logs in by entering his username, e-mail address, or either one of both.
+ACCOUNT_AUTHENTICATION_METHOD = "email" #("email",)
+
+# Allauth fails if this is not set to true and
+# ACCOUNT_AUTHENTICATION_METHOD is set to "email"
+# See allauth/account/app_settings ln 20.
+ACCOUNT_EMAIL_REQUIRED = True
+
+# To get rid of username field
+ACCOUNT_USERNAME_REQUIRED = False
+##### end
+
+########## end ALLAUTH CONFIGURATION

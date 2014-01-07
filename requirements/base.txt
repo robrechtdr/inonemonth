@@ -5,9 +5,6 @@ logutils==0.3.3
 psycopg2==2.5.1
 South==0.8.1
 Fabric==1.8.0
-#PIL==1.1.7
-Pillow==2.2.1
-django-userena==1.2.4
-#django-authtools=0.2.1
-django-pagedown=0.0.5
+django-pagedown==0.0.5
 django-sslify==0.2
+django-allauth==0.15.0

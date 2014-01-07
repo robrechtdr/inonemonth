@@ -22,3 +22,24 @@ class HomeViewTestCase(django.test.TestCase):
     def test_url_response_contains_html_tag(self):
         response = self.client.get(self.url)
         self.assertIn("<html", response.content)
+
+
+class SignupViewTestCase(django.test.TestCase):
+    def setUp(self):
+        # https://github.com/pennersr/django-allauth/blob/master/allauth/account/tests.py#L37-L56
+        '''
+        from allauth.socialaccount.models import SocialApp
+        social_account = SocialApp.objects.create(name="github_app",
+                                                  provider="github")
+        social_account.add(Site.objects.get_current())
+
+        user = User.objects.create(email='jason@raymond.penners')
+        user.name = user.email.split("@")[0]
+        user.set_password('password')
+        user.save()
+        EmailAddress.objects.create(email=user.email,
+                                    primary=True,
+                                    verified=True)
+
+        '''
+        pass

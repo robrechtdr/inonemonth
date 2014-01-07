@@ -7,3 +7,4 @@ South==0.8.1
 Fabric==1.8.0
 django-pagedown==0.0.5
 django-sslify==0.2
+django-allauth==0.15.0

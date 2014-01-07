@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^basic$', TemplateView.as_view(template_name='home.html')),
     #url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
 
+    url(r'^accounts/', include('allauth.urls')),
+
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
     url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
     #url(r'^challenge/detail/(?P<pk>\d+)/$', challenge_detail_view, name="challenge_detail_view"),

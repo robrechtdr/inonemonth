@@ -47,3 +47,17 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TEMPLATE_CONTEXT': True,
 }
 ########## END TOOLBAR CONFIGURATION
+
+
+########## ALLAUTH CONFIGURATION
+# See: http://django-allauth.readthedocs.org/en/latest/#github
+ALLAUTH_SOCIAL_APP_GITHUB_ID = "9a99010075a295b4855a"
+########## END ALLAUTH CONFIGURATION
+
+
+########## LETTUCE CONFIGURATION
+# See: http://lettuce.it/recipes/django-lxml.html#lettuce-install-the-lettuce-django-app
+INSTALLED_APPS += (
+    'lettuce.django',
+)
+########## END LETTUCE CONFIGURATION

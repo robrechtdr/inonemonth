@@ -3,3 +3,5 @@
 coverage==3.6
 #django-discover-runner==1.0
 factory-boy==2.2.1
+lettuce==0.2.19
+splinter==0.5.4

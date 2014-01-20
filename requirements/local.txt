@@ -5,3 +5,5 @@ coverage==3.6
 django-debug-toolbar==0.9.4
 Sphinx==1.2b1
 factory-boy==2.2.1
+lettuce==0.2.19
+splinter==0.5.4

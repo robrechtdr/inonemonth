@@ -58,14 +58,14 @@ MANAGERS = ADMINS
 ########## DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'inonemonth',
-    'USER': environ.get('DBUSER', "my_username"),
-    'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
-    'HOST': '',
-    'PORT': '',
-}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'inonemonth',
+        'USER': environ.get('DBUSER', "my_username"),
+        'PASSWORD': environ.get('DBPASSWORD', 'my_password'),
+        'HOST': '',
+        'PORT': '',
+    }
 }
 ########## END DATABASE CONFIGURATION
 
@@ -78,7 +78,8 @@ TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-us'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
-SITE_ID = 1
+# To avoid deleting the example.com entry for each db setup
+SITE_ID = 2
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
@@ -261,7 +262,7 @@ WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST = 'smtp.gmail.com'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
 EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
@@ -303,6 +304,14 @@ INSTALLED_APPS += (
 'pagedown',
 )
 ########## END PAGEDOWN CONFIGURATION
+
+
+########## MARKDOWN-DEUX CONFIGURATION
+# https://github.com/trentm/django-markdown-deux#django-project-setup
+INSTALLED_APPS += (
+'markdown_deux',
+)
+########## END MARKDOWN-DEUX CONFIGURATION
 
 
 ########## ALLAUTH CONFIGURATION
@@ -349,4 +358,17 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ##### end
 
+# http://django-allauth.readthedocs.org/en/latest/#github
+ALLAUTH_SOCIAL_APP_GITHUB_SECRET = get_env_setting('ALLAUTH_SOCIAL_APP_GITHUB_SECRET')
+
+# http://django-allauth.readthedocs.org/en/latest/#configuration
+#ACCOUNT_EMAIL_VERIFICATION = "none"
+#SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_URL = "/challenge/create/"
+LOGIN_REDIRECT_URL = LOGIN_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL
+
+# Doesn't seem to work for Github:
+# https://github.com/pennersr/django-allauth/issues/369
+#SOCIALACCOUNT_QUERY_EMAIL = True
 ########## end ALLAUTH CONFIGURATION

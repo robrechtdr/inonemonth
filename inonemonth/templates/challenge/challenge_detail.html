@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load markdown_deux_tags %}
 
 {% block content %}
 <div class="container">
@@ -6,7 +7,7 @@
       <div class="col-md-6">
           <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
           <p>{{ model.title }}</p>
-          <p>{{ model.body }}</p>
+          <p>{{ model.body|markdown }}</p>
       </div>
     </div><!-- end div.row -->
 

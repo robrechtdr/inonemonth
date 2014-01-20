@@ -6,7 +6,8 @@ coverage.xml
 heroku_env.txt
 local_env.txt
 .env
-PREP.rst
 */media/*
 .dump/*
 .coverage
+git_hidden/*
+inonemonth/core/initial_data.json

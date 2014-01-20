@@ -68,18 +68,6 @@ MIDDLEWARE_CLASSES = (
 ########## END MIDDLEWARE CONFIGURATION
 
 
-########## INSTALLED APPS
-# Apps specific for this project go here.
-THIRD_PARTY_APPS += (
-    'gunicorn',
-    'storages',
-)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-########## END INSTALLED APPS
-
-
 ########## SECURE COOKIES CONFIGURATION
 # Not in local because Django dev server doesn't readily support https:
 # http://stackoverflow.com/questions/7610394/
@@ -91,3 +79,25 @@ SESSION_COOKIE_SECURE = True
 # See: https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 CSRF_COOKIE_SECURE = True
 ########## END SECURE COOKIES CONFIGURATION
+
+
+########## GUNICORN CONFIGURATION
+# See:
+INSTALLED_APPS += (
+    'gunicorn',
+)
+########## END GUNICORN CONFIGURATION
+
+
+########## STORAGES CONFIGURATION
+# See:
+INSTALLED_APPS += (
+    'storages',
+)
+########## END STORAGES CONFIGURATION
+
+
+########## ALLAUTH CONFIGURATION
+# See: http://django-allauth.readthedocs.org/en/latest/#github
+ALLAUTH_SOCIAL_APP_GITHUB_ID = "d6bafec00ae074c0e5d8"
+########## END ALLAUTH CONFIGURATION

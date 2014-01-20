@@ -1,5 +1,7 @@
 from .base import *
 
+# Instead of duplicating data from local, just import one by one
+from .local import ALLAUTH_SOCIAL_APP_GITHUB_ID
 
 # For functional tests
 ########## DEBUG CONFIGURATION
@@ -24,4 +26,20 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/home/robrecht/src/my_projects/inonemonth/inonemonth/test.db',
+    }
+}
+'''
 ########## END IN-MEMORY TEST DATABASE CONFIGURATION
+
+
+########## LETTUCE CONFIGURATION
+# See: http://lettuce.it/recipes/django-lxml.html#lettuce-install-the-lettuce-django-app
+INSTALLED_APPS += (
+    'lettuce.django',
+)
+########## END LETTUCE CONFIGURATION

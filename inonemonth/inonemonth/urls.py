@@ -48,13 +48,18 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 def sandbox_mini(request):
-    raise Error
+    from allauth.socialaccount.models import SocialLogin, SocialAccount
+    from django.contrib.auth import get_user_model
+
+
+
     html = 'Heeey!'
+    import pdb; pdb.set_trace()
     return HttpResponse(content=html)
     #return render(request=request, template_name='my_template.html',
     #  dictionary={"message": "Heeeey!"})
 
 urlpatterns += patterns('',
-    url(regex=r'sbm/$', view=sandbox_mini, name="sandbox_mini"),
+    url(regex=r'sbvm/$', view=sandbox_mini, name="sandbox_mini"),
 )
 ########### Sandbox mini view end ################

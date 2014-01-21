@@ -11,3 +11,7 @@ class ChallengeCreateModelForm(forms.ModelForm):
     class Meta:
         model = Challenge
         fields = ("title", "body")
+
+
+class JurorInviteForm(forms.Form):
+    email = forms.EmailField()

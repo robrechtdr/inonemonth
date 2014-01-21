@@ -36,10 +36,6 @@ def get_github_commit_comparison_url(github_account_name, repo_name, start_commi
                                                                  start_commit,
                                                                  end_commit)
 
-
-
-
-
 '''
 1. On challenge/create/ call get_branch_last_commit and save this to Branch.start_commit.
 (in Challenge: branch = OneToOneField(Branch)).
@@ -47,7 +43,6 @@ def get_github_commit_comparison_url(github_account_name, repo_name, start_commi
  call get_branch_last_commit again and save to Branch.end_commit.
 3. Use get_github_comparison_url in challenge/detail/1/ view to generate comparison url to see current state of challenge.
 '''
-
 
 if __name__ == "__main__":
     import doctest

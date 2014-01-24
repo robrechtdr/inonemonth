@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Challenge(models.Model):
@@ -11,50 +12,59 @@ class Challenge(models.Model):
     repo_name = models.CharField(max_length=200)
     creation_datetime = models.DateTimeField(auto_now_add=True)
 
+    # Don"t include self.role_set.user because the user will not exist
+    # in some cases.
     def __unicode__(self):
-        return "Challenge created on {0} by {1}".format(
-            self.creation_datetime.ctime(),
-            self.clencher.user
+        return "Challenge {0}, created on {1}".format(
+            self.id,
+            self.creation_datetime.ctime()
         )
-        #return "In one month {0}".format(self.title)
 
-    def get_user_role(self, user):
-        if user == self.clencher.user:
-            return self.clencher
-        elif user in self.juror_set.all():
-            return self.juror_set.get(user=user)
+    def get_clencher(self):
+        try:
+            return self.role_set.get(type=self.role_set.model.CLENCHER)
+        except ObjectDoesNotExist:
+            raise Exception("No user has been assigned as clencher "
+                                  "for this challenge yet.")
+
+    def get_jurors(self):
+        # `filter` call with no results returns an empty list (vs `get`)
+        jurors = self.role_set.filter(type=self.role_set.model.JUROR)
+        if jurors:
+            return jurors
         else:
-            raise Exception("User '{0}' does not have a role for "
-                            "this challenge".format(user.__unicode__()))
+            return self.Exception("No Juror has been assigned as juror "
+                                     "for this challenge yet.")
 
 
-class ChallengeRole(models.Model):
+class Role(models.Model):
     """
-    Abstract class ChallengeRole
-
-    A role instance for a given challenge is attached to one user at maximum and a user
-    can have many instances of a role of different challenges.
+    Role for a given challenge: Clencher or Juror.
+    A role instance for a given challenge is attached to one user at maximum.
     """
-    user = models.ForeignKey(get_user_model()) # Is get_user_model correct here or other name with allauth?
+    CLENCHER = "clencher" # is more descriptive than a single capital in js
+    JUROR = "juror"
+    ROLE_CHOICES = ((CLENCHER, CLENCHER.capitalize()),
+                    (JUROR, JUROR.capitalize()))
 
-    class Meta:
-        abstract = True
-
-
-class Clencher(ChallengeRole):
-    """
-    """
-    challenge = models.OneToOneField(Challenge)
-
-    def __unicode__(self):
-        return "Clencher {0} of {1}".format(self.user, self.challenge)
-
-
-class Juror(ChallengeRole):
-    """
-    """
+    user = models.ForeignKey(get_user_model())
+    type = models.CharField(max_length=10, choices=ROLE_CHOICES)
     challenge = models.ForeignKey(Challenge)
-    positive_vote = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
-        return "Juror {0} in {1}".format(self.user, self.challenge)
+        return "{0} '{1}' of '{2}'".format(self.type.capitalize(), self.user, self.challenge)
+
+
+class JurorVote(models.Model):
+    """
+    Vote if challenge is deemed successful or not by a juror for a given challenge.
+    """
+    POSITIVE = "positive"
+    NEGATIVE = "negative"
+    DECISION_CHOICES = ((POSITIVE, POSITIVE), (NEGATIVE, NEGATIVE))
+
+    decision = models.CharField(max_length=10, choices=DECISION_CHOICES, default="")
+    juror = models.OneToOneField(Role) # only use for jurors!
+
+    def __unicode__(self):
+        return "{0} vote of {1}".format(self.decision, self.juror)

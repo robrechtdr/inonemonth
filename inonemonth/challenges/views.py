@@ -8,7 +8,7 @@ from django.forms.formsets import formset_factory
 
 from core.allauth_utils import create_allauth_user
 from .forms import ChallengeCreateModelForm, JurorInviteForm
-from .models import Challenge, Clencher, Juror
+from .models import Challenge, Role
 #!! from .decorators import user_has_profile
 
 
@@ -46,13 +46,16 @@ def invite_jurors_view(request, **kwargs):
     if request.method == "POST":
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():
-            Clencher.objects.create(user=request.user, challenge=challenge)
+            clencher = Role.objects.create(user=request.user,
+                                           challenge=challenge,
+                                           type=Role.CLENCHER)
 
             for form in formset:
                 user = create_allauth_user(email=form.cleaned_data["email"])
                 # Here, Send invitation email to user to challenge (probably need to
                 # deactivate mailing email confirmation)
-                Juror.objects.create(user=user, challenge=challenge)
+                juror = Role.objects.create(user=user, challenge=challenge,
+                                            type=Role.JUROR)
 
             """
             model = form.instance.__class__
@@ -95,27 +98,3 @@ class detail_view(request, challenge_id_code):
     return render(request=request, template_name='challenge/challenge_detail.html',
       dictionary={"model": })
 '''
-
-from django.http import HttpResponse
-from django.core import serializers
-import json
-def send_role_json_view(request, **kwargs):
-    # Too much logic inside view, should be handled in utility or smthn
-    challenge = Challenge.objects.get(pk=kwargs["pk"])
-    user_role = challenge.get_user_role(request.user)
-
-    serialized_challenge = serializers.serialize("json", [challenge,])
-    serialized_user_role = serializers.serialize("json", [user_role,])
-
-    result = {"challenge": json.loads(serialized_challenge)[0],
-              "user_role": json.loads(serialized_user_role)[0]}
-    return HttpResponse(json.dumps(result),
-                        content_type='application/json')
-
-def get_challenge_ajax_view(request, **kwargs):
-    challenge = Challenge.objects.get(pk=kwargs["pk"])
-    serialized_challenge = serializers.serialize("json", [challenge,])
-    return HttpResponse(serialized_challenge,
-                        content_type='application/json')
-
-

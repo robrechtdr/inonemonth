@@ -46,40 +46,7 @@
                 }
             });
         };
-        someFunc(); 
-
-
-        /*
-        function someFunc() {
-            var relativeUrl = window.location.pathname;
-            // This should be tested
-            var pk = relativeUrl.match("[0-9]+");
-            // For /challenge/8/detail/
-
-            $.ajax({
-                url: "/challenge/" + pk + "/ajax/get-challenge/",
-                type: "POST", 
-                data: {},
-                success: function(data){
-                    debugger;
-                    data
-                },
-                // Delete for production
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(xhr.responseText);
-                    alert(thrownError);
-                }
-            });
-        };
-        someFunc();
-        */
-
-
-
-
-
-        //$('.form-container').formset();
+        //someFunc(); 
     })
 </script>
 {% endblock extra_js %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 class Challenge(models.Model):
     """
     """
@@ -13,8 +14,19 @@ class Challenge(models.Model):
     def __unicode__(self):
         return "Challenge created on {0} by {1}".format(
             self.creation_datetime.ctime(),
-            self.clencher.user)
+            self.clencher.user
+        )
         #return "In one month {0}".format(self.title)
+
+    def get_user_role(self, user):
+        if user == self.clencher.user:
+            return self.clencher
+        elif user in self.juror_set.all():
+            return self.juror_set.get(user=user)
+        else:
+            raise Exception("User '{0}' does not have a role for "
+                            "this challenge".format(user.__unicode__()))
+
 
 class ChallengeRole(models.Model):
     """
@@ -46,4 +58,3 @@ class Juror(ChallengeRole):
 
     def __unicode__(self):
         return "Juror {0} in {1}".format(self.user, self.challenge)
-

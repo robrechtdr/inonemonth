@@ -8,7 +8,7 @@ from django.forms.formsets import formset_factory
 
 from core.allauth_utils import create_allauth_user
 from .forms import ChallengeCreateModelForm, JurorInviteForm
-from .models import Challenge
+from .models import Challenge, Clencher, Juror
 #!! from .decorators import user_has_profile
 
 
@@ -46,12 +46,13 @@ def invite_jurors_view(request, **kwargs):
     if request.method == "POST":
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():
-            # pre processing
+            Clencher.objects.create(user=request.user, challenge=challenge)
 
             for form in formset:
                 user = create_allauth_user(email=form.cleaned_data["email"])
                 # Here, Send invitation email to user to challenge (probably need to
                 # deactivate mailing email confirmation)
+                Juror.objects.create(user=user, challenge=challenge)
 
             """
             model = form.instance.__class__
@@ -59,8 +60,6 @@ def invite_jurors_view(request, **kwargs):
             inst = model.objects.create(**cleaned_dic)
             inst.save()
             """
-
-            # post processing
             return HttpResponseRedirect(reverse_lazy("challenge_detail_view",
                                         kwargs={"pk": challenge.pk}))
     else:
@@ -75,6 +74,14 @@ class ChallengeDetailView(DetailView):
     model = Challenge
     context_object_name = "model"
 
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs) #or MyView instd of self.__class__
+        # Get user role
+        #challenge = Challenge.objects.get(pk=self.kwargs["pk"])
+        #user_role = challenge.get_user_role(self.request.user)
+
+        return context
+
 
 class challenge_detail_view():
     pass
@@ -88,3 +95,27 @@ class detail_view(request, challenge_id_code):
     return render(request=request, template_name='challenge/challenge_detail.html',
       dictionary={"model": })
 '''
+
+from django.http import HttpResponse
+from django.core import serializers
+import json
+def send_role_json_view(request, **kwargs):
+    # Too much logic inside view, should be handled in utility or smthn
+    challenge = Challenge.objects.get(pk=kwargs["pk"])
+    user_role = challenge.get_user_role(request.user)
+
+    serialized_challenge = serializers.serialize("json", [challenge,])
+    serialized_user_role = serializers.serialize("json", [user_role,])
+
+    result = {"challenge": json.loads(serialized_challenge)[0],
+              "user_role": json.loads(serialized_user_role)[0]}
+    return HttpResponse(json.dumps(result),
+                        content_type='application/json')
+
+def get_challenge_ajax_view(request, **kwargs):
+    challenge = Challenge.objects.get(pk=kwargs["pk"])
+    serialized_challenge = serializers.serialize("json", [challenge,])
+    return HttpResponse(serialized_challenge,
+                        content_type='application/json')
+
+

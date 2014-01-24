@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% load markdown_deux_tags %}
 
 {% block content %}
@@ -14,3 +15,71 @@
 </div><!-- end div.container -->
 
 {% endblock content %}
+
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/jquery-django-csrf-ajax.js' %}"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function() {
+
+        function someFunc() {
+
+            var relativeUrl = window.location.pathname;
+            // This should be tested
+            var challengePk = relativeUrl.match("[0-9]+");
+            // For /challenge/8/detail/
+            // 8
+
+            $.ajax({
+                url: "/challenge/" + challengePk + "/ajax/send-role/",
+                type: "POST", 
+                data: {},
+                success: function(data){
+                    debugger;
+                    data
+                },
+                // Delete for production
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                }
+            });
+        };
+        someFunc(); 
+
+
+        /*
+        function someFunc() {
+            var relativeUrl = window.location.pathname;
+            // This should be tested
+            var pk = relativeUrl.match("[0-9]+");
+            // For /challenge/8/detail/
+
+            $.ajax({
+                url: "/challenge/" + pk + "/ajax/get-challenge/",
+                type: "POST", 
+                data: {},
+                success: function(data){
+                    debugger;
+                    data
+                },
+                // Delete for production
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                }
+            });
+        };
+        someFunc();
+        */
+
+
+
+
+
+        //$('.form-container').formset();
+    })
+</script>
+{% endblock extra_js %}

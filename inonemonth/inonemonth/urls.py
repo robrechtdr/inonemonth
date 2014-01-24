@@ -6,7 +6,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 from challenges.views import (challenge_create_view, invite_jurors_view,
-    challenge_detail_view, ChallengeDetailView)
+    challenge_detail_view, ChallengeDetailView, send_role_json_view,
+    get_challenge_ajax_view) #, get_user_ajax_view
 
 
 urlpatterns = patterns('',
@@ -17,8 +18,15 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
 
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
-    url(r'^challenge/invite-jurors/(?P<pk>\d+)/$', invite_jurors_view, name="challenge_invite_jurors_view"),
-    url(r'^challenge/detail/(?P<pk>\d+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
+    url(r'^challenge/(?P<pk>\d+)/detail/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
+    url(r'^challenge/(?P<pk>\d+)/ajax/send-role/$', send_role_json_view, name="send_role_json_view"),
+
+    #url(r'^challenge/(?P<pk>\d+)/ajax/get-challenge/$', get_challenge_ajax_view, name="get_challenge_ajax_view"),
+
+    #url(r'^challenge/(?P<pk>\d+)/ajax/get-user-role/$', get_user_ajax_view, name="get_challenge_user_view"),
+
+
     #url(r'^challenge/detail/(?P<pk>\d+)/$', challenge_detail_view, name="challenge_detail_view"),
     #url(r'^challenge/(?P<username>\w+)/detail/(?P<challenge_id_code>\w+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
     #url(r'^challenge/(?P<username>\w+)/create/', challenge_create_view, name="challenge_create_view"),

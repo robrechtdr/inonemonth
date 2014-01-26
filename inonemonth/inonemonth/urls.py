@@ -1,10 +1,9 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
-
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-admin.autodiscover()
+admin.autodiscover() # To enable the admin:
 
+from core.views import UserDetailView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeDetailView)
 
@@ -12,7 +11,6 @@ from challenges.views import (challenge_create_view, invite_jurors_view,
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
     url(r'^basic$', TemplateView.as_view(template_name='home.html')),
-    #url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
 
     url(r'^accounts/', include('allauth.urls')),
 
@@ -20,20 +18,10 @@ urlpatterns = patterns('',
     url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
     url(r'^challenge/(?P<pk>\d+)/detail/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
 
+    url(r'^api/users/(?P<pk>[0-9]+)/$', UserDetailView.as_view(), name="user_detail"),
+    url(r'^api-auth/', include('rest_framework.urls', # Enable browseable api
+                               namespace='rest_framework')),
 
-    #url(r'^challenge/detail/(?P<pk>\d+)/$', challenge_detail_view, name="challenge_detail_view"),
-    #url(r'^challenge/(?P<username>\w+)/detail/(?P<challenge_id_code>\w+)/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
-    #url(r'^challenge/(?P<username>\w+)/create/', challenge_create_view, name="challenge_create_view"),
-
-
-    # Examples:
-    # url(r'^$', 'inonemonth.views.home', name='home'),
-    # url(r'^inonemonth/', include('inonemonth.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 

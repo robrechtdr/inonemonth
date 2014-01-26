@@ -6,5 +6,9 @@ psycopg2==2.5.1
 South==0.8.1
 Fabric==1.8.0
 django-pagedown==0.0.5
+django-markdown-deux==1.0.4 # For rendering data entered in pagedown
 django-sslify==0.2
 django-allauth==0.15.0
+djangorestframework==2.3.12
+django-filter==0.7 # For Restframework filtering support
+Markdown==2.3.1 # for Restframework Markdown support 

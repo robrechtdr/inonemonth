@@ -6,9 +6,12 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 from django.forms.formsets import formset_factory
 
+from rest_framework import generics
+
 from core.allauth_utils import create_allauth_user
 from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role
+from .serializers import ChallengeSerializer, RoleSerializer
 #!! from .decorators import user_has_profile
 
 
@@ -98,3 +101,12 @@ class detail_view(request, challenge_id_code):
     return render(request=request, template_name='challenge/challenge_detail.html',
       dictionary={"model": })
 '''
+
+class ChallengeDetailAPIView(generics.RetrieveAPIView):
+    queryset = Challenge.objects.all()
+    serializer_class = ChallengeSerializer
+
+
+class RoleDetailAPIView(generics.RetrieveAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer

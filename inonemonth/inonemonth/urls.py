@@ -3,9 +3,10 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover() # To enable the admin:
 
-from core.views import UserDetailView
+from core.views import UserDetailAPIView
 from challenges.views import (challenge_create_view, invite_jurors_view,
-                              challenge_detail_view, ChallengeDetailView)
+                              challenge_detail_view, ChallengeDetailView,
+                              ChallengeDetailAPIView, RoleDetailAPIView)
 
 
 urlpatterns = patterns('',
@@ -18,7 +19,9 @@ urlpatterns = patterns('',
     url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
     url(r'^challenge/(?P<pk>\d+)/detail/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
 
-    url(r'^api/users/(?P<pk>[0-9]+)/$', UserDetailView.as_view(), name="user_detail"),
+    url(r'^api/users/(?P<pk>[0-9]+)/$', UserDetailAPIView.as_view(), name="user_api_detail"),
+    url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeDetailAPIView.as_view(), name="challenge_api_detail"),
+    url(r'^api/roles/(?P<pk>[0-9]+)/$', RoleDetailAPIView.as_view(), name="role_api_detail"),
     url(r'^api-auth/', include('rest_framework.urls', # Enable browseable api
                                namespace='rest_framework')),
 

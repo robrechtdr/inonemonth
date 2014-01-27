@@ -3,10 +3,10 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover() # To enable the admin:
 
-from core.views import UserDetailAPIView
+from core.views import UserRetrieveAPIView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeDetailView,
-                              ChallengeDetailAPIView, RoleDetailAPIView)
+                              ChallengeRetrieveAPIView, RoleRetrieveAPIView)
 from comments.views import (CommentListCreateAPIView,
                             CommentRetrieveUpdateDestroyAPIView)
 
@@ -20,9 +20,9 @@ urlpatterns = patterns('',
     url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
     url(r'^challenge/(?P<pk>\d+)/detail/$', ChallengeDetailView.as_view(), name="challenge_detail_view"),
 
-    url(r'^api/users/(?P<pk>[0-9]+)/$', UserDetailAPIView.as_view(), name="user_api_detail"),
-    url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeDetailAPIView.as_view(), name="challenge_api_detail"),
-    url(r'^api/roles/(?P<pk>[0-9]+)/$', RoleDetailAPIView.as_view(), name="role_api_detail"),
+    url(r'^api/users/(?P<pk>[0-9]+)/$', UserRetrieveAPIView.as_view(), name="user_api_retrieve"),
+    url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeRetrieveAPIView.as_view(), name="challenge_api_retrieve"),
+    url(r'^api/roles/(?P<pk>[0-9]+)/$', RoleRetrieveAPIView.as_view(), name="role_api_retrieve"),
     url(r'^api/comments/$', CommentListCreateAPIView.as_view(), name="comment_api_list_create"),
     url(r'^api/comments/(?P<pk>[0-9]+)/$', CommentRetrieveUpdateDestroyAPIView.as_view(), name="comment_api_retrieve_update_destroy"),
     url(r'^api-auth/', include('rest_framework.urls', # Enable browseable api

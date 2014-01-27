@@ -102,11 +102,11 @@ class detail_view(request, challenge_id_code):
       dictionary={"model": })
 '''
 
-class ChallengeDetailAPIView(generics.RetrieveAPIView):
+class ChallengeRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Challenge.objects.all()
     serializer_class = ChallengeSerializer
 
 
-class RoleDetailAPIView(generics.RetrieveAPIView):
+class RoleRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer

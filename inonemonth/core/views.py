@@ -6,6 +6,6 @@ from rest_framework import generics
 User = get_user_model()
 
 
-class UserDetailAPIView(generics.RetrieveAPIView):
+class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

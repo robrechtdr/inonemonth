@@ -18,7 +18,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
-    #role_set = serializers.HyperlinkedRelatedField(view_name="role_api_detail", many=True)
+    #role_set = serializers.HyperlinkedRelatedField(view_name="role_api_retrieve", many=True)
     #role_set = serializers.RelatedField(many=True)
     #role_set = serializers.SlugRelatedField(many=True, slug_field="type")
     role_set = RoleSerializer(many=True)

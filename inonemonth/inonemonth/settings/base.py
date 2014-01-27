@@ -363,8 +363,18 @@ ACCOUNT_USERNAME_REQUIRED = False
 ALLAUTH_SOCIAL_APP_GITHUB_SECRET = get_env_setting('ALLAUTH_SOCIAL_APP_GITHUB_SECRET')
 
 # http://django-allauth.readthedocs.org/en/latest/#configuration
-#ACCOUNT_EMAIL_VERIFICATION = "none"
-#SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# Since a user can only sign up via Github and only jurors
+# will have accounts that are not linked to github, it is
+# not necessary or even sensical to let them verify their
+# accounts. They start their access through the site via
+# an invite email anyway.
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# Otherwise someone could create a challenge with someone
+# else's email address and send this out to employers,
+# potentially placing him/her in an embarressing situation.
+SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory" #"none"
+
 LOGIN_URL = "/challenge/create/"
 LOGIN_REDIRECT_URL = LOGIN_URL
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL

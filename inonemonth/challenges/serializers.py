@@ -8,11 +8,12 @@ from comments.serializers import CommentSerializer
 class RoleSerializer(serializers.ModelSerializer):
     #user = UserSerializer()
     #challenge = serializers.RelatedField()
-    comment_set = CommentSerializer()
+    #comment_set = CommentSerializer()
 
     class Meta:
         model = Role
         fields = ("id", "user", "type", "challenge", "comment_set")
+        depth = 2
 
 
 class ChallengeSerializer(serializers.ModelSerializer):

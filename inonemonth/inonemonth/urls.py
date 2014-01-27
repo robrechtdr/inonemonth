@@ -7,7 +7,8 @@ from core.views import UserDetailAPIView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeDetailView,
                               ChallengeDetailAPIView, RoleDetailAPIView)
-
+from comments.views import (CommentListCreateAPIView,
+                            CommentRetrieveUpdateDestroyAPIView)
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
@@ -22,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^api/users/(?P<pk>[0-9]+)/$', UserDetailAPIView.as_view(), name="user_api_detail"),
     url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeDetailAPIView.as_view(), name="challenge_api_detail"),
     url(r'^api/roles/(?P<pk>[0-9]+)/$', RoleDetailAPIView.as_view(), name="role_api_detail"),
+    url(r'^api/comments/$', CommentListCreateAPIView.as_view(), name="comment_api_list_create"),
+    url(r'^api/comments/(?P<pk>[0-9]+)/$', CommentRetrieveUpdateDestroyAPIView.as_view(), name="comment_api_retrieve_update_destroy"),
     url(r'^api-auth/', include('rest_framework.urls', # Enable browseable api
                                namespace='rest_framework')),
 

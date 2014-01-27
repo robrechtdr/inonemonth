@@ -2,19 +2,17 @@ from rest_framework import serializers
 from .models import Challenge, Role
 
 from core.serializers import UserSerializer
+from comments.serializers import CommentSerializer
 
 
 class RoleSerializer(serializers.ModelSerializer):
-    #user = serializers.RelatedField(many=True)
-    #user = serializers.PrimaryKeyRelatedField()
-    #user = serializers.HyperlinkedRelatedField()
-    user = UserSerializer()
-    #challenge = ChallengeSerializer()
-    challenge = serializers.RelatedField()
+    #user = UserSerializer()
+    #challenge = serializers.RelatedField()
+    comment_set = CommentSerializer()
 
     class Meta:
         model = Role
-        fields = ("id", "user", "type", "challenge")
+        fields = ("id", "user", "type", "challenge", "comment_set")
 
 
 class ChallengeSerializer(serializers.ModelSerializer):

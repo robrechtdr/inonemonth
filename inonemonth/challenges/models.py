@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse, reverse_lazy
 
 
 class Challenge(models.Model):
@@ -19,6 +20,9 @@ class Challenge(models.Model):
             self.id,
             self.creation_datetime.ctime()
         )
+
+    def get_absolute_url(self):
+        return reverse("challenge_api_retrieve", kwargs={"pk": self.pk})
 
     def get_clencher(self):
         try:
@@ -54,8 +58,32 @@ class Role(models.Model):
     def __unicode__(self):
         return "{0} '{1}' of '{2}'".format(self.type.capitalize(), self.user, self.challenge)
 
+    def get_absolute_url(self):
+        return reverse("role_api_retrieve", kwargs={"pk": self.pk})
 
-class JurorVote(models.Model):
+    # Possibly refine later, to only allow jurors to vote during
+    # the judgement period.
+    def can_vote(self):
+        if self.type == self.JUROR:
+            return True
+        elif self.type == self.CLENCHER:
+            return False
+
+    def can_make_head_comment(self):
+        """
+        Only allow jurors that haven't made a head comment yet to make a head
+        comment.
+        """
+        if self.type == self.JUROR:
+            for comment in self.comment_set.all():
+                if comment.type == "head":
+                    return False
+            return True
+        else:
+            return False
+
+
+class Vote(models.Model):
     """
     Vote if challenge is deemed successful or not by a juror for a given challenge.
     """

@@ -26,27 +26,12 @@
         //var userApiUrl =  
 
         var roleApiUrl = "{{ role_api_url }}";
-        
-        // Possible to define in backend and call with api call?
-        // This would be cleaner to keep logic as much as possible 
-        // in the backend.
-        // => Yes, read SerializerMethodField(serializer fields)
-        var roleHasUsedHeadComment = $.get( roleApiUrl, function( data ) {
-           //debugger;
-           //data ;
-           var role = data;
-           var comment_set = role["comment_set"]
-           for (i in comment_set){
-               var comment = comment_set[i];
-               if (comment["type"] == "head"){
-                   return true;
-               }
-               else {
-                   return false;
-               }
-           }
+        var getRole = $.get(roleApiUrl, function(data) {
+            var role = data; 
+            if (role.can_make_head_comment) {
+                //show head comment button
+            }
         });
-
 
         function someFunc2() {
 

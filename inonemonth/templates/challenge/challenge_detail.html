@@ -2,6 +2,10 @@
 {% load staticfiles %}
 {% load markdown_deux_tags %}
 
+{% block prepend_css %}
+  {{ head_comment_form.media }}
+{% endblock prepend_css %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -9,6 +13,33 @@
           <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
           <p>{{ model.title }}</p>
           <p>{{ model.body|markdown }}</p>
+
+          <div class="comments-container">
+              {% for comment in comments %}
+              <div class="comment">
+                {{ comment.text }}
+                {{ comment.type }}
+                {% if comment.type == "head" %}
+                  {{ comment.owner.vote.decision }}
+                {% endif %}
+              </div>
+              {% endfor %}
+
+              <button id="head-comment-button" type="button" class="btn" style="display:none;">
+                Make vote comment
+              </button>
+
+              <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+                {{ head_comment_form }}   
+                <input type="submit" value="Submit" name="head-submit">
+              </form>
+              <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+                {{ tail_comment_form }}   
+                <input type="submit" value="Submit" name="tail-submit">
+              </form>
+
+          </div>
+
       </div>
     </div><!-- end div.row -->
 
@@ -22,46 +53,43 @@
 <script type="text/javascript" charset="utf-8">
     $(function() {
 
+        // This hack is not to be implemented in Pagedown directly.
+        // That would make it impossible to render multiple forms on the 
+        // same page properly.
+        function fixExtraPageDownEditBarsRendering(){
+            var $pagedownEditBars = $('.wmd-button-row');
+            if ($pagedownEditBars.length >= 1) {
+                var $slicedPageDownEditBars = $pagedownEditBars.slice(1);
+                $slicedPageDownEditBars.each(function(index) {
+                    $(this).hide()
+                });
+            }
+        }
+
         // Shouldn't even be necessary:
         //var userApiUrl =  
 
         var roleApiUrl = "{{ role_api_url }}";
-        var getRole = $.get(roleApiUrl, function(data) {
+        var $headCommentButton = $('#head-comment-button');
+        var $headCommentForm = $('#head-comment-form');
+        var $tailCommentForm = $('#tail-comment-form');
+
+        // Show $headCommentButton in case of juror that hasn't made a headcomment yet
+        $.get(roleApiUrl, function(data) {
             var role = data; 
-            if (role.can_make_head_comment) {
-                //show head comment button
+            // remember to remove the !
+            if (!role.can_make_head_comment) {
+                //$headCommentButton.appendTo(".comments-container");
+                $headCommentButton.show();
             }
         });
+        
+        $headCommentButton.click(function() {
+            $headCommentButton.hide();
+            $headCommentForm.show();
 
-        function someFunc2() {
-
-            var relativeUrl = window.location.pathname;
-            // This should be tested
-            var challengePk = relativeUrl.match("[0-9]+");
-            // For /challenge/8/detail/
-            // 8
-
-            $.ajax({
-                url: "/challenge/" + challengePk + "/ajax/send-role/",
-                type: "POST", 
-                data: {},
-                success: function(data){
-                    debugger;
-                    data
-                },
-                // Delete for production
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(xhr.responseText);
-                    alert(thrownError);
-                }
-            });
-        };
-
-
-
-
-
+            fixExtraPageDownEditBarsRendering();
+        });
 
         function someFunc() {
 

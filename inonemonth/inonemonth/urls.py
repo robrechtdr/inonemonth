@@ -5,8 +5,8 @@ admin.autodiscover() # To enable the admin:
 
 from core.views import UserRetrieveAPIView
 from challenges.views import (challenge_create_view, invite_jurors_view,
-                              challenge_detail_view, ChallengeDetailView,
-                              ChallengeRetrieveAPIView, RoleRetrieveAPIView)
+                              challenge_detail_view, ChallengeRetrieveAPIView,
+                              RoleRetrieveAPIView)
 from comments.views import (CommentListCreateAPIView,
                             CommentRetrieveUpdateDestroyAPIView)
 

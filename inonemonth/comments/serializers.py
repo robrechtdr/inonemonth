@@ -3,7 +3,7 @@ from .models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(view_name="user_api_retrieve")
+    owner = serializers.HyperlinkedRelatedField(view_name="role_api_retrieve")
 
     class Meta:
         model = Comment

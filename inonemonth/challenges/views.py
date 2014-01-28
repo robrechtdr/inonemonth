@@ -9,6 +9,8 @@ from django.forms.formsets import formset_factory
 from rest_framework import generics
 
 from core.allauth_utils import create_allauth_user
+from comments.forms import HeadCommentForm, TailCommentForm
+from comments.models import Comment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
@@ -82,8 +84,37 @@ def challenge_detail_view(request, **kwargs):
     challenge = Challenge.objects.get(pk=kwargs["pk"])
     role = request.user.role_set.get(challenge=challenge)
     role_api_url = role.get_absolute_url()
+    if request.method == "POST":
+        head_comment_form = HeadCommentForm(request.POST)
+        tail_comment_form = TailCommentForm(request.POST)
+
+        # http://stackoverflow.com/questions/1395807/proper-way-to-handle-multiple-forms-on-one-page-in-django
+        # http://stackoverflow.com/questions/866272/how-can-i-build-multiple-submit-buttons-django-form
+        if "head-submit" in (head_comment_form.data or tail_comment_form.data):
+            if head_comment_form.is_valid():
+                Comment.objects.create(owner=role, type="head",
+                                       text=head_comment_form.cleaned_data["text"])
+                Vote.objects.create(juror=role,
+                                    decision=head_comment_form.cleaned_data["decision"])
+
+        elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
+            if tail_comment_form.is_valid():
+                Comment.objects.create(owner=role, type="tail",
+                                      text=tail_comment_form.cleaned_data["decision"])
+
+    else:
+        head_comment_form = HeadCommentForm()
+        tail_comment_form = TailCommentForm()
+
+    comments = Comment.objects.all()
     return render(request=request, template_name='challenge/challenge_detail.html',
-                  dictionary={"role_api_url": role_api_url, "model": challenge})
+                  dictionary={"role_api_url": role_api_url,
+                              "model": challenge,
+                              "comments": comments,
+                              "head_comment_form": head_comment_form,
+                              "tail_comment_form": tail_comment_form
+                              }
+    )
 
 
 class ChallengeRetrieveAPIView(generics.RetrieveAPIView):

@@ -10,7 +10,7 @@ from rest_framework import generics
 
 from core.allauth_utils import create_allauth_user
 from .forms import ChallengeCreateModelForm, JurorInviteForm
-from .models import Challenge, Role
+from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 #!! from .decorators import user_has_profile
 
@@ -59,6 +59,9 @@ def invite_jurors_view(request, **kwargs):
                 # deactivate mailing email confirmation)
                 juror = Role.objects.create(user=user, challenge=challenge,
                                             type=Role.JUROR)
+                # Could also be created with celery, at moment juror period
+                # starts
+                vote = Vote.objects.create(juror=juror)
 
             """
             model = form.instance.__class__
@@ -75,32 +78,13 @@ def invite_jurors_view(request, **kwargs):
                   dictionary={"formset": formset, "model": challenge})
 
 
-class ChallengeDetailView(DetailView):
-    template_name = "challenge/challenge_detail.html"
-    model = Challenge
-    context_object_name = "model"
-
-    def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs) #or MyView instd of self.__class__
-        # Get user role
-        #challenge = Challenge.objects.get(pk=self.kwargs["pk"])
-        #user_role = challenge.get_user_role(self.request.user)
-
-        return context
-
-
-class challenge_detail_view():
-    pass
-
-'''
-class detail_view(request, challenge_id_code):
-    model = Challenge
-    inst = model.objects.get()
-    #decode_to_id(challenge_id_code)
-
+def challenge_detail_view(request, **kwargs):
+    challenge = Challenge.objects.get(pk=kwargs["pk"])
+    role = request.user.role_set.get(challenge=challenge)
+    role_api_url = role.get_absolute_url()
     return render(request=request, template_name='challenge/challenge_detail.html',
-      dictionary={"model": })
-'''
+                  dictionary={"role_api_url": role_api_url, "model": challenge})
+
 
 class ChallengeRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Challenge.objects.all()

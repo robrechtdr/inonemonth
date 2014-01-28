@@ -22,6 +22,62 @@
 <script type="text/javascript" charset="utf-8">
     $(function() {
 
+        // Shouldn't even be necessary:
+        //var userApiUrl =  
+
+        var roleApiUrl = "{{ role_api_url }}";
+        
+        // Possible to define in backend and call with api call?
+        // This would be cleaner to keep logic as much as possible 
+        // in the backend.
+        // => Yes, read SerializerMethodField(serializer fields)
+        var roleHasUsedHeadComment = $.get( roleApiUrl, function( data ) {
+           //debugger;
+           //data ;
+           var role = data;
+           var comment_set = role["comment_set"]
+           for (i in comment_set){
+               var comment = comment_set[i];
+               if (comment["type"] == "head"){
+                   return true;
+               }
+               else {
+                   return false;
+               }
+           }
+        });
+
+
+        function someFunc2() {
+
+            var relativeUrl = window.location.pathname;
+            // This should be tested
+            var challengePk = relativeUrl.match("[0-9]+");
+            // For /challenge/8/detail/
+            // 8
+
+            $.ajax({
+                url: "/challenge/" + challengePk + "/ajax/send-role/",
+                type: "POST", 
+                data: {},
+                success: function(data){
+                    debugger;
+                    data
+                },
+                // Delete for production
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(xhr.responseText);
+                    alert(thrownError);
+                }
+            });
+        };
+
+
+
+
+
+
         function someFunc() {
 
             var relativeUrl = window.location.pathname;

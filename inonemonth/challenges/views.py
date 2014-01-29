@@ -100,7 +100,7 @@ def challenge_detail_view(request, **kwargs):
         elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
             if tail_comment_form.is_valid():
                 Comment.objects.create(owner=role, type="tail",
-                                      text=tail_comment_form.cleaned_data["decision"])
+                                      text=tail_comment_form.cleaned_data["text"])
 
     else:
         head_comment_form = HeadCommentForm()

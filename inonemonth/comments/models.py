@@ -10,6 +10,8 @@ class Comment(models.Model):
     text = models.TextField()
     # Only Jurors should be allowed to make a Head comment, check with js
     type = models.CharField(max_length=10, choices=COMMENT_CHOICES)
+    # The comment it belongs to
+    head = models.ForeignKey("self")
     owner = models.ForeignKey(Role)
     posted_on = models.DateTimeField(auto_now_add=True)
     last_modified_on = models.DateTimeField(auto_now=True)

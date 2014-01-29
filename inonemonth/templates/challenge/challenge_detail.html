@@ -8,40 +8,48 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-          <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-          <p>{{ model.title }}</p>
-          <p>{{ model.body|markdown }}</p>
+  <div class="row">
+    <div class="col-md-6">
+      <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
+      <p>{{ model.title }}</p>
+      <p>{{ model.body|markdown }}</p>
 
-          <div class="comments-container">
-              {% for comment in comments %}
-              <div class="comment">
-                {{ comment.text }}
-                {{ comment.type }}
-                {% if comment.type == "head" %}
-                  {{ comment.owner.vote.decision }}
-                {% endif %}
-              </div>
-              {% endfor %}
+      <div class="comments-container">
+        <ul>
+          {% for comment in comments %}
+          <li>
+            <div class="comment" style="border-style:solid;">
+              {{ comment.text }}
+              {{ comment.type }}
+              {% if comment.type == "head" %}
+                {{ comment.owner.vote.decision }}
+              {% endif %}
+            </div>
+            <button class="tail-comment-button" type="button" class="btn">
+              Add comment 
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
 
-              <button id="head-comment-button" type="button" class="btn" style="display:none;">
-                Make vote comment
-              </button>
+        <br>
+        <button id="head-comment-button" type="button" class="btn" style="display:none;">
+          Make vote comment
+        </button>
 
-              <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
-                {{ head_comment_form }}   
-                <input type="submit" value="Submit" name="head-submit">
-              </form>
-              <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
-                {{ tail_comment_form }}   
-                <input type="submit" value="Submit" name="tail-submit">
-              </form>
-
-          </div>
+        <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+          {{ head_comment_form }}   
+          <input type="submit" value="Post" name="head-submit">
+        </form>
+        <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+          {{ tail_comment_form }}   
+          <input type="submit" value="Post" name="tail-submit">
+        </form>
 
       </div>
-    </div><!-- end div.row -->
+
+    </div>
+  </div><!-- end div.row -->
 
 </div><!-- end div.container -->
 
@@ -51,71 +59,79 @@
 {% block extra_js %}
 <script type="text/javascript" src="{% static 'js/jquery-django-csrf-ajax.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
-    $(function() {
+  $(function() {
 
-        // This hack is not to be implemented in Pagedown directly.
-        // That would make it impossible to render multiple forms on the 
-        // same page properly.
-        function fixExtraPageDownEditBarsRendering(){
-            var $pagedownEditBars = $('.wmd-button-row');
-            if ($pagedownEditBars.length >= 1) {
-                var $slicedPageDownEditBars = $pagedownEditBars.slice(1);
-                $slicedPageDownEditBars.each(function(index) {
-                    $(this).hide()
-                });
-            }
-        }
+      // This hack is not to be implemented in Pagedown directly.
+      // That would make it impossible to render multiple forms on the 
+      // same page properly.
+      function fixExtraPageDownEditBarsRendering(){
+          var $pagedownEditBars = $('.wmd-button-row');
+          if ($pagedownEditBars.length >= 1) {
+              var $slicedPageDownEditBars = $pagedownEditBars.slice(1);
+              $slicedPageDownEditBars.each(function(index) {
+                  $(this).hide()
+              });
+          }
+      }
 
-        // Shouldn't even be necessary:
-        //var userApiUrl =  
+      // Shouldn't even be necessary:
+      //var userApiUrl =  
 
-        var roleApiUrl = "{{ role_api_url }}";
-        var $headCommentButton = $('#head-comment-button');
-        var $headCommentForm = $('#head-comment-form');
-        var $tailCommentForm = $('#tail-comment-form');
+      var roleApiUrl = "{{ role_api_url }}";
+      var $headCommentButton = $('#head-comment-button');
+      var $headCommentForm = $('#head-comment-form');
+      var $tailCommentButton = $('.tail-comment-button');
+      var $tailCommentForm = $('#tail-comment-form');
 
-        // Show $headCommentButton in case of juror that hasn't made a headcomment yet
-        $.get(roleApiUrl, function(data) {
-            var role = data; 
-            // remember to remove the !
-            if (!role.can_make_head_comment) {
-                //$headCommentButton.appendTo(".comments-container");
-                $headCommentButton.show();
-            }
-        });
-        
-        $headCommentButton.click(function() {
-            $headCommentButton.hide();
-            $headCommentForm.show();
+      // Show $headCommentButton in case of juror that hasn't made a headcomment yet
+      $.get(roleApiUrl, function(data) {
+          var role = data; 
+          // remember to remove the !
+          if (!role.can_make_head_comment) {
+              //$headCommentButton.appendTo(".comments-container");
+              $headCommentButton.show();
+          }
+      });
+      
+      $headCommentButton.click(function() {
+          $headCommentButton.hide();
+          $headCommentForm.show();
 
-            fixExtraPageDownEditBarsRendering();
-        });
+          fixExtraPageDownEditBarsRendering();
+      });
 
-        function someFunc() {
+      $tailCommentButton.click(function() {
+          $tailCommentForm.appendTo($(this).parent())
+          $tailCommentForm.show();
+      } );
 
-            var relativeUrl = window.location.pathname;
-            // This should be tested
-            var challengePk = relativeUrl.match("[0-9]+");
-            // For /challenge/8/detail/
-            // 8
 
-            $.ajax({
-                url: "/challenge/" + challengePk + "/ajax/send-role/",
-                type: "POST", 
-                data: {},
-                success: function(data){
-                    debugger;
-                    data
-                },
-                // Delete for production
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(xhr.responseText);
-                    alert(thrownError);
-                }
-            });
-        };
-        //someFunc(); 
-    })
+
+      function someFunc() {
+
+          var relativeUrl = window.location.pathname;
+          // This should be tested
+          var challengePk = relativeUrl.match("[0-9]+");
+          // For /challenge/8/detail/
+          // 8
+
+          $.ajax({
+              url: "/challenge/" + challengePk + "/ajax/send-role/",
+              type: "POST", 
+              data: {},
+              success: function(data){
+                  debugger;
+                  data
+              },
+              // Delete for production
+              error: function (xhr, ajaxOptions, thrownError) {
+                  alert(xhr.status);
+                  alert(xhr.responseText);
+                  alert(thrownError);
+              }
+          });
+      };
+      //someFunc(); 
+  })
 </script>
 {% endblock extra_js %}

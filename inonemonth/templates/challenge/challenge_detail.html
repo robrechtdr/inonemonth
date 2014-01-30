@@ -16,20 +16,28 @@
 
       <div class="comments-container">
         <ul>
-          {% for comment in comments %}
+        {% for head_comment in model.headcomment_set.all %}
           <li>
-            <div class="comment" style="border-style:solid;">
-              {{ comment.text }}
-              {{ comment.type }}
-              {% if comment.type == "head" %}
-                {{ comment.owner.vote.decision }}
-              {% endif %}
+            <div class="head-comment" style="border-style:solid;">
+              {{ head_comment.text }}
+              {{ head_comment.owner.vote.decision }}
+              <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
             </div>
+    
+            <ul>
+            {% for tail_comment in head_comment.tailcomment_set.all %}
+              <li class="tail-comment" style="border-style:solid;">
+                {{ tail_comment.text }}
+              </li>
+            {% endfor %}
+            </ul>
+    
+
             <button class="tail-comment-button" type="button" class="btn">
               Add comment 
             </button>
           </li>
-          {% endfor %}
+        {% endfor %}
         </ul>
 
         <br>
@@ -43,6 +51,7 @@
         </form>
         <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
           {{ tail_comment_form }}   
+          <input type="hidden" value="" name="head-id">
           <input type="submit" value="Post" name="tail-submit">
         </form>
 
@@ -103,35 +112,12 @@
       $tailCommentButton.click(function() {
           $tailCommentForm.appendTo($(this).parent())
           $tailCommentForm.show();
+
+          // Set clicked head id to $tailCommentForm
+          var clickedHeadCommentId = $(this).parent().find(".head-id").text()
+          $tailCommentForm.find("input[name='head-id']").attr("value", clickedHeadCommentId);
       } );
 
-
-
-      function someFunc() {
-
-          var relativeUrl = window.location.pathname;
-          // This should be tested
-          var challengePk = relativeUrl.match("[0-9]+");
-          // For /challenge/8/detail/
-          // 8
-
-          $.ajax({
-              url: "/challenge/" + challengePk + "/ajax/send-role/",
-              type: "POST", 
-              data: {},
-              success: function(data){
-                  debugger;
-                  data
-              },
-              // Delete for production
-              error: function (xhr, ajaxOptions, thrownError) {
-                  alert(xhr.status);
-                  alert(xhr.responseText);
-                  alert(thrownError);
-              }
-          });
-      };
-      //someFunc(); 
   })
 </script>
 {% endblock extra_js %}

@@ -1,21 +1,27 @@
 from django.db import models
 from challenges.models import Role
+from challenges.models import Challenge
 
 
-class Comment(models.Model):
-    HEAD = "head"
-    TAIL = "tail"
-    COMMENT_CHOICES = ((HEAD, HEAD.capitalize()), (TAIL, TAIL.capitalize()))
-
+class CommentBase(models.Model):
     text = models.TextField()
-    # Only Jurors should be allowed to make a Head comment, check with js
-    type = models.CharField(max_length=10, choices=COMMENT_CHOICES)
-    # The comment it belongs to
-    head = models.ForeignKey("self")
     owner = models.ForeignKey(Role)
     posted_on = models.DateTimeField(auto_now_add=True)
     last_modified_on = models.DateTimeField(auto_now=True)
+    challenge = models.ForeignKey(Challenge)
+
+    class Meta:
+        abstract = True
 
     def __unicode__(self):
-        return "{0} from {1} on {2}".format(self.type.capitalize(),
+
+        return "{0} from {1} on {2}".format(#self.type.capitalize(),
                                             self.owner, self.posted_on)
+
+
+class HeadComment(CommentBase):
+   pass
+
+
+class TailComment(CommentBase):
+    head = models.ForeignKey(HeadComment) # The head comment it belongs to

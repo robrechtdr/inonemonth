@@ -10,7 +10,7 @@ from rest_framework import generics
 
 from core.allauth_utils import create_allauth_user
 from comments.forms import HeadCommentForm, TailCommentForm
-from comments.models import Comment
+from comments.models import HeadComment, TailComment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
@@ -92,25 +92,25 @@ def challenge_detail_view(request, **kwargs):
         # http://stackoverflow.com/questions/866272/how-can-i-build-multiple-submit-buttons-django-form
         if "head-submit" in (head_comment_form.data or tail_comment_form.data):
             if head_comment_form.is_valid():
-                Comment.objects.create(owner=role, type="head",
-                                       text=head_comment_form.cleaned_data["text"])
+                HeadComment.objects.create(owner=role, challenge=challenge,
+                                           text=head_comment_form.cleaned_data["text"])
+
                 Vote.objects.create(juror=role,
                                     decision=head_comment_form.cleaned_data["decision"])
 
         elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
             if tail_comment_form.is_valid():
-                Comment.objects.create(owner=role, type="tail",
-                                      text=tail_comment_form.cleaned_data["text"])
+                TailComment.objects.create(owner=role, challenge=challenge,
+                                           text=tail_comment_form.cleaned_data["text"],
+                                           head=HeadComment.objects.get(id=int(tail_comment_form.data["head-id"])))
 
     else:
         head_comment_form = HeadCommentForm()
         tail_comment_form = TailCommentForm()
 
-    comments = Comment.objects.all()
     return render(request=request, template_name='challenge/challenge_detail.html',
                   dictionary={"role_api_url": role_api_url,
                               "model": challenge,
-                              "comments": comments,
                               "head_comment_form": head_comment_form,
                               "tail_comment_form": tail_comment_form
                               }

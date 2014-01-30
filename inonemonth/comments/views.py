@@ -1,8 +1,9 @@
 from rest_framework import generics
-from .serializers import CommentSerializer
-from .models import Comment
+from .models import HeadComment, TailComment
+#from .serializers import HeadCommentSerializer, TailCommentSerializer
 
 
+"""
 class CommentListCreateAPIView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -11,3 +12,4 @@ class CommentListCreateAPIView(generics.ListCreateAPIView):
 class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+"""

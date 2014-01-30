@@ -31,6 +31,8 @@ class Challenge(models.Model):
             raise Exception("No user has been assigned as clencher "
                                   "for this challenge yet.")
 
+    # Make manager method out of it, but will I then be able to use it in
+    # serializer?
     def get_jurors(self):
         # `filter` call with no results returns an empty list (vs `get`)
         jurors = self.role_set.filter(type=self.role_set.model.JUROR)
@@ -75,10 +77,10 @@ class Role(models.Model):
         comment.
         """
         if self.type == self.JUROR:
-            for comment in self.comment_set.all():
-                if comment.type == "head":
-                    return False
-            return True
+            if len(self.headcomment_set.all()) != 0:
+                return False
+            else:
+                return True
         else:
             return False
 

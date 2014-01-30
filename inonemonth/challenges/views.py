@@ -8,7 +8,8 @@ from django.forms.formsets import formset_factory
 
 from rest_framework import generics
 
-from core.allauth_utils import create_allauth_user
+from core.models import UserExtension
+from core.allauth_utils import create_allauth_user, generate_password
 from comments.forms import HeadCommentForm, TailCommentForm
 from comments.models import HeadComment, TailComment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
@@ -56,14 +57,23 @@ def invite_jurors_view(request, **kwargs):
                                            type=Role.CLENCHER)
 
             for form in formset:
-                user = create_allauth_user(email=form.cleaned_data["email"])
+                password = generate_password()
+                user = create_allauth_user(email=form.cleaned_data["email"],
+                                           password=password)
+                print password
+
+                # hashed passwords can't be retrieved, so they'll need to be
+                # stored somewhere to send that temporary password to the user.
+                # The user can then change the password by himself later on.
+                UserExtension.objects.create(user=user, temp_password=password)
+
                 # Here, Send invitation email to user to challenge (probably need to
                 # deactivate mailing email confirmation)
                 juror = Role.objects.create(user=user, challenge=challenge,
                                             type=Role.JUROR)
                 # Could also be created with celery, at moment juror period
                 # starts
-                vote = Vote.objects.create(juror=juror)
+                #vote = Vote.objects.create(juror=juror)
 
             """
             model = form.instance.__class__
@@ -97,6 +107,12 @@ def challenge_detail_view(request, **kwargs):
 
                 Vote.objects.create(juror=role,
                                     decision=head_comment_form.cleaned_data["decision"])
+                # Vote is created in invite jurors
+                # Only jurors are allowed to save a vote,
+                # check happens in backend method but called from frontend
+                #juror_vote = role.vote
+                #juror_vote.decision=head_comment_form.cleaned_data["decision"]
+                #juror_vote.save()
 
         elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
             if tail_comment_form.is_valid():

@@ -13,15 +13,16 @@ class CommentBase(models.Model):
     class Meta:
         abstract = True
 
-    def __unicode__(self):
-
-        return "{0} from {1} on {2}".format(#self.type.capitalize(),
-                                            self.owner, self.posted_on)
-
 
 class HeadComment(CommentBase):
-   pass
+    pass
+
+    def __unicode__(self):
+        return "Head comment from {0} on {1}".format(self.owner, self.posted_on)
 
 
 class TailComment(CommentBase):
     head = models.ForeignKey(HeadComment) # The head comment it belongs to
+
+    def __unicode__(self):
+        return "Tail comment from {0} on {1}".format(self.owner, self.posted_on)

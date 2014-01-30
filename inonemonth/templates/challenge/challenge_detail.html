@@ -96,7 +96,7 @@
       $.get(roleApiUrl, function(data) {
           var role = data; 
           // remember to remove the !
-          if (!role.can_make_head_comment) {
+          if (role.can_make_head_comment) {
               //$headCommentButton.appendTo(".comments-container");
               $headCommentButton.show();
           }

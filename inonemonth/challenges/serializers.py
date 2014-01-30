@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .models import Challenge, Role
 from core.serializers import UserSerializer
-from comments.serializers import CommentSerializer
+#from comments.serializers import HeadCommentSerializer, TailCommentSerializer
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ("id", "user", "type", "challenge", "comment_set",
+        fields = ("id", "user", "type", "challenge",
                   "vote", "can_vote", "can_make_head_comment")
         depth = 2
 
@@ -29,4 +29,4 @@ class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
         fields = ("id", "title", "body", "repo_name", "creation_datetime",
-                  "role_set", "get_clencher")
+                  "role_set", "get_clencher", "headcomment_set", "tailcomment_set")

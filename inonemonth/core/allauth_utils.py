@@ -10,13 +10,13 @@ from allauth.account.forms import SignupForm
 from allauth.account.views import SignupView
 from allauth.account.utils import setup_user_email, complete_signup
 
+
 # http://stackoverflow.com/questions/2257441/python-random-string-generation-with-upper-case-letters-and-digits
 def generate_password(chars=8):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(chars))
 
 
-def get_post_dic(email):
-    password = generate_password()
+def get_post_dic(email, password):
     #csrfmiddlewaretoken = #not necessary
     return {
             u'password1': password,
@@ -50,8 +50,8 @@ def get_signin_request(post_dic):
     return signin_request
 
 
-def create_allauth_user(email):
-    post_dic = get_post_dic(email)
+def create_allauth_user(email, password):
+    post_dic = get_post_dic(email, password)
     signin_request = get_signin_request(post_dic)
 
     signup_form_kwargs = {"files": {}, "initial": {},

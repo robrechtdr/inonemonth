@@ -9,14 +9,14 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
       <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-      <p>{{ model.title }}</p>
-      <p>{{ model.body|markdown }}</p>
+      <p>{{ challenge.title }}</p>
+      <p>{{ challenge.body|markdown }}</p>
 
       <div class="comments-container">
         <ul>
-        {% for head_comment in model.headcomment_set.all %}
+        {% for head_comment in challenge.headcomment_set.all %}
           <li>
             <div class="head-comment" style="border-style:solid;">
               <div class="head-comment-content">
@@ -74,6 +74,12 @@
       </div>
 
     </div>
+    <div class="col-md-4">
+      <div id="name">
+        {{ challenge.get_challenge_period_end_datetime|timeuntil }}
+      </div>
+    </div>
+
   </div><!-- end div.row -->
 
 </div><!-- end div.container -->
@@ -132,7 +138,6 @@
                   var headCommentId = Number(headComment.find(".head-id").text());
                   // There is maximum only 1 head comment
                   var roleHeadCommentId = role.headcomment_set[0].id;
-                  debugger;
                   if (headCommentId === roleHeadCommentId) {
                       headComment.find(".head-edit-button").show();
                   }

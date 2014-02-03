@@ -15,7 +15,9 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ("id", "user", "type", "challenge",
-                  "vote", "can_vote", "can_make_head_comment")
+                  "vote", "can_vote", "can_make_head_comment",
+                  "headcomment_set", "tailcomment_set")
+                  #"comment_set")
         depth = 2
 
 

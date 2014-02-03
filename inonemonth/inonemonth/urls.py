@@ -7,7 +7,8 @@ from core.views import UserRetrieveAPIView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView)
-#from comments.views import (CommentListCreateAPIView,
+from comments.views import TailCommentDestroyAPIView
+#                            ListCreateAPIView,
 #                            CommentRetrieveUpdateDestroyAPIView)
 
 urlpatterns = patterns('',
@@ -23,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^api/users/(?P<pk>[0-9]+)/$', UserRetrieveAPIView.as_view(), name="user_api_retrieve"),
     url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeRetrieveAPIView.as_view(), name="challenge_api_retrieve"),
     url(r'^api/roles/(?P<pk>[0-9]+)/$', RoleRetrieveAPIView.as_view(), name="role_api_retrieve"),
+    url(r'^api/tail-comments/(?P<pk>[0-9]+)/$', TailCommentDestroyAPIView.as_view(), name="tail_comment_api_destroy"),
     #url(r'^api/comments/$', CommentListCreateAPIView.as_view(), name="comment_api_list_create"),
     #url(r'^api/comments/(?P<pk>[0-9]+)/$', CommentRetrieveUpdateDestroyAPIView.as_view(), name="comment_api_retrieve_update_destroy"),
     url(r'^api-auth/', include('rest_framework.urls', # Enable browseable api

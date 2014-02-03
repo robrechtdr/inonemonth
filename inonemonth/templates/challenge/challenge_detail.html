@@ -19,21 +19,35 @@
         {% for head_comment in model.headcomment_set.all %}
           <li>
             <div class="head-comment" style="border-style:solid;">
+              <div class="head-comment-content">
               {{ head_comment.text }}
               {{ head_comment.owner.vote.decision }}
+              </div>
               <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
+              <button class="head-edit-button btn" style="display:none;" type="button">
+                Edit 
+              </button>
             </div>
     
             <ul>
             {% for tail_comment in head_comment.tailcomment_set.all %}
               <li class="tail-comment" style="border-style:solid;">
+                <div class="tail-comment-content">
                 {{ tail_comment.text }}
+                </div>
+                <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
+                <button class="tail-edit-button btn" type="button" style="display:none;">
+                  Edit 
+                </button>
+                <button class="tail-delete-button btn" type="button" style="display:none;">
+                  Delete 
+                </button>
               </li>
             {% endfor %}
             </ul>
     
 
-            <button class="tail-comment-button" type="button" class="btn">
+            <button class="tail-comment-button btn" type="button">
               Add comment 
             </button>
           </li>
@@ -41,16 +55,18 @@
         </ul>
 
         <br>
-        <button id="head-comment-button" type="button" class="btn" style="display:none;">
+        <button class="head-comment-button btn" type="button" style="display:none;">
           Make vote comment
         </button>
 
         <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
           {{ head_comment_form }}   
+          <input type="hidden" value="" name="id">
           <input type="submit" value="Post" name="head-submit">
         </form>
         <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
           {{ tail_comment_form }}   
+          <input type="hidden" value="" name="id">
           <input type="hidden" value="" name="head-id">
           <input type="submit" value="Post" name="tail-submit">
         </form>
@@ -87,20 +103,64 @@
       //var userApiUrl =  
 
       var roleApiUrl = "{{ role_api_url }}";
-      var $headCommentButton = $('#head-comment-button');
+
+      var $headCommentButton = $('.head-comment-button');
+      var $headEditButton = $('.head-edit-button');
       var $headCommentForm = $('#head-comment-form');
+
       var $tailCommentButton = $('.tail-comment-button');
+      var $tailEditButton = $('.tail-edit-button');
+      var $tailCommentDeleteButton = $('.tail-delete-button');
       var $tailCommentForm = $('#tail-comment-form');
 
-      // Show $headCommentButton in case of juror that hasn't made a headcomment yet
       $.get(roleApiUrl, function(data) {
           var role = data; 
+
+          // Show $headCommentButton in case of juror that hasn't made a headcomment yet
           // remember to remove the !
           if (role.can_make_head_comment) {
               //$headCommentButton.appendTo(".comments-container");
               $headCommentButton.show();
           }
+
+          // Only show delete and edit buttons for comments owned by the current role
+          // To omit type errors
+          if (role.headcomment_set.length > 0) {
+              var headComments = $(".head-comment");
+              for (i in headComments) {
+                  var headComment = headComments.eq(i) 
+                  var headCommentId = Number(headComment.find(".head-id").text());
+                  // There is maximum only 1 head comment
+                  var roleHeadCommentId = role.headcomment_set[0].id;
+                  debugger;
+                  if (headCommentId === roleHeadCommentId) {
+                      headComment.find(".head-edit-button").show();
+                  }
+
+              }
+          } 
+          // To omit type errors
+          // Why are there so many loops? each loop gets repeated like a hundred times, wth??
+          if (role.tailcomment_set.length > 0) {
+              var tailComments = $(".tail-comment");
+              for (i in tailComments) {
+                  var tailComment = tailComments.eq(i) 
+                  var tailCommentId = Number(tailComment.find(".tail-id").text());
+                  console.log("tailCommentId: " + tailCommentId);
+                  for (e in role.tailcomment_set) { 
+                      var roleTailCommentId = role.tailcomment_set[e].id
+
+                      console.log("roleTailCommentId: " + roleTailCommentId);
+                      if (tailCommentId === roleTailCommentId) {
+                          tailComment.find(".tail-edit-button").show();
+                          tailComment.find(".tail-delete-button").show();
+                      }
+                  }
+              }
+          } 
+
       });
+
       
       $headCommentButton.click(function() {
           $headCommentButton.hide();
@@ -109,6 +169,21 @@
           fixExtraPageDownEditBarsRendering();
       });
 
+      $headEditButton.click(function() {
+          $headCommentForm.appendTo($(this).parent())
+          $headCommentForm.show();
+          fixExtraPageDownEditBarsRendering();
+
+          // Set id to indicate that the form is sent for edit mode
+          // Need to send the id so backend knows what comment to edit.
+          var headCommentId = $(this).parent().find(".head-id").text();
+          $headCommentForm.find("input[name='id']").attr("value", headCommentId);
+
+          // text should pop back if pressed on other edit button. 
+          //$(this).parent().find(".head-comment-content").empty()
+      });
+
+
       $tailCommentButton.click(function() {
           $tailCommentForm.appendTo($(this).parent())
           $tailCommentForm.show();
@@ -116,7 +191,41 @@
           // Set clicked head id to $tailCommentForm
           var clickedHeadCommentId = $(this).parent().find(".head-id").text()
           $tailCommentForm.find("input[name='head-id']").attr("value", clickedHeadCommentId);
-      } );
+      });
+
+      $tailCommentDeleteButton.click(function() {
+          // Delete clicked tail comment
+          var clickedTailCommentId = $(this).parent().find(".tail-id").text()
+          var tailCommentApiDeleteUrl = "/api/tail-comments/" + clickedTailCommentId + "/"
+          $.ajax({
+              url: tailCommentApiDeleteUrl,
+              type: "DELETE", 
+              data: {},
+              success: function(data) {
+
+              },
+          });
+
+          // Reload page
+          window.location.reload(true);
+      });
+
+      $tailEditButton.click(function() {
+          $tailCommentForm.appendTo($(this).parent())
+          $tailCommentForm.show();
+
+          // Set clicked head id to $tailCommentForm
+          var clickedHeadCommentId = $(this).parent().parent().parent().find(".head-id").text();
+          $tailCommentForm.find("input[name='head-id']").attr("value", clickedHeadCommentId);
+
+          // Set id to indicate that the form is sent for edit mode
+          // Need to send the id so backend knows what comment to edit.
+          var tailCommentId = $(this).parent().find(".tail-id").text();
+          $tailCommentForm.find("input[name='id']").attr("value", tailCommentId);
+
+          // text should pop back if pressed on other edit button. 
+          //$(this).parent().find(".tail-comment-content").empty()
+      });
 
   })
 </script>

@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse_lazy
@@ -102,21 +102,47 @@ def challenge_detail_view(request, **kwargs):
         # http://stackoverflow.com/questions/866272/how-can-i-build-multiple-submit-buttons-django-form
         if "head-submit" in (head_comment_form.data or tail_comment_form.data):
             if head_comment_form.is_valid():
-                HeadComment.objects.create(owner=role, challenge=challenge,
-                                           text=head_comment_form.cleaned_data["text"])
+                head_comment_id = head_comment_form.data["id"]
+                # In case of comment edit
+                if head_comment_id:
+                    # Check should be made if the head_comment is owned by the
+                    # role
+                    head_comment = HeadComment.objects.get(id=head_comment_id)
+                    if head_comment.owner == role:
+                        head_comment.challenge = challenge
+                        head_comment.text = head_comment_form.cleaned_data["text"]
+                        head_comment.save()
 
-                Vote.objects.create(juror=role,
-                                    decision=head_comment_form.cleaned_data["decision"])
-                # Vote is created in invite jurors
-                # Only jurors are allowed to save a vote,
-                # check happens in backend method but called from frontend
-                #juror_vote = role.vote
-                #juror_vote.decision=head_comment_form.cleaned_data["decision"]
-                #juror_vote.save()
+                        vote = Vote.objects.get(juror=role)
+                        vote.decision = head_comment_form.cleaned_data["decision"]
+                        vote.save()
+                    else:
+                        return HttpResponseForbidden()
+
+                else:
+                    HeadComment.objects.create(owner=role, challenge=challenge,
+                                       text=head_comment_form.cleaned_data["text"])
+
+                    Vote.objects.create(juror=role,
+                                   decision=head_comment_form.cleaned_data["decision"])
+
 
         elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
             if tail_comment_form.is_valid():
-                TailComment.objects.create(owner=role, challenge=challenge,
+                tail_comment_id = tail_comment_form.data["id"]
+                # In case of comment edit
+                if tail_comment_id:
+                    tail_comment = TailComment.objects.get(id=tail_comment_id)
+                    if tail_comment.owner == role:
+                        tail_comment.challenge = challenge
+                        tail_comment.text = tail_comment_form.cleaned_data["text"]
+                        tail_comment.head = HeadComment.objects.get(id=int(tail_comment_form.data["head-id"]))
+                        tail_comment.save()
+                    else:
+                        return HttpResponseForbidden()
+
+                else:
+                    TailComment.objects.create(owner=role, challenge=challenge,
                                            text=tail_comment_form.cleaned_data["text"],
                                            head=HeadComment.objects.get(id=int(tail_comment_form.data["head-id"])))
 

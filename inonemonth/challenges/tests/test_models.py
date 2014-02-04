@@ -1,73 +1,93 @@
 import django.test
 import unittest
 
+from django.core.management import call_command
 from django.contrib.auth import get_user_model
 from challenges.models import Challenge, Role
 
+from core.tests.setups import (GargantuanChallengeFactory, ChallengeFactory,
+                               UserFactory, JurorRoleFactory)
 
-class ChallengesTestCase(django.test.TestCase):
-    """
-    Used to build data structure
-    """
+
+class ChallengeTestCase(django.test.TestCase):
     def setUp(self):
-        # Set up users
-        albert = get_user_model().objects.create(email="albert@gmail.com",
-                                                 username="albert",
-                                                 password="my_password")
-        sonya = get_user_model().objects.create(email="sonya@gmail.com",
-                                                username="sonya",
-                                                password="my_password")
-        danny = get_user_model().objects.create(email="danny@gmail.com",
-                                                username="danny",
-                                                password="my_password")
-        jimmy = get_user_model().objects.create(email="jimmy@gmail.com",
-                                                username="jimmy",
-                                                password="my_password")
+        call_command('setup_allauth_social', 'github', domain="http://localhost", setting="test")
+        GargantuanChallengeFactory()
+
+    def tearDown(self):
+        UserFactory.reset_sequence(1)
+
+    def test_get_unicode(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.__unicode__(),
+                         "Challenge 1, created on Tue Feb  4 09:15:00 2014")
+
+    def test_get_absolute_url(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.get_absolute_url(), "/api/challenges/1/")
+
+    def test_get_clencher(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.get_clencher().user.email, u"de.rouck.robrecht@gmail.com")
+
+    def test_get_jurors(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual([juror.user.email for juror in challenge.get_jurors()],
+                         [u'john.doe2@gmail.com', u'john.doe3@gmail.com'])
+
+    @unittest.skip("For development periods shorter than one month will be used")
+    def test_get_challenge_period_end_datetime(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.get_challenge_period_end_datetime().ctime(),
+                         'Tue Mar  4 09:15:00 2014')
+
+    @unittest.skip("For development periods shorter than one week will be used")
+    def test_get_voting_period_end_datetime(self):
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.get_challenge_period_end_datetime().ctime(),
+                         'Wed Feb  5 09:15:00 2014')
 
 
-        # Set up ssl_challenge, clencher and jurors
-        ssl_challenge = Challenge.objects.create(title="I will do ssl shit",
-                                                 body="my body",
-                                                 repo_name="django_ssl")
-        clencher_ssl_challenge = Role.objects.create(user=albert,
-                                                     challenge=ssl_challenge,
-                                                     type=Role.CLENCHER)
-        juror1_ssl_challenge = Role.objects.create(challenge=ssl_challenge,
-                                                   user=sonya,
-                                                   type=Role.JUROR)
-        juror2_ssl_challenge = Role.objects.create(challenge=ssl_challenge,
-                                                   user=danny,
-                                                   type=Role.JUROR)
+class RoleTestCase(django.test.TestCase):
+    def setUp(self):
+        call_command('setup_allauth_social', 'github', domain="http://localhost", setting="test")
+        GargantuanChallengeFactory()
 
+    def tearDown(self):
+        UserFactory.reset_sequence(1)
 
-        # Set up gargantuan_challenge, clencher and jurors
-        gargantuan_challenge = Challenge.objects.create(title="I will do gargantuan shit",
-                                                        body="my body",
-                                                        repo_name="django_gargantuan")
-        clencher_gargantuan_challenge = Role.objects.create(user=albert,
-                                                            challenge=gargantuan_challenge,
-                                                            type=Role.CLENCHER)
-        juror1_gargantuan_challenge = Role.objects.create(challenge=gargantuan_challenge,
-                                                          user=jimmy,
-                                                          type=Role.JUROR)
-        juror2_gargantuan_challenge = Role.objects.create(challenge=gargantuan_challenge,
-                                                          user=sonya,
-                                                          type=Role.JUROR)
+    def test_get_unicode(self):
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertEqual(clencher.__unicode__(),
+                         "Clencher 'de.rouck.robrecht' of 'Challenge 1, created on Tue Feb  4 09:15:00 2014'")
 
+    def test_get_absolute_url(self):
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertEqual(clencher.get_absolute_url(), "/api/roles/1/")
 
-    def test_get_clencher_from_challenge(self):
-        ssl_challenge = Challenge.objects.get(repo_name="django_ssl")
-        self.assertEqual(ssl_challenge.role_set.get(type="clencher"),
-                         Role.objects.get(challenge=ssl_challenge,
-                                          type=Role.CLENCHER)
-        )
+    def test_clencher_cant_vote(self):
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertEqual(clencher.can_vote(), False)
 
+    def test_juror_can_vote(self):
+        challenge = Challenge.objects.get(id=1)
+        juror = challenge.get_jurors()[0]
+        self.assertEqual(juror.can_vote(), True)
 
-    def test_get_jurors_from_challenge(self):
-        ssl_challenge = Challenge.objects.get(repo_name="django_ssl")
-        # Why is complete queryset not equal even though it looks identical?
-        self.assertEqual(ssl_challenge.get_jurors()[0],
-                         # Filter because you get more than one result
-                         Role.objects.filter(challenge=ssl_challenge,
-                                             type=Role.JUROR)[0]
-        )
+    def test_clencher_cant_make_head_comment(self):
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertEqual(clencher.can_make_head_comment(), False)
+
+    def test_juror_without_headcomments_can_make_head_comment(self):
+        challenge = Challenge.objects.get(id=1)
+        juror = JurorRoleFactory() # without head comment
+        self.assertEqual(juror.can_make_head_comment(), True)
+
+    def test_juror_with_comments_cant_make_head_comment(self):
+        challenge = Challenge.objects.get(id=1)
+        juror = challenge.get_jurors()[0] # factory makes head comment for juror
+        self.assertEqual(juror.can_make_head_comment(), False)

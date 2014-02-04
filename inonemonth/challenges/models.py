@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -41,6 +43,18 @@ class Challenge(models.Model):
         else:
             return self.Exception("No Juror has been assigned as juror "
                                      "for this challenge yet.")
+
+    def get_challenge_period_end_datetime(self):
+        #one_month = relativedelta(months=1)
+        one_month = relativedelta(days=1)
+        #one_month = relativedelta(minutes=20)
+        return (self.creation_datetime + one_month)
+
+    def get_voting_period_end_datetime(self):
+        #one_month = relativedelta(months=1)
+        one_week = relativedelta(weeks=1)
+        #one_month = relativedelta(minutes=20)
+        return (self.get_challenge_period_end_datetime() + one_week)
 
 
 class Role(models.Model):

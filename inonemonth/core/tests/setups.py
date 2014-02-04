@@ -30,7 +30,7 @@ class UserFactory(factory.DjangoModelFactory):
 
 
 class RobrechtUserFactory(UserFactory):
-    email = "robrecht.de.rouck@gmail.com"
+    email = "de.rouck.robrecht@gmail.com"
 
 
 class SocialUserFactory(factory.DjangoModelFactory):
@@ -89,6 +89,16 @@ class ChallengeFactory(factory.DjangoModelFactory):
     title = factory.Sequence(lambda n: "This is the title of the challenge{0}.".format(n))
     body = factory.Sequence(lambda n: "This is the body of the challenge{0}.".format(n))
     repo_name = factory.Sequence(lambda n: "project{0}.".format(n))
+    # For some reason the following doesn't overwrite models.DateTimeField(auto_now_add=True)
+    #creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
+
+    # Note that this forces a save, you can't use the build
+    # method anymore on the factory because of this.
+    # Fix auto_now_add behavior
+    @factory.post_generation
+    def overwrite_creation_datetime(self, create, extracted, **kwargs):
+        self.creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
+        self.save()
 
 
 class ClencherRoleFactory(factory.DjangoModelFactory):

@@ -72,6 +72,16 @@ def utest(app_name=""):
     local("coverage run --rcfile=.coveragerc --source='.' manage.py test %s "
           "--settings=inonemonth.settings.test -v2 --traceback" % app_name)
 
+def utestff(app_name=""):
+    """
+    utest with failfast option
+    """
+    #local("django-admin.py %s "
+    #  "--settings=inonemonth.settings.test" % command)
+    local("coverage run --rcfile=.coveragerc --source='.' manage.py test %s "
+          "--failfast --settings=inonemonth.settings.test -v2 --traceback" % app_name)
+
+
 def utest_all():
     """
     Test all local(=project) apps.

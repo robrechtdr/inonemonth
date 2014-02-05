@@ -27,6 +27,12 @@ CACHES = {
 ########## END CACHE CONFIGURATION
 
 
+########## INONEMONTH CONFIGURATION
+CHALLENGE_PERIOD_DURATION = relativedelta(days=40)
+VOTING_PERIOD_DURATION = relativedelta(weeks=1)
+########## END INONEMONTH CONFIGURATION
+
+
 ########## TOOLBAR CONFIGURATION
 # See: https://github.com/django-debug-toolbar/django-debug-toolbar#installation
 INSTALLED_APPS += (

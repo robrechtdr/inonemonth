@@ -6,88 +6,140 @@ from django.contrib.auth import get_user_model
 from challenges.models import Challenge, Role
 
 from core.tests.setups import (GargantuanChallengeFactory, ChallengeFactory,
-                               UserFactory, JurorRoleFactory)
+                               UserFactory, JurorRoleFactory,
+                               TimeFixedGargantuanChallengeFactory,
+                               InVotingPeriodGargantuanChallengeFactory,
+                               EndedGargantuanChallengeFactory)
+
+User = get_user_model()
 
 
 class ChallengeTestCase(django.test.TestCase):
     def setUp(self):
         call_command('setup_allauth_social', 'github', domain="http://localhost", setting="test")
-        GargantuanChallengeFactory()
+        #GargantuanChallengeFactory()
 
     def tearDown(self):
         UserFactory.reset_sequence(1)
 
     def test_get_unicode(self):
+        TimeFixedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.__unicode__(),
                          "Challenge 1, created on Tue Feb  4 09:15:00 2014")
 
     def test_get_absolute_url(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.get_absolute_url(), "/api/challenges/1/")
 
     def test_get_clencher(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.get_clencher().user.email, u"de.rouck.robrecht@gmail.com")
 
     def test_get_jurors(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual([juror.user.email for juror in challenge.get_jurors()],
-                         [u'john.doe2@gmail.com', u'john.doe3@gmail.com'])
+                         [u'andy.slacker@gmail.com', u'fred.labot@gmail.com',
+                          u'jason.jay@gmail.com'])
 
-    @unittest.skip("For development periods shorter than one month will be used")
     def test_get_challenge_period_end_datetime(self):
+        TimeFixedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.get_challenge_period_end_datetime().ctime(),
                          'Tue Mar  4 09:15:00 2014')
+        # While:
+        self.assertEqual(challenge.creation_datetime.ctime(),
+                         'Tue Feb  4 09:15:00 2014')
 
-    @unittest.skip("For development periods shorter than one week will be used")
     def test_get_voting_period_end_datetime(self):
+        TimeFixedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
-        self.assertEqual(challenge.get_challenge_period_end_datetime().ctime(),
-                         'Wed Feb  5 09:15:00 2014')
+        # Weird: why is there no space here in ctime format? Or rather why
+        # was there a space in
+        # challenge.get_challenge_period_end_datetime().ctime() ?
+        self.assertEqual(challenge.get_voting_period_end_datetime().ctime(),
+                         'Tue Mar 11 09:15:00 2014')
+        # While:
+        self.assertEqual(challenge.creation_datetime.ctime(),
+                         'Tue Feb  4 09:15:00 2014')
+
+    def test_in_voting_period(self):
+        InVotingPeriodGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.in_voting_period(), True)
+
+    def test_in_challenge_period(self):
+        GargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.in_challenge_period(), True)
+
+    def test_has_challenge_ended(self):
+        EndedGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.has_ended(), True)
 
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):
         call_command('setup_allauth_social', 'github', domain="http://localhost", setting="test")
-        GargantuanChallengeFactory()
+        #GargantuanChallengeFactory()
 
     def tearDown(self):
         UserFactory.reset_sequence(1)
 
     def test_get_unicode(self):
+        TimeFixedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         clencher = challenge.get_clencher()
         self.assertEqual(clencher.__unicode__(),
                          "Clencher 'de.rouck.robrecht' of 'Challenge 1, created on Tue Feb  4 09:15:00 2014'")
 
     def test_get_absolute_url(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         clencher = challenge.get_clencher()
         self.assertEqual(clencher.get_absolute_url(), "/api/roles/1/")
 
-    def test_clencher_cant_vote(self):
-        challenge = Challenge.objects.get(id=1)
-        clencher = challenge.get_clencher()
-        self.assertEqual(clencher.can_vote(), False)
-
-    def test_juror_can_vote(self):
-        challenge = Challenge.objects.get(id=1)
-        juror = challenge.get_jurors()[0]
-        self.assertEqual(juror.can_vote(), True)
-
     def test_clencher_cant_make_head_comment(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         clencher = challenge.get_clencher()
         self.assertEqual(clencher.can_make_head_comment(), False)
 
-    def test_juror_without_headcomments_can_make_head_comment(self):
+    def test_is_juror(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
-        juror = JurorRoleFactory() # without head comment
-        self.assertEqual(juror.can_make_head_comment(), True)
+        juror = challenge.get_jurors()[0]
+        self.assertEqual(juror.is_juror(), True)
+
+    def test_clencher_cant_make_head_comment(self):
+        GargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertEqual(clencher.can_make_head_comment(), False)
+
+    def test_juror_cant_make_head_comment_before_end_of_challenge_period(self):
+        GargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        jason = User.objects.get(email="jason.jay@gmail.com")
+        juror_jason = challenge.role_set.get(user=jason) # without head comment
+        self.assertEqual(juror_jason.can_make_head_comment(), False)
+        # While:
+        self.assertEqual(challenge.in_challenge_period(), True)
+
+    def test_juror_without_headcomments_can_make_head_comment(self):
+        InVotingPeriodGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        jason = User.objects.get(email="jason.jay@gmail.com")
+        juror_jason = challenge.role_set.get(user=jason) # without head comment
+        self.assertEqual(juror_jason.can_make_head_comment(), True)
 
     def test_juror_with_comments_cant_make_head_comment(self):
+        GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
-        juror = challenge.get_jurors()[0] # factory makes head comment for juror
-        self.assertEqual(juror.can_make_head_comment(), False)
+        andy = User.objects.get(email="andy.slacker@gmail.com")
+        juror_andy = challenge.role_set.get(user=andy) # with head comment
+        self.assertEqual(juror_andy.can_make_head_comment(), False)

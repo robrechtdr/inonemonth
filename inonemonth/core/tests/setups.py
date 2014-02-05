@@ -3,8 +3,11 @@ import factory
 import factory.fuzzy
 import random
 
+
+from dateutil.relativedelta import relativedelta
 from hashlib import sha1
 
+from django.utils.timezone import utc
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 
@@ -31,6 +34,18 @@ class UserFactory(factory.DjangoModelFactory):
 
 class RobrechtUserFactory(UserFactory):
     email = "de.rouck.robrecht@gmail.com"
+
+
+class AndyUserFactory(UserFactory):
+    email = "andy.slacker@gmail.com"
+
+
+class FredUserFactory(UserFactory):
+    email = "fred.labot@gmail.com"
+
+
+class JasonUserFactory(UserFactory):
+    email = "jason.jay@gmail.com"
 
 
 class SocialUserFactory(factory.DjangoModelFactory):
@@ -92,6 +107,7 @@ class ChallengeFactory(factory.DjangoModelFactory):
     # For some reason the following doesn't overwrite models.DateTimeField(auto_now_add=True)
     #creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
 
+    '''
     # Note that this forces a save, you can't use the build
     # method anymore on the factory because of this.
     # Fix auto_now_add behavior
@@ -99,6 +115,7 @@ class ChallengeFactory(factory.DjangoModelFactory):
     def overwrite_creation_datetime(self, create, extracted, **kwargs):
         self.creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
         self.save()
+    '''
 
 
 class ClencherRoleFactory(factory.DjangoModelFactory):
@@ -141,6 +158,7 @@ class TailCommentFactory(factory.DjangoModelFactory):
     head = factory.SubFactory(HeadCommentFactory)
 
 
+# As any new challenge created, will be in its challengeperiod
 class GargantuanChallengeFactory(ChallengeFactory):
     title = "Gargantuan project challenge"
     body = "Gargantuan is the first project where I implement an api"
@@ -148,26 +166,69 @@ class GargantuanChallengeFactory(ChallengeFactory):
 
     @factory.post_generation
     def set_email_address_object(self, create, extracted, **kwargs):
+        andy = AndyUserFactory()
+        fred = FredUserFactory()
+        jason = JasonUserFactory()
+
         clencher = RobrechtClencherRoleFactory(challenge=self)
 
-        juror1 = JurorRoleFactory(challenge=self)
-        head1 = HeadCommentFactory(text="I think you succeeded!",
-                                   owner=juror1,
-                                   challenge=self)
-        VoteFactory(decision="positive", juror=juror1)
+        juror_andy = JurorRoleFactory(challenge=self, user=andy)
+        head_juror_andy = HeadCommentFactory(text="I think you succeeded!",
+                                             owner=juror_andy,
+                                             challenge=self)
+        VoteFactory(decision="positive", juror=juror_andy)
 
-        juror2 = JurorRoleFactory(challenge=self)
-        head2 = HeadCommentFactory(text="I think you failed!",
-                                   owner=juror2,
-                                   challenge=self)
-        VoteFactory(decision="negative", juror=juror2)
+        juror_fred = JurorRoleFactory(challenge=self, user=fred)
+        head_juror_fred = HeadCommentFactory(text="I think you failed!",
+                                             owner=juror_fred,
+                                             challenge=self)
+        VoteFactory(decision="negative", juror=juror_fred)
 
         TailCommentFactory(text="I don't agree.",
-                           owner=juror1,
+                           owner=juror_andy,
                            challenge=self,
-                           head=head1)
-
+                           head=head_juror_andy)
         TailCommentFactory(text="I don't agree either!",
-                           owner=juror2,
+                           owner=juror_fred,
                            challenge=self,
-                           head=head1)
+                           head=head_juror_andy)
+
+        juror_jason = JurorRoleFactory(challenge=self, user=jason) # A juror that hasn't voted yet
+
+
+# Note:
+# Don't use multiple GargantuanChallengeFactories on the same
+# db state. You will get an 'IntegrityError: column username is not unique'
+# otherwise. This is because of usage of the same clencher username.
+
+# A challenge created on a fixed date
+class TimeFixedGargantuanChallengeFactory(GargantuanChallengeFactory):
+    pass
+
+    @factory.post_generation
+    def overwrite_creation_datetime(self, create, extracted, **kwargs):
+        self.creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
+        self.save()
+
+
+# A challenge that is in its voting period
+class InVotingPeriodGargantuanChallengeFactory(GargantuanChallengeFactory):
+    pass
+
+    @factory.post_generation
+    def overwrite_creation_datetime(self, create, extracted, **kwargs):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        self.creation_datetime = now - relativedelta(months=1, minutes=1)
+        self.save()
+
+
+# A challenge that has ended(=post voting period)
+class EndedGargantuanChallengeFactory(GargantuanChallengeFactory):
+    pass
+
+    @factory.post_generation
+    def overwrite_creation_datetime(self, create, extracted, **kwargs):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        self.creation_datetime = now - relativedelta(months=2)
+        self.save()
+

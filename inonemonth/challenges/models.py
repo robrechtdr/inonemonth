@@ -1,5 +1,9 @@
+import datetime
+
 from dateutil.relativedelta import relativedelta
 
+from django.conf import settings
+from django.utils.timezone import utc
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -45,16 +49,31 @@ class Challenge(models.Model):
                                      "for this challenge yet.")
 
     def get_challenge_period_end_datetime(self):
-        #one_month = relativedelta(months=1)
-        one_month = relativedelta(days=1)
-        #one_month = relativedelta(minutes=20)
-        return (self.creation_datetime + one_month)
+        return (self.creation_datetime + settings.CHALLENGE_PERIOD_DURATION)
 
     def get_voting_period_end_datetime(self):
-        #one_month = relativedelta(months=1)
-        one_week = relativedelta(weeks=1)
-        #one_month = relativedelta(minutes=20)
-        return (self.get_challenge_period_end_datetime() + one_week)
+        return (self.get_challenge_period_end_datetime() + settings.VOTING_PERIOD_DURATION)
+
+    def in_challenge_period(self):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        if now < self.get_challenge_period_end_datetime():
+            return True
+        else:
+            return False
+
+    def in_voting_period(self):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        if self.get_challenge_period_end_datetime() < now < self.get_voting_period_end_datetime():
+            return True
+        else:
+            return False
+
+    def has_ended(self):
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        if now > self.get_voting_period_end_datetime():
+            return True
+        else:
+            return False
 
 
 class Role(models.Model):
@@ -77,9 +96,7 @@ class Role(models.Model):
     def get_absolute_url(self):
         return reverse("role_api_retrieve", kwargs={"pk": self.pk})
 
-    # Possibly refine later, to only allow jurors to vote during
-    # the judgement period.
-    def can_vote(self):
+    def is_juror(self):
         if self.type == self.JUROR:
             return True
         elif self.type == self.CLENCHER:
@@ -87,14 +104,14 @@ class Role(models.Model):
 
     def can_make_head_comment(self):
         """
-        Only allow jurors that haven't made a head comment yet to make a head
-        comment.
+        Only allow jurors that haven't made a head comment yet while
+        the challenge is still in the challenge period.
         """
         if self.type == self.JUROR:
             if len(self.headcomment_set.all()) != 0:
                 return False
             else:
-                return True
+                return self.challenge.in_voting_period()
         else:
             return False
 

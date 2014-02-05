@@ -4,6 +4,7 @@
 from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
+from dateutil.relativedelta import relativedelta
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -126,6 +127,12 @@ STATICFILES_FINDERS = (
 # Note: This key should only be used for development and testing.
 SECRET_KEY = r"^!!8(e%nbjoauefzo9jszx@o*fa#7r7jt%9p9ec6j^0qut6m&!"
 ########## END SECRET CONFIGURATION
+
+
+########## INONEMONTH CONFIGURATION
+CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
+VOTING_PERIOD_DURATION = relativedelta(weeks=1)
+########## END INONEMONTH CONFIGURATION
 
 
 ########## SITE CONFIGURATION

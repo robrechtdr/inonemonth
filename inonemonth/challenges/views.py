@@ -152,7 +152,7 @@ def challenge_detail_view(request, **kwargs):
 
     return render(request=request, template_name='challenge/challenge_detail.html',
                   dictionary={"role_api_url": role_api_url,
-                              "model": challenge,
+                              "challenge": challenge,
                               "head_comment_form": head_comment_form,
                               "tail_comment_form": tail_comment_form
                               }

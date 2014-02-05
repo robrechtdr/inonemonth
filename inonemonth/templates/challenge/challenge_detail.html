@@ -59,6 +59,10 @@
           Make vote comment
         </button>
 
+        <div id="challenge-period-notification" class="well" style="display:none;">
+          Only when the challenge period ends will you be able to cast your vote!  
+        </div>
+
         <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
           {{ head_comment_form }}   
           <input type="hidden" value="" name="id">
@@ -110,6 +114,8 @@
 
       var roleApiUrl = "{{ role_api_url }}";
 
+      var $challengePeriodNotification = $('#challenge-period-notification');
+
       var $headCommentButton = $('.head-comment-button');
       var $headEditButton = $('.head-edit-button');
       var $headCommentForm = $('#head-comment-form');
@@ -126,8 +132,15 @@
           // remember to remove the !
           if (role.can_make_head_comment) {
               //$headCommentButton.appendTo(".comments-container");
+              $challengePeriodNotification.hide(); 
               $headCommentButton.show();
           }
+          if (role.is_juror && role.challenge.in_challenge_period) {
+              // then show js message: You can vote when the challenge period ends, in x days, ... .
+              //console.log("yp");
+              $challengePeriodNotification.show(); 
+          }
+
 
           // Only show delete and edit buttons for comments owned by the current role
           // To omit type errors

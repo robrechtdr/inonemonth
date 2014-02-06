@@ -129,12 +129,6 @@ SECRET_KEY = r"^!!8(e%nbjoauefzo9jszx@o*fa#7r7jt%9p9ec6j^0qut6m&!"
 ########## END SECRET CONFIGURATION
 
 
-########## INONEMONTH CONFIGURATION
-CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
-VOTING_PERIOD_DURATION = relativedelta(weeks=1)
-########## END INONEMONTH CONFIGURATION
-
-
 ########## SITE CONFIGURATION
 # Hosts/domain names that are valid for this site
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -298,6 +292,20 @@ AUTHENTICATION_BACKENDS = (
 'django.contrib.auth.backends.ModelBackend',
 )
 ########## END AUTHENTICATION BACKENDS CONFIGURATION
+
+
+########## INONEMONTH CONFIGURATION
+CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
+VOTING_PERIOD_DURATION = relativedelta(weeks=1)
+########## END INONEMONTH CONFIGURATION
+
+
+########## CRISPY FORMS CONFIGURATION
+INSTALLED_APPS += (
+'crispy_forms',
+)
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+########## END CRISPY FORMS CONFIGURATION
 
 
 ########## SOUTH CONFIGURATION

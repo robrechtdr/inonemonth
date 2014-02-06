@@ -1,0 +1,8 @@
+/* Django-pagedown css fixes for bootstrap 3
+-------------------------------------------------- */
+
+.wmd-panel {
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+}

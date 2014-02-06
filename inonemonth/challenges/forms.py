@@ -6,10 +6,14 @@ from pagedown.widgets import PagedownWidget
 from .models import Challenge
 
 class ChallengeCreateModelForm(forms.ModelForm):
-    body = forms.CharField(widget=PagedownWidget(), label="Body")
+    body = forms.CharField(widget=PagedownWidget(attrs={"placeholder":"Complete description of my challenge"}), label="Body")
 
     class Meta:
         model = Challenge
+        widgets = {
+            "title": forms.TextInput(attrs={"placeholder":
+                                            "A one line description of my challenge"}),
+        }
         fields = ("title", "body")
 
 

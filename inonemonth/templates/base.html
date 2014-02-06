@@ -28,9 +28,14 @@
 
   <body>
 
-    
-    <nav class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
-      <div class="container-fluid info">
+
+    <!-- 
+    .navbar-fixed-top in <nav> breaks dropdown in collapse mode.
+    Also, even if dropdrown is rendered, looks ugly.
+    -->
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
 
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -45,11 +50,11 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <!--                                                
           <ul class="nav navbar-nav">
-            <!--                                                
             <li><a href="#">Link</a></li>
-            -->
           </ul>
+          -->
 
           <ul class="nav navbar-nav navbar-right">
             <!--                                                
@@ -62,15 +67,17 @@
               Need to color to "bg-warning"
               -->
               <ul class="dropdown-menu">
-                  <li><a href="{% url 'github_login' %}"><img title="Github account" src="{% static 'img/github-48-black.png' %}"></a></li>
+                <li><a href="{% url 'github_login' %}"><img title="Github account" src="{% static 'img/github-48-black.png' %}"></a></li>
                 <li class="divider"></li>
                 <li><a href="{% url 'account_login' %}">Local account</a></li>
               </ul>
+
             </li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
+
 
 
     <!-- # Navigation bar -->

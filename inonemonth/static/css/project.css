@@ -13,6 +13,9 @@ body {
 /* base.html 
 -------------------------------------------------- */
 
+.dropdown-menu {
+  text-align: center;
+}
 
 
 /* home.html 

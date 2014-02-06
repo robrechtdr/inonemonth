@@ -51,25 +51,25 @@
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
+            <!--                                                
             <li><a href="#">Link</a></li>
+            -->
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle " data-toggle="dropdown">Sign in <b class="caret"></b></a>
+              <!--                                                
+              Why does "bg-warning" color not apply on dropdown-menu?
+              Need to color to "bg-warning"
+              -->
               <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                  <li><a href="{% url 'github_login' %}"><img title="Github account" src="{% static 'img/github-48-black.png' %}"></a></li>
                 <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+                <li><a href="{% url 'account_login' %}">Local account</a></li>
               </ul>
             </li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-
-
-
-
 
 
     <!-- # Navigation bar -->

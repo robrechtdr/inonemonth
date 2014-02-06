@@ -11,3 +11,5 @@ local_env.txt
 .coverage
 git_hidden/*
 inonemonth/core/initial_data.json
+inonemonth/static/css/.bstr_dump/*
+

@@ -5,12 +5,30 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
+  padding-top: 64px;
   padding-bottom: 20px;
 }
 
+.navbar { 
+  height: 64px; 
+}
+
+/* base.html 
+-------------------------------------------------- */
+
+#main-logo {
+  float: left;
+  position: relative;
+  left: 8px;
+  top: 3px
+}
+
+
+
 /* home.html 
 -------------------------------------------------- */
+
+
 
 
 

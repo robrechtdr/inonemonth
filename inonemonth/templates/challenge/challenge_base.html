@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+      <div class="col-md-7">
+      {% block left-column %}
+      {% endblock left-column %}
+      </div>
+
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-4 ">
+      {% block right-column %}
+      {% endblock right-column %}
+      </div>
+    </div><!-- end div.row -->
+</div><!-- end div.container -->
+{% endblock content %}

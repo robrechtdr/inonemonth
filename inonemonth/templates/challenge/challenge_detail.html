@@ -1,94 +1,88 @@
-{% extends "base.html" %}
+{% extends "challenge/challenge_base.html" %}
+
 {% load staticfiles %}
 {% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
 
 {% block prepend_css %}
   {{ head_comment_form.media }}
 {% endblock prepend_css %}
 
-{% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-      <p>{{ challenge.title }}</p>
-      <p>{{ challenge.body|markdown }}</p>
 
-      <div class="comments-container">
-        <ul>
-        {% for head_comment in challenge.headcomment_set.all %}
-          <li>
-            <div class="head-comment" style="border-style:solid;">
-              <div class="head-comment-content">
-              {{ head_comment.text }}
-              {{ head_comment.owner.vote.decision }}
-              </div>
-              <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
-              <button class="head-edit-button btn" style="display:none;" type="button">
-                Edit 
-              </button>
-            </div>
-    
-            <ul>
-            {% for tail_comment in head_comment.tailcomment_set.all %}
-              <li class="tail-comment" style="border-style:solid;">
-                <div class="tail-comment-content">
-                {{ tail_comment.text }}
-                </div>
-                <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
-                <button class="tail-edit-button btn" type="button" style="display:none;">
-                  Edit 
-                </button>
-                <button class="tail-delete-button btn" type="button" style="display:none;">
-                  Delete 
-                </button>
-              </li>
-            {% endfor %}
-            </ul>
-    
+{% block left-column %}
+<h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
+<p>{{ challenge.title }}</p>
+<p>{{ challenge.body|markdown }}</p>
 
-            <button class="tail-comment-button btn" type="button">
-              Add comment 
-            </button>
-          </li>
-        {% endfor %}
-        </ul>
-
-        <br>
-        <button class="head-comment-button btn" type="button" style="display:none;">
-          Make vote comment
-        </button>
-
-        <div id="challenge-period-notification" class="well" style="display:none;">
-          Only when the challenge period ends will you be able to cast your vote!  
+<div class="comments-container">
+  <ul>
+  {% for head_comment in challenge.headcomment_set.all %}
+    <li>
+      <div class="head-comment" style="border-style:solid;">
+        <div class="head-comment-content">
+        {{ head_comment.text }}
+        {{ head_comment.owner.vote.decision }}
         </div>
-
-        <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
-          {{ head_comment_form }}   
-          <input type="hidden" value="" name="id">
-          <input type="submit" value="Post" name="head-submit">
-        </form>
-        <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
-          {{ tail_comment_form }}   
-          <input type="hidden" value="" name="id">
-          <input type="hidden" value="" name="head-id">
-          <input type="submit" value="Post" name="tail-submit">
-        </form>
-
+        <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
+        <button class="head-edit-button btn" style="display:none;" type="button">
+          Edit 
+        </button>
       </div>
 
-    </div>
-    <div class="col-md-4">
-      <div id="name">
-        {{ challenge.get_challenge_period_end_datetime|timeuntil }}
-      </div>
-    </div>
+      <ul>
+      {% for tail_comment in head_comment.tailcomment_set.all %}
+        <li class="tail-comment" style="border-style:solid;">
+          <div class="tail-comment-content">
+          {{ tail_comment.text }}
+          </div>
+          <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
+          <button class="tail-edit-button btn" type="button" style="display:none;">
+            Edit 
+          </button>
+          <button class="tail-delete-button btn" type="button" style="display:none;">
+            Delete 
+          </button>
+        </li>
+      {% endfor %}
+      </ul>
 
-  </div><!-- end div.row -->
+      <button class="tail-comment-button btn" type="button">
+        Add comment 
+      </button>
+    </li>
+  {% endfor %}
+  </ul>
 
-</div><!-- end div.container -->
+  <br>
+  <button class="head-comment-button btn" type="button" style="display:none;">
+    Make vote comment
+  </button>
 
-{% endblock content %}
+  <div id="challenge-period-notification" class="well" style="display:none;">
+    Only when the challenge period ends will you be able to cast your vote!  
+  </div>
+
+  <form id="head-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+    {{ head_comment_form }}   
+    <input type="hidden" value="" name="id">
+    <input type="submit" value="Post" name="head-submit">
+  </form>
+  <form id="tail-comment-form" action="" method="post" style="display:none;"> {% csrf_token %}
+    {{ tail_comment_form }}   
+    <input type="hidden" value="" name="id">
+    <input type="hidden" value="" name="head-id">
+    <input type="submit" value="Post" name="tail-submit">
+  </form>
+
+</div>
+{% endblock left-column %}
+
+
+{% block right-column %}
+<div id="name">
+  {{ challenge.get_challenge_period_end_datetime|timeuntil }}
+</div>
+{% endblock right-column %}
 
 
 {% block extra_js %}

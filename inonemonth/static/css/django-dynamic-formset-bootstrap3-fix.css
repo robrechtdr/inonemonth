@@ -1,0 +1,26 @@
+/*************************************************
+ *  django-dynamic-formset fixes for bootstrap3  *
+ *************************************************/
+
+.dynamic-form {
+  /* For Firefox */ 
+  padding-left: 0px;
+  /* For webkit browers */ 
+  -webkit-padding-start: 0px;
+}
+
+.delete-row {
+  float: right;
+}
+
+/* The field's length should auto adapt instead 
+ * of using %, why does width auto not come to 
+ * the border of the remove button? */
+.dynamic-form input.form-control {
+  display: inline;
+  width : 84%;
+}
+
+.add-row {
+  margin-bottom: 10px; 
+}

@@ -4,33 +4,52 @@
 {% load markdown_deux_tags %}
 {% load crispy_forms_tags %}
 
+{% block append_css %}
+    <link href="{% static 'css/django-dynamic-formset-bootstrap3-fix.css' %}" rel="stylesheet">
+{% endblock append_css %}
+ 
 
 {% block left-column %}
 <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-<p>{{ model.title }}</p>
-<p>{{ model.body|markdown }}</p>
+<div class="panel panel-default">
+  <div class="panel-heading">{{ model.title }}</div>
+  <div class="panel-body">
+    {{ model.body|markdown }}
+  </div>
+</div>
 
+
+<h2>Invite your judges</h1>
 <form action="" method="post"> {% csrf_token %}
   <ul class="form-container">
+    {% crispy formset %}
+
+{% comment %}
   {% for form in formset.forms %} 
     {{ form|crispy }}
   {% endfor %}
+{% endcomment %}
   </ul>
   {{ formset.management_form }}
-  <input type="submit" value="Submit">
+  <input type="submit" value="Submit" class="btn btn-default">
 </form>
 {% endblock left-column %}
 
 
 {% block right-column %}
+<div class="well">
+  <h4>What will each juror receive?</h4>
+  <p>Each juror will receive an ...</p>
+</div>
 {% endblock right-column %}
 
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.django-dynamic-formset.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
     $(function() {
         $('.form-container').formset();
     })
 </script>
+<script type="text/javascript" src="{% static 'js/jquery.django-dynamic-formset-bootstrap3-fix.js' %}"></script>
 {% endblock extra_js %}

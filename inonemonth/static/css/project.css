@@ -17,6 +17,11 @@ body {
   text-align: center;
 }
 
+/* Without !important it won't overwrite */
+.signin-text {
+  color: #ffffff !important;
+}
+
 
 /* home.html 
 -------------------------------------------------- */

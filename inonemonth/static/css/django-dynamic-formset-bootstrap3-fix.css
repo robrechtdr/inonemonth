@@ -24,3 +24,8 @@
 .add-row {
   margin-bottom: 10px; 
 }
+
+/* http://stackoverflow.com/questions/1817792/css-previous-sibling-selector */
+.dynamic-form ~ input[type=submit] {
+  display: block;
+}

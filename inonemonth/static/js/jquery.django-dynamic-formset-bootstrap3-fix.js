@@ -4,9 +4,9 @@
     $(document).ready(function(){
         function fixDeleteRow ($deleteClickable) {
             // Move .delete-row link immediately after the form input
-            $deleteClickableList = $deleteClickable.parent();
-            var $formGroup = $deleteClickableList.siblings().find(".controls");
-            $deleteClickableList.appendTo($formGroup);
+            var $deleteClickableList = $deleteClickable.parent();
+            var $formInputField = $deleteClickableList.parent().find("input");
+            $deleteClickableList.insertAfter($formInputField);
             // Strip its li tags
             $deleteClickableList.replaceWith($deleteClickable);
             // Style it with bootstrap3 classes
@@ -22,10 +22,21 @@
         $addAnotherClickables.addClass("btn btn-default");
 
         // To apply on subsequently generated .delete-row links
-        $(".add-row").click(function(){
+        $(".add-row").click(function() {
             // Move .delete-row link immediately after the form input
             var $deleteClickable = $(".delete-row").last();
             fixDeleteRow($deleteClickable);
         });
+
+        // To apply on form validation errors
+        // .help-block tag comes up when validation error is shown.
+        if ($(".help-block").length > 0) {
+            // Slice of the already styled last element.
+            var $deleteClickables = $(".delete-row").slice(0, -1);
+            for (i in $deleteClickables) {
+                fixDeleteRow($deleteClickables.eq(i));
+            }
+        }
+
     });
 })(jQuery); 

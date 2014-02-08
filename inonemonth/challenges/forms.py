@@ -18,4 +18,6 @@ class ChallengeCreateModelForm(forms.ModelForm):
 
 
 class JurorInviteForm(forms.Form):
-    email = forms.EmailField()
+    # Strange that with only 1 form in formset, required does not apply
+    # without writing it here explicitly.
+    email = forms.EmailField(required=True)

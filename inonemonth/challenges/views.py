@@ -9,6 +9,7 @@ from django.forms.formsets import formset_factory
 from rest_framework import generics
 
 from core.models import UserExtension
+from core.forms import RequiredFormSet
 from core.allauth_utils import create_allauth_user, generate_password
 from comments.forms import HeadCommentForm, TailCommentForm
 from comments.models import HeadComment, TailComment
@@ -47,7 +48,7 @@ def challenge_create_view(request):
 
 
 def invite_jurors_view(request, **kwargs):
-    JurorInviteFormset = formset_factory(JurorInviteForm)
+    JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     challenge = Challenge.objects.get(pk=kwargs["pk"])
     if request.method == "POST":
         formset = JurorInviteFormset(request.POST)

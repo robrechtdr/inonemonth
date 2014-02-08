@@ -38,5 +38,9 @@
             }
         }
 
+        // Don't show first remove button, user should always fill 
+        // in one form at least.
+        $(".delete-row").first().hide();
+
     });
 })(jQuery); 

@@ -11,14 +11,19 @@
 
 {% block left-column %}
 <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-<p>{{ challenge.title }}</p>
-<p>{{ challenge.body|markdown }}</p>
+
+<div class="panel panel-default">
+  <div class="panel-heading">{{ challenge.title }}</div>
+  <div class="panel-body">
+    {{ challenge.body|markdown }}
+  </div>
+</div>
 
 <div class="comments-container">
-  <ul>
+  <ul class="list-group">
   {% for head_comment in challenge.headcomment_set.all %}
-    <li>
-      <div class="head-comment" style="border-style:solid;">
+    <li class="list-group-item">
+      <div class="head-comment">
         <div class="head-comment-content">
         {{ head_comment.text }}
         {{ head_comment.owner.vote.decision }}
@@ -29,9 +34,9 @@
         </button>
       </div>
 
-      <ul>
+      <ul class="list-group">
       {% for tail_comment in head_comment.tailcomment_set.all %}
-        <li class="tail-comment" style="border-style:solid;">
+        <li class="tail-comment list-group-item">
           <div class="tail-comment-content">
           {{ tail_comment.text }}
           </div>
@@ -79,8 +84,10 @@
 
 
 {% block right-column %}
-<div id="name">
-  {{ challenge.get_challenge_period_end_datetime|timeuntil }}
+<div class="well">
+  <div id="name">
+    {{ challenge.get_challenge_period_end_datetime|timeuntil }}
+  </div>
 </div>
 {% endblock right-column %}
 

@@ -27,7 +27,16 @@ body {
 -------------------------------------------------- */
 
 
+/* challenge/challenge_detail.html 
+-------------------------------------------------- */
 
+.comments-container > ul:first-of-type {
+  padding: 0px; 
+}
+
+.comments-container li {
+  list-style: none;
+}
 
 
 /* carousel.html 

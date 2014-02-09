@@ -26,6 +26,33 @@ body {
 /* home.html 
 -------------------------------------------------- */
 
+.home-outer-centered-container {
+   height: 550px;
+   display: table;
+   width: 100%;
+}
+
+.home-inner-centered-container {
+   display: table-cell;
+   text-align: center;
+   vertical-align: middle;
+}
+
+.home-inner-centered-container a {
+  width: 200px;
+}
+
+.home-inner-centered-container h3 {
+  margin-top: 10px; 
+  margin-bottom: 25px; 
+}
+
+.home-inner-centered-container img {
+  /*
+  padding: 10px;
+  */
+}
+
 
 /* challenge/challenge_detail.html 
 -------------------------------------------------- */

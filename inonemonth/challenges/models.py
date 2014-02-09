@@ -101,6 +101,8 @@ class Role(models.Model):
             return True
         elif self.type == self.CLENCHER:
             return False
+        else:
+            return Exception("Else Die")
 
     def can_make_head_comment(self):
         """

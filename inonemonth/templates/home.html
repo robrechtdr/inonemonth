@@ -2,9 +2,11 @@
 
 {% load staticfiles %}
 
+{% block body_class %}home{% endblock %}
+
 {% block content %}
-<div class="home-outer-centered-container">
-   <div class="home-inner-centered-container">
+<div class="outer-centered-container">
+   <div class="inner-centered-container">
      <img src="{% static 'img/inonemonth_large_white.png' %}">
      <h3>- Fail wisely -</h3>
      <a class="btn btn-primary btn-lg" role="button">Start a challenge</a>

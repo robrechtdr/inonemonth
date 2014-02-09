@@ -26,7 +26,7 @@
     {% endblock append_css %}
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock body_class %}">
 
 
     <!-- 
@@ -131,7 +131,7 @@
     {% endblock content %}
 
     <!-- ## Bottom of page -->
-    <div class="container">
+    <div class="container foot">
       <hr>
 
       <footer>

@@ -12,8 +12,9 @@ from comments.views import TailCommentDestroyAPIView
 #                            CommentRetrieveUpdateDestroyAPIView)
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
-    url(r'^basic$', TemplateView.as_view(template_name='home.html')),
+    url(r'^$', TemplateView.as_view(template_name='home.html'), name="home_view"),
+    url(r'^carousel$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
+    url(r'^basic$', TemplateView.as_view(template_name='home2.html')),
 
     url(r'^accounts/', include('allauth.urls')),
 

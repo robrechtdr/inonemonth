@@ -11,7 +11,6 @@
   font-weight:700;
   font-size:1rem;
   line-height:2rem;
-  position:relative;
   transition:.5s;
   padding:5px 40px;
   /* Override of heilman's settings */
@@ -51,7 +50,7 @@
 
   #stage-indicator a {
     width:200px;
-    position:absolute;
+    position:fixed;
     top:60px;
     left:-60px;
     transform:rotate(-45deg);

@@ -19,6 +19,7 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="{% static 'css/django-pagedown-bootstrap3-fix.css' %}" rel="stylesheet">
+    <link href="{% static 'css/stage-indicator.css' %}" rel="stylesheet">
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
     <!-- Use the following to quickly test CSS changes in a template,
       then move to project.css -->
@@ -28,6 +29,7 @@
 
   <body class="{% block body_class %}{% endblock body_class %}">
 
+    <span id="stage-indicator"><a href="">Alpha</a></span>
 
     <!-- 
     .navbar-fixed-top in <nav> breaks dropdown in collapse mode.

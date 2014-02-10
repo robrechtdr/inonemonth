@@ -41,12 +41,18 @@ class Challenge(models.Model):
     # serializer?
     def get_jurors(self):
         # `filter` call with no results returns an empty list (vs `get`)
-        jurors = self.role_set.filter(type=self.role_set.model.JUROR)
+        # Also, the order_by id is probably default, but want to explicit that
+        # ordering by id is important here (other model method relies on it).
+        jurors = self.role_set.filter(type=self.role_set.model.JUROR).order_by("id")
         if jurors:
             return jurors
         else:
             return self.Exception("No Juror has been assigned as juror "
                                      "for this challenge yet.")
+
+    def get_juror_representation_list(self):
+        jurors = self.get_jurors()
+        return [(jurors[i], i + 1) for i in range(len(jurors))]
 
     def get_challenge_period_end_datetime(self):
         return (self.creation_datetime + settings.CHALLENGE_PERIOD_DURATION)
@@ -116,6 +122,33 @@ class Role(models.Model):
                 return self.challenge.in_voting_period()
         else:
             return False
+
+    # Why 2 methods with no argument instead of one with
+    # an argument and then define a filter/tag to pass
+    # the argument in the teplate?
+    # Because I'd like to make it as easy as possible for
+    # later to call this method via an api call and you
+    # can't serialize model methods with an argument
+    # as far as I know. This with the goal of making
+    # the comments asynchronous.
+
+    # But is premature optimization, which isn't good... .
+    def get_challenge_representation_for_juror(self):
+        jurors = self.challenge.get_jurors()
+        clencher = self.challenge.get_clencher()
+        if self.type == self.CLENCHER:
+            return self.type.capitalize()
+        elif self.type == self.JUROR:
+            juror_representation_list = self.challenge.get_juror_representation_list()
+            for juror, index in juror_representation_list:
+                if self == juror:
+                    return "{0} {1}".format(juror.type.capitalize(), index)
+            return Exception("Die")
+        else:
+            return Exception("Else Die")
+
+    def get_challenge_representation_for_clencher(self):
+        return self.user.email
 
 
 class Vote(models.Model):

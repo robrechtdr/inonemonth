@@ -27,6 +27,12 @@
         <div class="head-comment-content">
         {{ head_comment.text }}
         {{ head_comment.owner.vote.decision }}
+        {% if user_role == "juror" %}
+          {{ head_comment.owner.get_challenge_representation_for_juror }}
+        {% else %}
+          {{ head_comment.owner.get_challenge_representation_for_clencher }}
+        {% endif %}
+
         </div>
         <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
         <button class="head-edit-button btn" style="display:none;" type="button">
@@ -39,6 +45,11 @@
         <li class="tail-comment list-group-item">
           <div class="tail-comment-content">
           {{ tail_comment.text }}
+          {% if user_role == "juror" %}
+            {{ tail_comment.owner.get_challenge_representation_for_juror }}
+          {% else %}
+            {{ tail_comment.owner.get_challenge_representation_for_clencher }}
+          {% endif %}
           </div>
           <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
           <button class="tail-edit-button btn" type="button" style="display:none;">

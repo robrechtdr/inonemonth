@@ -54,6 +54,16 @@ class Challenge(models.Model):
         jurors = self.get_jurors()
         return [(jurors[i], i + 1) for i in range(len(jurors))]
 
+    def get_juror_representation_number(self, juror):
+        jurors = self.get_jurors()
+        print jurors
+        for i in range(len(jurors)):
+            print jurors[i]
+            if juror == jurors[i]:
+                # Id numbering of instances starts at 1 instead of 0
+                return (i + 1)
+        return Exception("Argument is not a Juror in the current challenge")
+
     def get_challenge_period_end_datetime(self):
         return (self.creation_datetime + settings.CHALLENGE_PERIOD_DURATION)
 

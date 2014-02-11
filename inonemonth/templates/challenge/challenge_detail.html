@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load markdown_deux_tags %}
 {% load crispy_forms_tags %}
+{% load challenges_extras %}
 
 {% block prepend_css %}
   {{ head_comment_form.media }}
@@ -25,14 +26,9 @@
     <li class="list-group-item">
       <div class="head-comment">
         <div class="head-comment-content">
-        {{ head_comment.text }}
-        {{ head_comment.owner.vote.decision }}
-        {% if user_role == "juror" %}
-          {{ head_comment.owner.get_challenge_representation_for_juror }}
-        {% else %}
-          {{ head_comment.owner.get_challenge_representation_for_clencher }}
-        {% endif %}
-
+          <div>{{ head_comment.text }}</div>
+          <div>{{ head_comment.owner|get_representation_for_user:user_role }}</div>
+          <div>{{ head_comment.owner.vote.decision }}</div>
         </div>
         <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
         <button class="head-edit-button btn" style="display:none;" type="button">
@@ -44,12 +40,8 @@
       {% for tail_comment in head_comment.tailcomment_set.all %}
         <li class="tail-comment list-group-item">
           <div class="tail-comment-content">
-          {{ tail_comment.text }}
-          {% if user_role == "juror" %}
-            {{ tail_comment.owner.get_challenge_representation_for_juror }}
-          {% else %}
-            {{ tail_comment.owner.get_challenge_representation_for_clencher }}
-          {% endif %}
+            <div>{{ tail_comment.text }}</div>
+            <div>{{ tail_comment.owner|get_representation_for_user:user_role }}</div>
           </div>
           <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
           <button class="tail-edit-button btn" type="button" style="display:none;">

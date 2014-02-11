@@ -81,25 +81,6 @@ class ChallengeTestCase(django.test.TestCase):
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.has_ended(), True)
 
-    @unittest.skip("")
-    def test_get_juror_representation_list(self):
-        GargantuanChallengeFactory()
-        challenge = Challenge.objects.get(id=1)
-
-        '''
-        from mock import Mock
-        juror_mock = Mock(spec=Role)
-        #juror_mock.return_value = "<Role: Juror "#'{0}' of '{1}'"#.format(..)
-        #juror_mock.return_value = "<Role: {0}".format(Role.__unicode__(juror# "#'{0}' of '{1}'"#.format(..)
-        #andy_mock = juror_mock(username="andy.slacker", challenge="Challenge 1")
-        juror_mock.type = "kok"
-        juror_mock.user = "my_user"
-        juror_mock.challenge = "my_chal"
-        my_jur = Role.__unicode__(juror_mock)
-        import pdb; pdb.set_trace()
-        '''
-        self.assertEqual(challenge.get_juror_representation_list(), "")
-
     def test_get_juror_representation_number_as_juror(self):
         EndedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
@@ -174,18 +155,3 @@ class RoleTestCase(django.test.TestCase):
         andy = User.objects.get(email="andy.slacker@gmail.com")
         juror_andy = challenge.role_set.get(user=andy) # with head comment
         self.assertEqual(juror_andy.can_make_head_comment(), False)
-
-    def test_juror_get_challenge_representation_for_juror(self):
-        GargantuanChallengeFactory()
-        challenge = Challenge.objects.get(id=1)
-        andy = User.objects.get(email="andy.slacker@gmail.com")
-        juror_andy = challenge.role_set.get(user=andy)
-        juror_representation_for_juror = juror_andy.get_challenge_representation_for_juror()
-        self.assertEqual(juror_representation_for_juror, "Juror 1")
-
-    def test_clencher_get_challenge_representation_for_juror(self):
-        GargantuanChallengeFactory()
-        challenge = Challenge.objects.get(id=1)
-        clencher = challenge.get_clencher()
-        clencher_representation_for_juror = clencher.get_challenge_representation_for_juror()
-        self.assertEqual(clencher_representation_for_juror, "Clencher")

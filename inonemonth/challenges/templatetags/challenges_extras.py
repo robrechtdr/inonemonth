@@ -6,7 +6,7 @@ register = Library()
 def get_representation_for_user(role, user_role):
     if user_role.type == "juror":
         if role.type == "clencher":
-            return "Clencher (de.rouck.robrecht@gmail.com)"
+            return "{0} ({1})".format(role.type.capitalize(), role.user.email)
         elif role.type == "juror":
             if role == user_role:
                 return "Juror 1 (me)"

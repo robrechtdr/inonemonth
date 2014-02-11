@@ -33,15 +33,37 @@ class GetRepresentationForUserTestCase(django.test.TestCase):
         self.assertEqual(get_representation_for_user(role, user_role), "Clencher (de.rouck.robrecht@gmail.com)")
 
     def test_juror_as_role_and_other_juror_as_user_role(self):
-        self.assertEqual("", "Juror 2")
+        challenge = Challenge.objects.get(id=1)
+        fred = User.objects.get(email="fred.labot@gmail.com")
+        role = challenge.role_set.get(user=fred)
+
+        andy = User.objects.get(email="andy.slacker@gmail.com")
+        user_role = challenge.role_set.get(user=andy)
+        self.assertEqual(get_representation_for_user(role, user_role), "Juror 2")
 
     def test_juror_as_role_and_identical_juror_as_user_role(self):
-        self.assertEqual("", "Juror 1 (me)")
+        challenge = Challenge.objects.get(id=1)
+        andy = User.objects.get(email="andy.slacker@gmail.com")
+        role = challenge.role_set.get(user=andy)
+
+        user_role = role
+        self.assertEqual(get_representation_for_user(role, user_role), "Juror 1 (me)")
 
     # If role and user_role are clenchers, is always the same person
     # because there is only 1 clencher per challenge.
     def test_clencher_as_role_and_clencher_as_user_role(self):
-        self.assertEqual("", "Clencher (me)")
+        challenge = Challenge.objects.get(id=1)
+        role = challenge.get_clencher()
+
+        robrecht = User.objects.get(email="de.rouck.robrecht@gmail.com")
+        user_role = challenge.role_set.get(user=robrecht)
+        self.assertEqual(get_representation_for_user(role, user_role), "Clencher (me)")
 
     def test_juror_as_role_and_clencher_as_user_role(self):
-        self.assertEqual("", "Juror 1 (andy.slacker@gmail.com)")
+        challenge = Challenge.objects.get(id=1)
+        andy = User.objects.get(email="andy.slacker@gmail.com")
+        role = challenge.role_set.get(user=andy)
+
+        robrecht = User.objects.get(email="de.rouck.robrecht@gmail.com")
+        user_role = challenge.role_set.get(user=robrecht)
+        self.assertEqual(get_representation_for_user(role, user_role), "Juror 1 (andy.slacker@gmail.com)")

@@ -100,6 +100,18 @@ class ChallengeTestCase(django.test.TestCase):
         '''
         self.assertEqual(challenge.get_juror_representation_list(), "")
 
+    def test_get_juror_representation_number_as_juror(self):
+        EndedGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        juror_1 = challenge.get_jurors()[0]
+        self.assertEqual(challenge.get_juror_representation_number(juror_1), 1)
+
+    def test_get_juror_representation_number_as_non_juror_for_given_challenge(self):
+        EndedGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        clencher = challenge.get_clencher()
+        self.assertRaises(challenge.get_juror_representation_number(clencher))
+
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):

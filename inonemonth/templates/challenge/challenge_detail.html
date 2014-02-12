@@ -90,9 +90,10 @@
 
 {% block right-column %}
 <div class="well">
+  {% if challenge.in_challenge_period %}
   <p>
   The <a href="{% url "glossary" %}#challenge-period">challenge period</a> ends 
-  on <strong class="text-warning">{{ challenge.get_challenge_period_end_datetime }} (<span id="challenge-end-datetime-countdown"></span>)</strong>.
+  on <strong class="text-warning">{{ challenge.get_challenge_period_end_datetime }} (<span id="challenge-period-end-datetime-countdown"></span>)</strong>.
   </p>
 
   <p>
@@ -100,6 +101,15 @@
   <a href="{% url "glossary" %}#challenge-period">challenge period</a> ends.
   </p>
 
+  {% elif challenge.in_voting_period %}
+  <p>
+  The <a href="{% url "glossary" %}#voting-period">voting period</a> ends 
+  on <strong class="text-warning">{{ challenge.get_voting_period_end_datetime }} (<span id="voting-period-end-datetime-countdown"></span>)</strong>.
+  </p>
+
+  {% else %}
+  <p>The challenge has ended.</p>
+  {% endif %}
 </div>
 
 
@@ -268,13 +278,17 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
       // Dynamically show time untill challenge period ends
       var challengePeriodEndDateTime = '{{ challenge.get_challenge_period_end_datetime|date:"D d M Y" }} {{ challenge.get_challenge_period_end_datetime|time:"H:i" }}';
+      var votingPeriodEndDateTime = '{{ challenge.get_voting_period_end_datetime|date:"D d M Y" }} {{ challenge.get_voting_period_end_datetime|time:"H:i" }}';
+      // Would be a very bad idea here (constant requests to the server from each user) to use 
+      // ajax calls every second just to get the format via the templating language.
       setInterval(function(){
           // How to let fromNow generate a format like "2 weeks, 3 days, 14 minutes and 3 seconds left"?
-          // Would be a very bad idea here (constant requests to the server from each user) to use 
-          // ajax calls every second just to get the format via the templating language.
           var challengePeriodCount = moment(challengePeriodEndDateTime).fromNow();
           //var challengePeriodCount = moment().format();
-          $("#challenge-end-datetime-countdown").text(challengePeriodCount);
+          $("#challenge-period-end-datetime-countdown").text(challengePeriodCount);
+
+          var votingPeriodCount = moment(votingPeriodEndDateTime).fromNow();
+          $("#voting-period-end-datetime-countdown").text(votingPeriodCount);
       },1000);
   })
 </script>

@@ -100,6 +100,19 @@ class Challenge(models.Model):
 
         return vote_results
 
+    def has_majority_vote(self):
+        vote_results = self.get_vote_results()
+        total_votes = vote_results["positive"] + vote_results["negative"]
+        try:
+            vote_ratio = float(vote_results["positive"]) / total_votes
+            if vote_ratio > 0.5:
+                return True
+            else:
+                return False
+        # When no votes where made
+        except ZeroDivisionError:
+            return None
+
 
 class Role(models.Model):
     """

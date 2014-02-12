@@ -88,9 +88,25 @@
 
 {% block right-column %}
 <div class="well">
-  <div id="name">
-    {{ challenge.get_challenge_period_end_datetime|timeuntil }}
-  </div>
+  <p>
+    {{ challenge.get_challenge_period_end_datetime|timeuntil }} before the challenge
+    period ends.
+  </p>
+
+  <p>
+  The <a href="{% url "glossary" %}#voting-period">voting period</a> starts as soon as the 
+  <a href="{% url "glossary" %}#challenge-period">challenge period</a> ends.
+  </p>
+
+</div>
+
+
+{% comment %} This well should only be visible to jurors {% endcomment %}
+<div class="well">
+  <h3>How to provide a proper vote comment?</h3>
+  <p>
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+  </p>
 </div>
 {% endblock right-column %}
 

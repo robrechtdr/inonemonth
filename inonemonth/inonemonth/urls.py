@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^carousel$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
     url(r'^basic$', TemplateView.as_view(template_name='home2.html')),
 
+    url(r'^glossary$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
     url(r'^accounts/', include('allauth.urls')),
 
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),

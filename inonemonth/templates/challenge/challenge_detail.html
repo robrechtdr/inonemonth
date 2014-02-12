@@ -88,9 +88,16 @@
 
 {% block right-column %}
 <div class="well">
+  <div>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+      </div>
+    </div>
+  </div>
+
   <p>
-    {{ challenge.get_challenge_period_end_datetime|timeuntil }} before the challenge
-    period ends.
+    The <a href="{% url "glossary" %}#challenge-period">challenge period</a> ends <span id="challenge-end-datetime-countdown"></span>.
+    {% comment %}{{ challenge.get_challenge_period_end_datetime|timeuntil }}{% endcomment %}
   </p>
 
   <p>
@@ -113,6 +120,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 {% block extra_js %}
 <script type="text/javascript" src="{% static 'js/jquery-django-csrf-ajax.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
   $(function() {
 
@@ -263,6 +271,16 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           //$(this).parent().find(".tail-comment-content").empty()
       });
 
+      // Dynamically show time untill challenge period ends
+      var challengePeriodEndDateTime = '{{ challenge.get_challenge_period_end_datetime|date:"D d M Y" }} {{ challenge.get_challenge_period_end_datetime|time:"H:i" }}';
+      setInterval(function(){
+          // How to let fromNow generate a format like "2 weeks, 3 days, 14 minutes and 3 seconds left"?
+          // Would be a very bad idea here (constant requests to the server from each user) to use 
+          // ajax calls every second just to get the format via the templating language.
+          var challengePeriodCount = moment(challengePeriodEndDateTime).fromNow();
+          //var challengePeriodCount = moment().format();
+          $("#challenge-end-datetime-countdown").text(challengePeriodCount);
+      },1000);
   })
 </script>
 {% endblock extra_js %}

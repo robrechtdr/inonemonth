@@ -85,6 +85,21 @@ class Challenge(models.Model):
         else:
             return False
 
+    def get_vote_results(self):
+        jurors = self.get_jurors()
+        vote_results = {"positive": 0, "negative": 0,
+                        "not_voted": 0}
+        for juror in jurors:
+            try:
+                if juror.vote.decision == "positive":
+                    vote_results["positive"] += 1
+                elif juror.vote.decision == "negative":
+                    vote_results["negative"] += 1
+            except ObjectDoesNotExist:
+                vote_results["not_voted"] += 1
+
+        return vote_results
+
 
 class Role(models.Model):
     """

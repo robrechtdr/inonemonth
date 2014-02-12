@@ -99,6 +99,12 @@ class ChallengeTestCase(django.test.TestCase):
         self.assertEqual(challenge.get_vote_results(),
                          {'positive': 1, 'negative': 1, 'not_voted': 1})
 
+    # Need more tests for tested method
+    def test_has_majority_vote(self):
+        EndedGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.has_majority_vote(), False)
+
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):

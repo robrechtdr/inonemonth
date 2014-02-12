@@ -52,9 +52,7 @@ class Challenge(models.Model):
 
     def get_juror_representation_number(self, juror):
         jurors = self.get_jurors()
-        print jurors
         for i in range(len(jurors)):
-            print jurors[i]
             if juror == jurors[i]:
                 # Id numbering of instances starts at 1 instead of 0
                 return (i + 1)

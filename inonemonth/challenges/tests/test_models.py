@@ -93,6 +93,12 @@ class ChallengeTestCase(django.test.TestCase):
         clencher = challenge.get_clencher()
         self.assertRaises(challenge.get_juror_representation_number(clencher))
 
+    def test_get_vote_results(self):
+        EndedGargantuanChallengeFactory()
+        challenge = Challenge.objects.get(id=1)
+        self.assertEqual(challenge.get_vote_results(),
+                         {'positive': 1, 'negative': 1, 'not_voted': 1})
+
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):

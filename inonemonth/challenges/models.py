@@ -113,6 +113,18 @@ class Challenge(models.Model):
         except ZeroDivisionError:
             return None
 
+    def is_successful(self):
+        if self.has_ended():
+            if self.has_majority_vote():
+                return True
+            # When no jurors voted for a given challenge
+            elif self.has_majority_vote() == None:
+                return None
+            else:
+                return False
+        else:
+            return None
+
 
 class Role(models.Model):
     """

@@ -108,7 +108,7 @@ class ChallengeTestCase(django.test.TestCase):
     def test_is_successful(self):
         EndedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
-        self.assertEqual(challenge.is_successful(),"")
+        self.assertEqual(challenge.is_successful(), False)
 
 
 class RoleTestCase(django.test.TestCase):

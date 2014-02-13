@@ -19,7 +19,7 @@
 </div>
 
 
-<h2>Invite your judges</h1>
+<h2>Invite your jurors</h1>
 <form action="" method="post"> {% csrf_token %}
   <ul class="form-container">
   {% comment %}
@@ -41,7 +41,15 @@
 {% block right-column %}
 <div class="well">
   <h4>What will each juror receive?</h4>
-  <p>Each juror will receive an ...</p>
+  <p>Each juror will get a standardized invitation mail with an account activation
+  link and a link to your challenge. 
+  You may want to send each juror a personalised mail first!</p>
+
+  <h4>What will be disclosed to each juror?</h4>
+  <p>Unlike the clencher (you), a juror will not be able to see the identity 
+  of another juror when they cast their vote or make a comment. 
+  They will only see who you are.</p>
+
 </div>
 {% endblock right-column %}
 

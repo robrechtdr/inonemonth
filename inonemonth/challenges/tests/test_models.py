@@ -105,6 +105,7 @@ class ChallengeTestCase(django.test.TestCase):
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.has_majority_vote(), False)
 
+    # Need more tests for tested method
     def test_is_successful(self):
         EndedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)

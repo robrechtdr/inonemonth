@@ -4,9 +4,15 @@ from django import forms
 from pagedown.widgets import PagedownWidget
 
 from .models import Challenge
+from .validators import validate_repo_existance
 
 class ChallengeCreateModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ChallengeCreateModelForm, self).__init__(*args, **kwargs)
+        self.fields["repo_name"].validators.append(validate_repo_existance(user))
+
     body = forms.CharField(widget=PagedownWidget(attrs={"placeholder":"Complete description of my challenge"}), label="Body")
+    repo_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"An existing repo on my Github account"}), label="Repo name")
 
     class Meta:
         model = Challenge
@@ -14,7 +20,7 @@ class ChallengeCreateModelForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"placeholder":
                                             "A one line description of my challenge"}),
         }
-        fields = ("title", "body")
+        fields = ("title", "body", "repo_name")
 
 
 class JurorInviteForm(forms.Form):

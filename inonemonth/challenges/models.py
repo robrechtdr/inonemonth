@@ -17,6 +17,7 @@ class Challenge(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField()
     repo_name = models.CharField(max_length=200)
+    branch_name = models.CharField(max_length=200)
     creation_datetime = models.DateTimeField(auto_now_add=True)
 
     # Don"t include self.role_set.user because the user will not exist

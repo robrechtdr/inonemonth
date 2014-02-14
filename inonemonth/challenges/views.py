@@ -22,7 +22,7 @@ from .serializers import ChallengeSerializer, RoleSerializer
 #!! @user_has_profile
 def challenge_create_view(request):
     if request.method == "POST":
-        form = ChallengeCreateModelForm(request.POST)
+        form = ChallengeCreateModelForm(request.user, data=request.POST)
         if form.is_valid():
             # Get Profile based on username
             #!! profile = Profile.objects.get(user=request.user)
@@ -41,7 +41,7 @@ def challenge_create_view(request):
             return HttpResponseRedirect(reverse_lazy("challenge_invite_jurors_view",
                                         kwargs={"pk": inst.pk}))
     else:
-        form = ChallengeCreateModelForm()
+        form = ChallengeCreateModelForm(request.user)
 
     return render(request=request, template_name='challenge/challenge_create.html',
                   dictionary={"form": form})

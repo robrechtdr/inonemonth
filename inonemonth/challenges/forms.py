@@ -4,12 +4,12 @@ from django import forms
 from pagedown.widgets import PagedownWidget
 
 from .models import Challenge
-from .validators import validate_repo_existance
+from .validators import RepoExistanceValidator
 
 class ChallengeCreateModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super(ChallengeCreateModelForm, self).__init__(*args, **kwargs)
-        self.fields["repo_name"].validators.append(validate_repo_existance(user))
+        self.fields["repo_name"].validators.append(RepoExistanceValidator(user))
 
     body = forms.CharField(widget=PagedownWidget(attrs={"placeholder":"Complete description of my challenge"}), label="Body")
     repo_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"An existing repo on my Github account"}), label="Repo name")

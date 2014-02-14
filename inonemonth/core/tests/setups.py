@@ -103,8 +103,7 @@ class ChallengeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Challenge
     title = factory.Sequence(lambda n: "This is the title of the challenge{0}.".format(n))
     body = factory.Sequence(lambda n: "This is the body of the challenge{0}.".format(n))
-    repo_name = factory.Sequence(lambda n: "project{0}.".format(n))
-    branch_name = factory.Sequence(lambda n: "branch{0}.".format(n))
+    repo = factory.Sequence(lambda n: "project{0}.".format(n))
     # For some reason the following doesn't overwrite models.DateTimeField(auto_now_add=True)
     #creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
 
@@ -163,7 +162,7 @@ class TailCommentFactory(factory.DjangoModelFactory):
 class GargantuanChallengeFactory(ChallengeFactory):
     title = "Gargantuan project challenge"
     body = "Gargantuan is the first project where I implement an api"
-    repo_name = "gargantuan"
+    repo = "gargantuan"
 
     @factory.post_generation
     def set_email_address_object(self, create, extracted, **kwargs):

@@ -3,6 +3,7 @@ import django.test
 from django.core.exceptions import ValidationError
 
 from core.tests.setups import RobrechtSocialUserFactory
+from ..validators import RepoExistanceValidator
 
 
 ###############################################################################
@@ -32,4 +33,4 @@ class InvestmentModelFormTestCase(TestCase):
 class RepoExistanceValidatorTestCase(django.test.TestCase):
     def test_name(self):
         user_rob = RobrechtSocialUserFactory()
-        self.assertRaises()
+        self.assertRaises(ValidationError, RepoExistanceValidator(user_rob), "asiakas/non_existing_branch")

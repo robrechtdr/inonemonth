@@ -17,7 +17,7 @@ class ChallengeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Challenge
-        fields = ("id", "title", "body", "repo_name", "creation_datetime",
+        fields = ("id", "title", "body", "repo", "creation_datetime",
                   "headcomment_set", "tailcomment_set",
                   "in_challenge_period")
 

@@ -1,11 +1,40 @@
-def get_github_branch_url(github_account_name, repo_name, branch_name):
-    """
-    >>> get_github_branch_url("RobrechtDR", "clac", "challenge2")
-    'https://github.com/RobrechtDR/clac/tree/challenge2'
-    """
-    return "https://github.com/{0}/{1}/tree/{2}".format(github_account_name,
-                                                        repo_name,
-                                                        branch_name)
+###############################################################################
+#                        Data to Github url utilities                         #
+###############################################################################
+# http://developer.github.com/guides/getting-started/
+
+API_ROOT_URL = "https://api.github.com"
+
+
+# http://developer.github.com/v3/repos/#get
+def get_api_repo_url(owner, repo):
+    return "{0}/repos/{1}/{2}".format(API_ROOT_URL, owner, repo)
+
+
+# http://developer.github.com/v3/repos/#list-user-repositories
+def get_api_repos_url(owner):
+    return "{0}/users/{1}/repos".format(API_ROOT_URL, owner, repo)
+
+
+# http://developer.github.com/v3/repos/#list-branches
+def get_api_repo_branches_url(owner, repo):
+    return "{0}/repos/{1}/{2}/branches".format(API_ROOT_URL, owner, repo)
+
+
+# http://developer.github.com/v3/repos/#get-branch
+def get_api_repo_branch_url(owner, repo, branch):
+    return "{0}/repos/{1}/{2}/branches/{3}".format(API_ROOT_URL, owner, repo, branch)
+
+
+###############################################################################
+#                       Other Github related utilities                        #
+###############################################################################
+
+def get_repo_and_branch_from_repo_path(repo_path):
+    if "/" not in repo_path:
+        return repo_path, "master"
+    else:
+        return tuple(repo_path.split("/", 1))
 
 
 def get_branch_last_commit(github_account_name, repo_name, branch_name):

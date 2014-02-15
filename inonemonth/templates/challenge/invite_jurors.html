@@ -12,10 +12,11 @@
 {% block left-column %}
 <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
 <div class="panel panel-default">
-  <div class="panel-heading">{{ model.title }}</div>
+  <div class="panel-heading">{{ challenge.title }}</div>
   <div class="panel-body">
-    {{ model.body|markdown }}
+    {{ challenge.body|markdown }}
   </div>
+  <div class="panel-footer"><a href="{{ challenge.get_branch_main_url }}" target="_blank">{{ challenge.get_repo_branch_path_representation }}</a></div>
 </div>
 
 

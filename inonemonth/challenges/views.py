@@ -75,7 +75,7 @@ def invite_jurors_view(request, **kwargs):
         formset = JurorInviteFormset()
 
     return render(request=request, template_name='challenge/invite_jurors.html',
-                  dictionary={"formset": formset, "model": challenge})
+                  dictionary={"formset": formset, "challenge": challenge})
 
 
 def challenge_detail_view(request, **kwargs):

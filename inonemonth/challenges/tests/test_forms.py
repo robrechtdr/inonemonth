@@ -30,8 +30,8 @@ class InvestmentModelFormTestCase(TestCase):
 #                                 Validators                                  #
 ###############################################################################
 
-# Test takes longer than average test because of requests call
-#@unittest.skip("")
+# Test takes about ~0.7 secs because of requests call
+@unittest.skip("")
 class RepoExistanceValidatorTestCase(django.test.TestCase):
     def test_repo_existance_validator(self):
         user_rob = RobrechtSocialUserFactory()

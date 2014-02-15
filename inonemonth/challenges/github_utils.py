@@ -1,3 +1,5 @@
+import requests
+
 ###############################################################################
 #                            Github api utilities                             #
 ###############################################################################
@@ -40,6 +42,12 @@ def get_repo_and_branch_from_repo_path(repo_path):
 
 def get_main_branch_url(owner, repo, branch):
     return "https://github.com/{0}/{1}/tree/{2}".format(owner, repo, branch)
+
+
+def get_last_commit_on_branch(owner, repo, branch):
+    repo_branch_url = get_api_repo_branch_url(owner, repo, branch)
+    req = requests.get(repo_branch_url)
+    return req.json()["commit"]["sha"]
 
 
 def get_branch_last_commit(github_account_name, repo_name, branch_name):

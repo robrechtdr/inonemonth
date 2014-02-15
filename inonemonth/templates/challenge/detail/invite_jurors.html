@@ -1,4 +1,4 @@
-{% extends "challenge/challenge_base.html" %}
+{% extends "challenge/detail/detail_base.html" %}
 
 {% load staticfiles %}
 {% load markdown_deux_tags %}
@@ -9,17 +9,7 @@
 {% endblock append_css %}
  
 
-{% block left-column %}
-<h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
-<div class="panel panel-default">
-  <div class="panel-heading">{{ challenge.title }}</div>
-  <div class="panel-body">
-    {{ challenge.body|markdown }}
-  </div>
-  <div class="panel-footer"><a href="{{ challenge.get_branch_main_url }}" target="_blank">{{ challenge.get_repo_branch_path_representation }}</a></div>
-</div>
-
-
+{% block left-column-bottom %}
 <h2>Invite your jurors</h1>
 <form action="" method="post"> {% csrf_token %}
   <ul class="form-container">
@@ -36,7 +26,7 @@
   {{ formset.management_form }}
   <input type="submit" value="Submit" class="btn btn-default">
 </form>
-{% endblock left-column %}
+{% endblock left-column-bottom %}
 
 
 {% block right-column %}

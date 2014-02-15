@@ -74,7 +74,7 @@ def invite_jurors_view(request, **kwargs):
     else:
         formset = JurorInviteFormset()
 
-    return render(request=request, template_name='challenge/invite_jurors.html',
+    return render(request=request, template_name='challenge/detail/invite_jurors.html',
                   dictionary={"formset": formset, "challenge": challenge})
 
 
@@ -138,7 +138,7 @@ def challenge_detail_view(request, **kwargs):
         head_comment_form = HeadCommentForm()
         tail_comment_form = TailCommentForm()
 
-    return render(request=request, template_name='challenge/challenge_detail.html',
+    return render(request=request, template_name='challenge/detail/challenge_detail.html',
                   dictionary={"role_api_url": role_api_url,
                               "user_role": role,
                               "challenge": challenge,

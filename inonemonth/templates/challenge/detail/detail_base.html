@@ -1,0 +1,24 @@
+{% extends "challenge/challenge_base.html" %}
+
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+
+{% block left-column %}
+  {% block left-column-top %}
+  <h2><span class="text-warning">In one month</span> I want to attain the following:</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ challenge.title }}</div>
+    <div class="panel-body">
+      {{ challenge.body|markdown }}
+    </div>
+    <div class="panel-footer"><a href="{{ challenge.get_branch_main_url }}" target="_blank">{{ challenge.get_repo_branch_path_representation }}</a></div>
+  </div>
+  {% endblock left-column-top %}
+
+  {% block left-column-bottom %}
+  {% endblock left-column-bottom %}
+{% endblock left-column %}
+
+{% block right-column %}
+{% endblock right-column %}

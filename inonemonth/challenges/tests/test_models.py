@@ -173,3 +173,6 @@ class RoleTestCase(django.test.TestCase):
         andy = User.objects.get(email="andy.slacker@gmail.com")
         juror_andy = challenge.role_set.get(user=andy) # with head comment
         self.assertEqual(juror_andy.can_make_head_comment(), False)
+
+    def test_get_repo_branch_path_representation(self):
+        self.assertEqual(challenge.get_repo_branch_path_representation(), "asiakas/master")

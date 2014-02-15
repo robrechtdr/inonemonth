@@ -9,7 +9,8 @@ from core.tests.setups import (GargantuanChallengeFactory, ChallengeFactory,
                                UserFactory, JurorRoleFactory,
                                TimeFixedGargantuanChallengeFactory,
                                InVotingPeriodGargantuanChallengeFactory,
-                               EndedGargantuanChallengeFactory)
+                               EndedGargantuanChallengeFactory,
+                               ClencherRoleFactory, RobrechtClencherRoleFactory)
 
 User = get_user_model()
 
@@ -177,3 +178,9 @@ class RoleTestCase(django.test.TestCase):
     def test_get_repo_branch_path_representation(self):
         challenge = ChallengeFactory(repo_name="asiakas", branch_name="master")
         self.assertEqual(challenge.get_repo_branch_path_representation(), "asiakas/master")
+
+    def test_get_branch_main_url(self):
+        clencher_rob = RobrechtClencherRoleFactory()
+        challenge = clencher_rob.challenge
+        self.assertEqual(challenge.get_branch_main_url(),
+                         "https://api.github.com/repos/RobrechtDR/gargantuan/branches/challenge")

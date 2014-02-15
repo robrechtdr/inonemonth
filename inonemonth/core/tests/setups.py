@@ -118,17 +118,21 @@ class ChallengeFactory(factory.DjangoModelFactory):
         self.save()
     '''
 
+class GargantuanRepoChallengeFactory(ChallengeFactory):
+    repo_name = "gargantuan"
+    branch_name = "challenge"
+
 
 class ClencherRoleFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Role
     user = factory.SubFactory(SocialUserFactory)
     type = "clencher"
-    challenge = factory.SubFactory(ChallengeFactory)
+    challenge = factory.SubFactory(GargantuanRepoChallengeFactory)
 
 
 class RobrechtClencherRoleFactory(ClencherRoleFactory):
     user = factory.SubFactory(RobrechtSocialUserFactory)
-    challenge = factory.SubFactory(ChallengeFactory)
+    challenge = factory.SubFactory(GargantuanRepoChallengeFactory)
 
 
 class JurorRoleFactory(factory.DjangoModelFactory):

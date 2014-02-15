@@ -183,4 +183,4 @@ class RoleTestCase(django.test.TestCase):
         clencher_rob = RobrechtClencherRoleFactory()
         challenge = clencher_rob.challenge
         self.assertEqual(challenge.get_branch_main_url(),
-                         "https://api.github.com/repos/RobrechtDR/gargantuan/branches/challenge")
+                         "https://github.com/RobrechtDR/gargantuan/tree/challenge")

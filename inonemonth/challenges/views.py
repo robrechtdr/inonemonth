@@ -24,22 +24,9 @@ def challenge_create_view(request):
     if request.method == "POST":
         form = ChallengeCreateModelForm(request.user, data=request.POST)
         if form.is_valid():
-            # Get Profile based on username
-            #!! profile = Profile.objects.get(user=request.user)
-
-            # Save data to challenge
-            model = form.instance.__class__
-            cleaned_dic = form.cleaned_data
-            inst = model.objects.create(**cleaned_dic)
-            #!! inst = model.objects.create(clencher=profile, **cleaned_dic)
-            # If Juror selection here done then also add jurors to model here.
-            inst.save()
-            #import pdb; pdb.set_trace()
-
-            #return HttpResponseRedirect(reverse_lazy("challenge_detail_view",
-            #                            kwargs={"pk": inst.pk}))
+            instance = form.save()
             return HttpResponseRedirect(reverse_lazy("challenge_invite_jurors_view",
-                                        kwargs={"pk": inst.pk}))
+                                        kwargs={"pk": instance.pk}))
     else:
         form = ChallengeCreateModelForm(request.user)
 

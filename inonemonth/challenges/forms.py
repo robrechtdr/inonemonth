@@ -5,6 +5,7 @@ from pagedown.widgets import PagedownWidget
 
 from .models import Challenge
 from .validators import RepoExistanceValidator
+from .github_utils import get_repo_and_branch_from_repo_path
 
 class ChallengeCreateModelForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
@@ -13,6 +14,15 @@ class ChallengeCreateModelForm(forms.ModelForm):
 
     body = forms.CharField(widget=PagedownWidget(attrs={"placeholder":"Complete description of my challenge"}), label="Body")
     repo = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"my_repo/my_branch (existing repo on my Github account)"}), label="Repo")
+
+    def save(self, *args, **kwargs):
+        model = self.instance
+        repo_path = self.cleaned_data["repo"]
+        repo, branch = get_repo_and_branch_from_repo_path(repo_path)
+        model.repo_name = repo
+        model.branch_name = branch
+        model.save()
+        return super(ChallengeCreateModelForm, self).save(*args, **kwargs)
 
     class Meta:
         model = Challenge

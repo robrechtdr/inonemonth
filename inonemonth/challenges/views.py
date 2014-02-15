@@ -16,6 +16,7 @@ from comments.models import HeadComment, TailComment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
+from .github_utils import get_last_commit_on_branch
 #!! from .decorators import user_has_profile
 
 
@@ -28,7 +29,13 @@ def challenge_create_view(request):
             clencher = Role.objects.create(user=request.user,
                                            challenge=instance,
                                            type=Role.CLENCHER)
-
+            # Save start commit
+            github_social_account = clencher.user.socialaccount_set.get(id=1)
+            github_login = github_social_account.extra_data["login"]
+            instance.start_commit = get_last_commit_on_branch(github_login,
+                                                              instance.repo_name,
+                                                              instance.branch_name)
+            instance.save()
             return HttpResponseRedirect(reverse_lazy("challenge_invite_jurors_view",
                                         kwargs={"pk": instance.pk}))
     else:

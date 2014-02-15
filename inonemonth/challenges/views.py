@@ -25,6 +25,10 @@ def challenge_create_view(request):
         form = ChallengeCreateModelForm(request.user, data=request.POST)
         if form.is_valid():
             instance = form.save()
+            clencher = Role.objects.create(user=request.user,
+                                           challenge=instance,
+                                           type=Role.CLENCHER)
+
             return HttpResponseRedirect(reverse_lazy("challenge_invite_jurors_view",
                                         kwargs={"pk": instance.pk}))
     else:
@@ -40,10 +44,6 @@ def invite_jurors_view(request, **kwargs):
     if request.method == "POST":
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():
-            clencher = Role.objects.create(user=request.user,
-                                           challenge=challenge,
-                                           type=Role.CLENCHER)
-
             for form in formset:
                 password = generate_password()
                 user = create_allauth_user(email=form.cleaned_data["email"],

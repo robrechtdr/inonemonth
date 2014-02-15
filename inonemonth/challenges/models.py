@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse, reverse_lazy
 
+from .github_utils import get_api_repo_branch_url
+
 
 class Challenge(models.Model):
     """
@@ -128,6 +130,13 @@ class Challenge(models.Model):
 
     def get_repo_branch_path_representation(self):
         return "{0}/{1}".format(self.repo_name, self.branch_name)
+
+    def get_branch_main_url(self):
+        clencher = self.get_clencher()
+        # Every clencher has a github socialaccount
+        github_social_account = clencher.user.socialaccount_set.get(id=1)
+        github_login =  github_social_account.extra_data["login"]
+        return get_api_repo_branch_url(github_login, self.repo_name, self.branch_name)
 
 
 class Role(models.Model):

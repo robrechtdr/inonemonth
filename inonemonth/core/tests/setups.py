@@ -105,6 +105,8 @@ class ChallengeFactory(factory.DjangoModelFactory):
     body = factory.Sequence(lambda n: "This is the body of the challenge{0}.".format(n))
     repo_name = factory.Sequence(lambda n: "project{0}.".format(n))
     branch_name = factory.Sequence(lambda n: "branch{0}.".format(n))
+    start_commit = factory.Sequence(lambda n: "2f6c381f1a9b2bac57cc1650182498c2c8fe8bc{0}.".format(n))
+    end_commit = factory.Sequence(lambda n: "4k3k381f1a9b3bac57cc1650182498c2c8fe3b7{0}.".format(n))
     # For some reason the following doesn't overwrite models.DateTimeField(auto_now_add=True)
     #creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
 
@@ -121,6 +123,8 @@ class ChallengeFactory(factory.DjangoModelFactory):
 class GargantuanRepoChallengeFactory(ChallengeFactory):
     repo_name = "gargantuan"
     branch_name = "challenge"
+    start_commit = "6b8c1906761a9518f38ac1ad0006f01ebca09c7e"
+    end_commit = "b3e18963c3e1091134f5b4637aa198d196336ea9"
 
 
 class ClencherRoleFactory(factory.DjangoModelFactory):

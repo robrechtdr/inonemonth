@@ -20,6 +20,8 @@ class Challenge(models.Model):
     body = models.TextField()
     repo_name = models.CharField(max_length=200)
     branch_name = models.CharField(max_length=200)
+    start_commit = models.CharField(max_length=150)
+    end_commit = models.CharField(max_length=150)
     creation_datetime = models.DateTimeField(auto_now_add=True)
 
     # Don"t include self.role_set.user because the user will not exist

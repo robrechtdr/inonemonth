@@ -3,7 +3,9 @@ import django.test
 import requests
 from ..github_utils import (get_api_repo_branch_url,
                             get_repo_and_branch_from_repo_path,
-                            get_main_branch_url)
+                            get_main_branch_url,
+                            get_last_commit_on_branch)
+
 
 class GithubUtilsTestCase(django.test.TestCase):
     def test_get_api_repo_branch_url(self):
@@ -31,3 +33,12 @@ class GithubUtilsTestCase(django.test.TestCase):
                          target_url)
         # Makes ~0.5 sec diff in tests
         #self.assertEqual(requests.get(target_url).status_code, 200)
+
+    def test_get_last_commit_on_branch(self):
+        # Project is moved so there are likely no new commits
+        # TODO: Replace with my own test github project later
+        github_login = "dnerdy"
+        repo_name = "factory_boy"
+        branch_name = "master"
+        self.assertEqual(get_last_commit_on_branch(github_login, repo_name, branch_name),
+                         '638704c06e7f3bc6412f2c81fe5b3073b397a60b')

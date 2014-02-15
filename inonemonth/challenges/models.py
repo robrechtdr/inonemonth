@@ -126,6 +126,9 @@ class Challenge(models.Model):
         else:
             return None
 
+    def get_repo_branch_path_representation(self):
+        return "{0}/{1}".format(self.repo_name, self.branch_name)
+
 
 class Role(models.Model):
     """

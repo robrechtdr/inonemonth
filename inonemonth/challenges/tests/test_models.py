@@ -175,4 +175,5 @@ class RoleTestCase(django.test.TestCase):
         self.assertEqual(juror_andy.can_make_head_comment(), False)
 
     def test_get_repo_branch_path_representation(self):
+        challenge = ChallengeFactory(repo_name="asiakas", branch_name="master")
         self.assertEqual(challenge.get_repo_branch_path_representation(), "asiakas/master")

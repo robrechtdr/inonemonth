@@ -4,7 +4,8 @@ import requests
 from ..github_utils import (get_api_repo_branch_url,
                             get_repo_and_branch_from_repo_path,
                             get_main_branch_url,
-                            get_last_commit_on_branch)
+                            get_last_commit_on_branch,
+                            get_commit_comparison_url)
 
 
 class GithubUtilsTestCase(django.test.TestCase):
@@ -42,3 +43,11 @@ class GithubUtilsTestCase(django.test.TestCase):
         branch_name = "master"
         self.assertEqual(get_last_commit_on_branch(github_login, repo_name, branch_name),
                          '638704c06e7f3bc6412f2c81fe5b3073b397a60b')
+
+    def test_get_commit_comparison_url(self):
+        owner = "RobrechtDR"
+        repo = "asiakas"
+        start_commit = "6b8c19067"
+        end_commit = "b3e18963c3"
+        self.assertEqual(get_commit_comparison_url(owner, repo, start_commit, end_commit),
+                         "https://github.com/RobrechtDR/asiakas/compare/6b8c19067...b3e18963c3")

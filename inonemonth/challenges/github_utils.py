@@ -7,6 +7,7 @@ import requests
 # http://developer.github.com/guides/getting-started/
 
 API_ROOT_URL = "https://api.github.com"
+SITE_ROOT_URL = "https://github.com"
 
 
 # http://developer.github.com/v3/repos/#get
@@ -41,7 +42,7 @@ def get_repo_and_branch_from_repo_path(repo_path):
 
 
 def get_main_branch_url(owner, repo, branch):
-    return "https://github.com/{0}/{1}/tree/{2}".format(owner, repo, branch)
+    return "{0}/{1}/{2}/tree/{3}".format(SITE_ROOT_URL, owner, repo, branch)
 
 
 def get_last_commit_on_branch(owner, repo, branch):
@@ -50,33 +51,11 @@ def get_last_commit_on_branch(owner, repo, branch):
     return req.json()["commit"]["sha"]
 
 
-def get_branch_last_commit(github_account_name, repo_name, branch_name):
-    """
-    >>> get_branch_last_commit("RobrechtDR", "clac", "challenge2")
-    'e0227880aaa548022f670576ee4408144d515f0c'
+def get_commit_comparison_url(owner, repo, start_commit, end_commit):
+    return "{0}/{1}/{2}/compare/{3}...{4}".format(SITE_ROOT_URL, owner,
+                                                  repo, start_commit,
+                                                  end_commit)
 
-    Purely by using a webparser such as beatifulsoup or better: use a public api call.
-    """
-    pass
-
-
-def get_github_commit_comparison_url(github_account_name, repo_name, start_commit, end_commit):
-    """
-    # Use inonemonth account to create test repo
-    >>> get_github_commit_comparison_url("RobrechtDR", "clac", "f7860ff8fc",
-    ...                                  "5035bd5dbf")
-    'https://github.com/RobrechtDR/clac/compare/f7860ff8fc...5035bd5dbf'
-
-    Comparison between 2 commit states:
-    https://github.com/github/linguist/compare/96d29b7662f148842486d46117786ccb7fcc8018...a20631af040b4901b7341839d9e76e31994adda3
-
-    Comparison between time states: (e.g. 1 month)
-    https://github.com/github/linguist/compare/master@{1month}...master
-    """
-    return "https://github.com/{0}/{1}/compare/{2}...{3}".format(github_account_name,
-                                                                 repo_name,
-                                                                 start_commit,
-                                                                 end_commit)
 
 '''
 1. On challenge/create/ call get_branch_last_commit and save this to Branch.start_commit.
@@ -85,7 +64,3 @@ def get_github_commit_comparison_url(github_account_name, repo_name, start_commi
  call get_branch_last_commit again and save to Branch.end_commit.
 3. Use get_github_comparison_url in challenge/detail/1/ view to generate comparison url to see current state of challenge.
 '''
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

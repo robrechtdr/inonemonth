@@ -113,6 +113,16 @@ class ChallengeTestCase(django.test.TestCase):
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.is_successful(), False)
 
+    def test_get_repo_branch_path_representation(self):
+        challenge = ChallengeFactory(repo_name="asiakas", branch_name="master")
+        self.assertEqual(challenge.get_repo_branch_path_representation(), "asiakas/master")
+
+    def test_get_branch_main_url(self):
+        clencher_rob = RobrechtClencherRoleFactory()
+        challenge = clencher_rob.challenge
+        self.assertEqual(challenge.get_branch_main_url(),
+                         "https://github.com/RobrechtDR/gargantuan/tree/challenge")
+
     @unittest.skip("The challenge method currently makes a request")
     def test_get_commit_comparison_url(self):
         challenge = GargantuanChallengeFactory(repo_name="asiakas",
@@ -183,13 +193,3 @@ class RoleTestCase(django.test.TestCase):
         andy = User.objects.get(email="andy.slacker@gmail.com")
         juror_andy = challenge.role_set.get(user=andy) # with head comment
         self.assertEqual(juror_andy.can_make_head_comment(), False)
-
-    def test_get_repo_branch_path_representation(self):
-        challenge = ChallengeFactory(repo_name="asiakas", branch_name="master")
-        self.assertEqual(challenge.get_repo_branch_path_representation(), "asiakas/master")
-
-    def test_get_branch_main_url(self):
-        clencher_rob = RobrechtClencherRoleFactory()
-        challenge = clencher_rob.challenge
-        self.assertEqual(challenge.get_branch_main_url(),
-                         "https://github.com/RobrechtDR/gargantuan/tree/challenge")

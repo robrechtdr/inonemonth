@@ -150,8 +150,23 @@ class Challenge(models.Model):
         github_social_account = clencher.user.socialaccount_set.get(id=1)
         github_login =  github_social_account.extra_data["login"]
         last_commit = get_last_commit_on_branch(github_login, self.repo_name, self.branch_name)
+
         start_commit = self.start_commit
         return get_commit_comparison_url(github_login, self.repo_name, start_commit, last_commit)
+
+
+    # Note, each time get_last_commit_on_branch is called, makes a request,
+    # change later on!
+    def is_last_commit_different_from_start_commit(self):
+        clencher = self.get_clencher()
+        github_social_account = clencher.user.socialaccount_set.get(id=1)
+        github_login =  github_social_account.extra_data["login"]
+        last_commit = get_last_commit_on_branch(github_login, self.repo_name, self.branch_name)
+
+        if self.start_commit != last_commit:
+            return True
+        else:
+            return False
 
 
 class Role(models.Model):

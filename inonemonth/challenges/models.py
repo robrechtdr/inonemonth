@@ -9,7 +9,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse, reverse_lazy
 
-from .github_utils import get_main_branch_url
+from .github_utils import (get_main_branch_url, get_last_commit_on_branch,
+                           get_commit_comparison_url)
 
 
 class Challenge(models.Model):
@@ -139,6 +140,18 @@ class Challenge(models.Model):
         github_social_account = clencher.user.socialaccount_set.get(id=1)
         github_login =  github_social_account.extra_data["login"]
         return get_main_branch_url(github_login, self.repo_name, self.branch_name)
+
+    # Later store latest github commit to branch to the end_commit
+    # model field. Let this saving to field be done using celery, e.g.
+    # every 10 mins or so. And Stop checking once the end date of the
+    # challenge is reached.
+    def get_commit_comparison_url(self):
+        clencher = self.get_clencher()
+        github_social_account = clencher.user.socialaccount_set.get(id=1)
+        github_login =  github_social_account.extra_data["login"]
+        last_commit = get_last_commit_on_branch(github_login, self.repo_name, self.branch_name)
+        start_commit = self.start_commit
+        return get_commit_comparison_url(github_login, self.repo_name, start_commit, last_commit)
 
 
 class Role(models.Model):

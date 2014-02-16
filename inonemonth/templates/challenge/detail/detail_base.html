@@ -12,7 +12,18 @@
     <div class="panel-body">
       {{ challenge.body|markdown }}
     </div>
-    <div class="panel-footer"><a href="{{ challenge.get_branch_main_url }}" target="_blank">{{ challenge.get_repo_branch_path_representation }}</a></div>
+    <div class="panel-footer">
+      <p>
+        <a href="{{ challenge.get_branch_main_url }}" target="_blank">{{ challenge.get_repo_branch_path_representation }}</a>
+      </p>
+      <p>
+      {% if challenge.is_last_commit_different_from_start_commit %}
+        <a href="{{ challenge.get_commit_comparison_url }}" target="_blank">Changes on branch since challenge started</a>.
+      {% else %}
+        No changes pushed to branch yet since challenge started.
+      {% endif %}
+      </p>
+    </div>
   </div>
   {% endblock left-column-top %}
 

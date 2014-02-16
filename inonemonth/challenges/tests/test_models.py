@@ -12,6 +12,7 @@ from core.tests.setups import (GargantuanChallengeFactory, ChallengeFactory,
                                EndedGargantuanChallengeFactory,
                                ClencherRoleFactory, RobrechtClencherRoleFactory)
 
+
 User = get_user_model()
 
 
@@ -111,6 +112,14 @@ class ChallengeTestCase(django.test.TestCase):
         EndedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         self.assertEqual(challenge.is_successful(), False)
+
+    @unittest.skip("The challenge method currently makes a request")
+    def test_get_commit_comparison_url(self):
+        challenge = GargantuanChallengeFactory(repo_name="asiakas",
+                                               branch_name="master",
+                                               start_commit="6b8c19067")
+        self.assertEqual(challenge.get_commit_comparison_url(),
+                         "https://github.com/RobrechtDR/asiakas/compare/6b8c19067...b3e18963c3e1091134f5b4637aa198d196336ea9")
 
 
 class RoleTestCase(django.test.TestCase):

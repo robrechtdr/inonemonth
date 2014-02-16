@@ -131,6 +131,13 @@ class ChallengeTestCase(django.test.TestCase):
         self.assertEqual(challenge.get_commit_comparison_url(),
                          "https://github.com/RobrechtDR/asiakas/compare/6b8c19067...b3e18963c3e1091134f5b4637aa198d196336ea9")
 
+    def test_is_last_commit_different_from_start_commit(self):
+        challenge = GargantuanChallengeFactory(repo_name="asiakas",
+                                               branch_name="master",
+                                               start_commit="6b8c19067")
+        self.assertEqual(challenge.is_last_commit_different_from_start_commit(),
+                         True)
+
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):

@@ -18,9 +18,9 @@
       </p>
       <p>
       {% if challenge.is_last_commit_different_from_start_commit %}
-        <a href="{{ challenge.get_commit_comparison_url }}" target="_blank">Changes on branch since challenge started</a>.
+        <a href="{{ challenge.get_commit_comparison_url }}" target="_blank">Changes on {{ challenge.get_repo_branch_path_representation }} since challenge started</a>.
       {% else %}
-        No changes pushed to branch yet since challenge started.
+        No changes pushed to {{ challenge.get_repo_branch_path_representation }} yet since challenge started.
       {% endif %}
       </p>
     </div>

@@ -10,8 +10,7 @@ def send_invitation_mail_to_juror(juror, request):
     from_role = juror.challenge.get_clencher()
     from_email = from_role.user.email
     to_email = juror.user.email
-    # Change pattern name once /account/signin-juror/challenge/1/ is made
-    link = request.build_absolute_uri(reverse("challenge_detail_view", kwargs={"pk": 1}))
+    link = request.build_absolute_uri(reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
 
     text = get_template('email/juror_invitation.txt')
     html = get_template('email/juror_invitation.html')

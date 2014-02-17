@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover() # To enable the admin:
 
-from core.views import UserRetrieveAPIView
+from core.views import UserRetrieveAPIView, JurorChallengeSigninView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView)
@@ -13,10 +13,11 @@ from comments.views import TailCommentDestroyAPIView
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='home.html'), name="home_view"),
-    url(r'^carousel$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
-    url(r'^basic$', TemplateView.as_view(template_name='home2.html')),
+    url(r'^carousel/$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
+    url(r'^basic/$', TemplateView.as_view(template_name='home2.html')),
 
-    url(r'^glossary$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
+    url(r'^glossary/$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
+    url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),
 
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),

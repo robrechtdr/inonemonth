@@ -1,0 +1,11 @@
+{{ sender }} has invited you to be a juror for the following challenge:
+
+{{ challenge_title }}
+
+Go to this challenge via {{ link }}
+
+Login credentials:
+Email: {{ account_email }}
+Password: {{ account_password }}
+
+Note that it is advised to change your password.

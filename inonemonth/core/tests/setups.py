@@ -3,7 +3,6 @@ import factory
 import factory.fuzzy
 import random
 
-
 from dateutil.relativedelta import relativedelta
 from hashlib import sha1
 
@@ -11,6 +10,7 @@ from django.utils.timezone import utc
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 
+from core.models import UserExtension
 from challenges.models import Challenge, Role, Vote
 from comments.models import HeadComment, TailComment
 
@@ -99,6 +99,12 @@ class RobrechtSocialUserFactory(SocialUserFactory):
     uid= u"2156349"
 
 
+class UserExtensionFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = UserExtension
+    user = factory.SubFactory(UserFactory)
+    temp_password = "temp_password"
+
+
 class ChallengeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Challenge
     title = factory.Sequence(lambda n: "This is the title of the challenge{0}.".format(n))
@@ -176,8 +182,11 @@ class GargantuanChallengeFactory(ChallengeFactory):
     @factory.post_generation
     def set_email_address_object(self, create, extracted, **kwargs):
         andy = AndyUserFactory()
+        UserExtensionFactory(user=andy)
         fred = FredUserFactory()
+        UserExtensionFactory(user=fred)
         jason = JasonUserFactory()
+        UserExtensionFactory(user=jason)
 
         clencher = RobrechtClencherRoleFactory(challenge=self)
 

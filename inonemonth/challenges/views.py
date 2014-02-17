@@ -11,6 +11,7 @@ from rest_framework import generics
 from core.models import UserExtension
 from core.forms import RequiredFormSet
 from core.allauth_utils import create_allauth_user, generate_password
+from core.mail_utils import send_invitation_mail_to_juror
 from comments.forms import HeadCommentForm, TailCommentForm
 from comments.models import HeadComment, TailComment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
@@ -52,6 +53,7 @@ def invite_jurors_view(request, **kwargs):
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():
             for form in formset:
+                # TODO: should check if user already exists
                 password = generate_password()
                 user = create_allauth_user(email=form.cleaned_data["email"],
                                            password=password)
@@ -62,10 +64,11 @@ def invite_jurors_view(request, **kwargs):
                 # The user can then change the password by himself later on.
                 UserExtension.objects.create(user=user, temp_password=password)
 
-                # Here, Send invitation email to user to challenge (probably need to
-                # deactivate mailing email confirmation)
                 juror = Role.objects.create(user=user, challenge=challenge,
                                             type=Role.JUROR)
+                # Here, Send invitation email to user to challenge (probably need to
+                # deactivate mailing email confirmation)
+                send_invitation_mail_to_juror(juror, request)
                 # Could also be created with celery, at moment juror period
                 # starts
                 #vote = Vote.objects.create(juror=juror)

@@ -17,9 +17,9 @@
     <li class="list-group-item">
       <div class="head-comment">
         <div class="head-comment-content">
-          <div>{{ head_comment.text|markdown }}</div>
+          <div class="head-comment-text">{{ head_comment.text|markdown }}</div>
           <div>{{ head_comment.owner|get_representation_for_user:user_role }}</div>
-          <div>{{ head_comment.owner.vote.decision }}</div>
+          <div class="head-comment-decision">{{ head_comment.owner.vote.decision }}</div>
         </div>
         <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
         <button class="head-edit-button btn" style="display:none;" type="button">
@@ -31,7 +31,7 @@
       {% for tail_comment in head_comment.tailcomment_set.all %}
         <li class="tail-comment list-group-item">
           <div class="tail-comment-content">
-            <div>{{ tail_comment.text|markdown }}</div>
+            <div class="tail-comment-text">{{ tail_comment.text|markdown }}</div>
             <div>{{ tail_comment.owner|get_representation_for_user:user_role }}</div>
           </div>
           <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
@@ -229,6 +229,23 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           var headCommentId = $(this).parent().find(".head-id").text();
           $headCommentForm.find("input[name='id']").attr("value", headCommentId);
 
+          // Move current text inside edit text field
+          var headCommentText = $(this).parent().find(".head-comment-text").text();
+          var $headCommentTextInput = $(this).parent().find("textarea#id_text");
+          $headCommentTextInput.empty();
+          $headCommentTextInput.append(headCommentText);
+
+          // Move current decision inside edit decision field
+          var headCommentDecision = $(this).parent().find(".head-comment-decision").text();
+          var $headCommentDecisionInput = $(this).parent().find("#id_decision");
+          var $headCommentOptions = $headCommentDecisionInput.children()
+          for (i in $headCommentOptions) {
+              if ($headCommentOptions.eq(i).text() === headCommentDecision) {
+                  
+                  $headCommentOptions.eq(i).attr("selected", "selected"); 
+              }
+          }
+
           // Hide content of comment selected to edit and its edit button
           $(this).parent().find(".head-comment-content").hide();
           $(this).hide();
@@ -276,6 +293,12 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           var tailCommentId = $(this).parent().find(".tail-id").text();
           $tailCommentForm.find("input[name='id']").attr("value", tailCommentId);
 
+          // Move current text inside edit text field
+          var tailCommentText = $(this).parent().find(".tail-comment-text").text();
+          var $tailCommentTextInput = $(this).parent().find("textarea#id_text");
+          $tailCommentTextInput.empty();
+          $tailCommentTextInput.append(tailCommentText);
+
           // Hide content of comment selected to edit and its delete and edit button
           $(this).parent().find(".tail-comment-content").hide();
           $(this).siblings().filter(".tail-delete-button").hide();
@@ -303,6 +326,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 /*
 // Why don't the typing preview and edit bar buttons work? 
+// If you implement this you can delete the fixExtraPageDownEditBarsRendering function
 $(window).bind("load", function() {
     function fixTailCommentRow1() {
       var $tailCommentRow = $(".wmd-wrapper").first().find(".wmd-button-row").last();

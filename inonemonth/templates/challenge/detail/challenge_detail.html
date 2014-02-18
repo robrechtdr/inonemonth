@@ -233,7 +233,6 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           //$(this).parent().find(".head-comment-content").empty()
       });
 
-
       $tailCommentButton.click(function() {
           $tailCommentForm.appendTo($(this).parent())
           $tailCommentForm.show();
@@ -292,5 +291,18 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           $("#voting-period-end-datetime-countdown").text(votingPeriodCount);
       },1000);
   })
+
+/*
+// Why don't the typing preview and edit bar buttons work? 
+$(window).bind("load", function() {
+    function fixTailCommentRow1() {
+      var $tailCommentRow = $(".wmd-wrapper").first().find(".wmd-button-row").last();
+      var $tailCommentParentForRow = $(".wmd-wrapper").last().children().first().children().first();
+      $tailCommentRow.appendTo($tailCommentParentForRow);
+    }
+    fixTailCommentRow1();
+});
+*/
+
 </script>
 {% endblock extra_js %}

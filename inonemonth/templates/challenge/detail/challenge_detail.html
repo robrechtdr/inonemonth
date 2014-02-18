@@ -17,7 +17,7 @@
     <li class="list-group-item">
       <div class="head-comment">
         <div class="head-comment-content">
-          <div>{{ head_comment.text }}</div>
+          <div>{{ head_comment.text|markdown }}</div>
           <div>{{ head_comment.owner|get_representation_for_user:user_role }}</div>
           <div>{{ head_comment.owner.vote.decision }}</div>
         </div>
@@ -31,7 +31,7 @@
       {% for tail_comment in head_comment.tailcomment_set.all %}
         <li class="tail-comment list-group-item">
           <div class="tail-comment-content">
-            <div>{{ tail_comment.text }}</div>
+            <div>{{ tail_comment.text|markdown }}</div>
             <div>{{ tail_comment.owner|get_representation_for_user:user_role }}</div>
           </div>
           <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
@@ -96,6 +96,9 @@
   <p>
   The <a href="{% url "glossary" %}#voting-period">voting period</a> ends 
   on <strong class="text-warning">{{ challenge.get_voting_period_end_datetime }} (<span id="voting-period-end-datetime-countdown"></span>)</strong>.
+  </p>
+  <p>
+  Jurors are now allowed to make a vote! Once a vote is cast you can comment on it. 
   </p>
 
   {% else %}

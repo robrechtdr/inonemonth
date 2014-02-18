@@ -229,6 +229,9 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           var headCommentId = $(this).parent().find(".head-id").text();
           $headCommentForm.find("input[name='id']").attr("value", headCommentId);
 
+          // Hide edit button
+          $(this).hide();
+
           // text should pop back if pressed on other edit button. 
           //$(this).parent().find(".head-comment-content").empty()
       });
@@ -271,6 +274,10 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           // Need to send the id so backend knows what comment to edit.
           var tailCommentId = $(this).parent().find(".tail-id").text();
           $tailCommentForm.find("input[name='id']").attr("value", tailCommentId);
+
+          // Hide delete and edit button
+          $(this).siblings().filter(".tail-delete-button").hide();
+          $(this).hide();
 
           // text should pop back if pressed on other edit button. 
           //$(this).parent().find(".tail-comment-content").empty()

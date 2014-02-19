@@ -53,7 +53,7 @@ class Challenge(models.Model):
         if jurors:
             return jurors
         else:
-            return self.Exception("No Juror has been assigned as juror "
+            raise self.Exception("No Juror has been assigned as juror "
                                      "for this challenge yet.")
 
     def get_juror_representation_number(self, juror):
@@ -62,7 +62,7 @@ class Challenge(models.Model):
             if juror == jurors[i]:
                 # Id numbering of instances starts at 1 instead of 0
                 return (i + 1)
-        return Exception("Argument is not a Juror in the current challenge")
+        raise Exception("Argument is not a Juror in the current challenge")
 
     def get_challenge_period_end_datetime(self):
         return (self.creation_datetime + settings.CHALLENGE_PERIOD_DURATION)
@@ -195,7 +195,7 @@ class Role(models.Model):
         elif self.type == self.CLENCHER:
             return False
         else:
-            return Exception("Else Die")
+            raise Exception("Else Die")
 
     def can_make_head_comment(self):
         """

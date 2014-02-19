@@ -93,7 +93,7 @@ class ChallengeTestCase(django.test.TestCase):
         EndedGargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         clencher = challenge.get_clencher()
-        self.assertRaises(challenge.get_juror_representation_number(clencher))
+        self.assertRaises(Exception, challenge.get_juror_representation_number, clencher)
 
     def test_get_vote_results(self):
         EndedGargantuanChallengeFactory()

@@ -172,7 +172,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
           // Show $headCommentButton in case of juror that hasn't made a headcomment yet
           // remember to remove the !
-          if (role.can_make_head_comment) {
+          if (role.can_make_head_comment && !role.challenge.has_ended) {
               //$headCommentButton.appendTo(".comments-container");
               $challengePeriodNotification.hide(); 
               $headCommentButton.show();
@@ -181,17 +181,17 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
               $challengePeriodNotification.show(); 
           }
 
-
           // Only show delete and edit buttons for comments owned by the current role
+          // and as long as challenge period hasn't ended
           // To omit type errors
-          if (role.headcomment_set.length > 0) {
+          if (role.headcomment_set.length > 0 && !role.challenge.has_ended) {
               var headComments = $(".head-comment");
               for (i in headComments) {
                   var headComment = headComments.eq(i) 
                   var headCommentId = Number(headComment.find(".head-id").text());
                   // There is maximum only 1 head comment
                   var roleHeadCommentId = role.headcomment_set[0].id;
-                  if (headCommentId === roleHeadCommentId) {
+                  if (headCommentId === roleHeadCommentId) {  
                       headComment.find(".head-edit-button").show();
                   }
 
@@ -199,7 +199,7 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
           } 
           // To omit type errors
           // Why are there so many loops? each loop gets repeated like a hundred times, wth??
-          if (role.tailcomment_set.length > 0) {
+          if (role.tailcomment_set.length > 0 && !role.challenge.has_ended) {
               var tailComments = $(".tail-comment");
               for (i in tailComments) {
                   var tailComment = tailComments.eq(i) 
@@ -216,6 +216,10 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
                   }
               }
           } 
+          if (role.challenge.has_ended) {
+              $tailCommentButton.hide()
+          }
+
 
       });
 

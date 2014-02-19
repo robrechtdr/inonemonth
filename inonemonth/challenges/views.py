@@ -99,7 +99,7 @@ def challenge_detail_view(request, **kwargs):
         # http://stackoverflow.com/questions/1395807/proper-way-to-handle-multiple-forms-on-one-page-in-django
         # http://stackoverflow.com/questions/866272/how-can-i-build-multiple-submit-buttons-django-form
         if "head-submit" in (head_comment_form.data or tail_comment_form.data):
-            if head_comment_form.is_valid():
+            if head_comment_form.is_valid() and not challenge.has_ended():
                 head_comment_id = head_comment_form.data["id"]
                 # In case of comment edit
                 if head_comment_id:
@@ -126,7 +126,7 @@ def challenge_detail_view(request, **kwargs):
 
 
         elif "tail-submit" in (head_comment_form.data or tail_comment_form.data):
-            if tail_comment_form.is_valid():
+            if tail_comment_form.is_valid() and not challenge.has_ended():
                 tail_comment_id = tail_comment_form.data["id"]
                 # In case of comment edit
                 if tail_comment_id:

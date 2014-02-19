@@ -14,12 +14,13 @@ class ChallengeSerializer(serializers.ModelSerializer):
     #role_set = RoleSerializer(many=True)
     #get_clencher = serializers.Field(source="get_clencher")
     in_challenge_period = serializers.Field(source="in_challenge_period")
+    has_ended = serializers.Field(source="has_ended")
 
     class Meta:
         model = Challenge
         fields = ("id", "title", "body", "repo_name", "branch_name", "creation_datetime",
                   "headcomment_set", "tailcomment_set",
-                  "in_challenge_period")
+                  "in_challenge_period", "has_ended")
 
 
 class RoleSerializer(serializers.ModelSerializer):

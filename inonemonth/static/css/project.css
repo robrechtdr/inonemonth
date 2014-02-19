@@ -74,6 +74,23 @@ body {
   list-style: none;
 }
 
+.list-group-item {
+  padding: 0px;
+}
+
+.list-group .list-group, .tail-comment-button {
+  margin-left: 20px;
+}
+
+.tail-comment-button {
+  margin-bottom: 20px;
+}
+
+#comments-closer {
+  margin-bottom: 30px; 
+}
+
+
 
 /* carousel.html 
 -------------------------------------------------- */

@@ -15,45 +15,44 @@
   <ul class="list-group">
   {% for head_comment in challenge.headcomment_set.all %}
     <li class="list-group-item">
-      <div class="head-comment">
-        <div class="head-comment-content">
+      <div class="head-comment panel panel-info">
+        <div class="panel-heading">{{ head_comment.owner|get_representation_for_user:user_role }}</div>
+        <div class="head-comment-content panel-body">
           <div class="head-comment-text">{{ head_comment.text|markdown }}</div>
-          <div>{{ head_comment.owner|get_representation_for_user:user_role }}</div>
           <div class="head-comment-decision">{{ head_comment.owner.vote.decision }}</div>
         </div>
         <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
-        <button class="head-edit-button btn" style="display:none;" type="button">
+        <button class="head-edit-button btn btn-default" style="display:none;" type="button">
           Edit 
         </button>
       </div>
 
       <ul class="list-group">
       {% for tail_comment in head_comment.tailcomment_set.all %}
-        <li class="tail-comment list-group-item">
-          <div class="tail-comment-content">
+        <li class="tail-comment list-group-item panel panel-default">
+          <div class="panel-heading">{{ tail_comment.owner|get_representation_for_user:user_role }}</div>
+          <div class="tail-comment-content panel-body">
             <div class="tail-comment-text">{{ tail_comment.text|markdown }}</div>
-            <div>{{ tail_comment.owner|get_representation_for_user:user_role }}</div>
           </div>
           <div class="tail-id" style="display:none;">{{ tail_comment.id }}</div>             
-          <button class="tail-edit-button btn" type="button" style="display:none;">
+          <button class="tail-edit-button btn btn-default" type="button" style="display:none;">
             Edit 
           </button>
-          <button class="tail-delete-button btn" type="button" style="display:none;">
+          <button class="tail-delete-button btn btn-default" type="button" style="display:none;">
             Delete 
           </button>
         </li>
       {% endfor %}
       </ul>
 
-      <button class="tail-comment-button btn" type="button">
+      <button class="tail-comment-button btn btn-default" type="button">
         Add comment 
       </button>
     </li>
   {% endfor %}
   </ul>
 
-  <br>
-  <button class="head-comment-button btn" type="button" style="display:none;">
+  <button class="head-comment-button btn btn-default" type="button" style="display:none;">
     Make vote comment
   </button>
 
@@ -76,6 +75,8 @@
   </form>
 
 </div>
+
+<div id="comments-closer"></div>
 {% endblock left-column-bottom %}
 
 

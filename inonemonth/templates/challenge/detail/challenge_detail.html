@@ -12,6 +12,11 @@
 
 {% block left-column-bottom %}
 <h2>Votes</h1>
+{% if not challenge.headcomment_set.all and not challenge.has_ended %}
+<p>No votes have been cast yet.</p>
+{% elif not challenge.headcomment_set.all and challenge.has_ended %}
+<p>No votes were cast.</p>
+{% endif %}
 <div class="comments-container">
   <ul class="list-group">
   {% for head_comment in challenge.headcomment_set.all %}

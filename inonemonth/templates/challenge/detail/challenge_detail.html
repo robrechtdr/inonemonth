@@ -115,7 +115,21 @@
   </p>
 
   {% else %}
-  <p>The challenge has ended.</p>
+  <p>
+    The challenge has ended 
+    {% if challenge.is_succesful %}
+      successfully.</p> 
+    {% elif challenge.is_successful == None %}
+      . Unfortunately no one voted.</p> 
+    {% else %}
+      unsuccessfully.</p>
+    {% endif %}
+  </p>
+  <p>
+  {{ challenge.get_vote_results.positive }} juror{{ challenge.get_vote_results.positive|pluralize }} voted positively, 
+    {{challenge.get_vote_results.negative }} voted negatively 
+    and {{ challenge.get_vote_results.not_voted }} did not vote.
+  </p>
   {% endif %}
 </div>
 

@@ -11,6 +11,7 @@
 
 
 {% block left-column-bottom %}
+<h2>Votes</h1>
 <div class="comments-container">
   <ul class="list-group">
   {% for head_comment in challenge.headcomment_set.all %}
@@ -18,8 +19,14 @@
       <div class="head-comment panel panel-info">
         <div class="panel-heading">{{ head_comment.owner|get_representation_for_user:user_role }}</div>
         <div class="head-comment-content panel-body">
-          <div class="head-comment-text">{{ head_comment.text|markdown }}</div>
-          <div class="head-comment-decision">{{ head_comment.owner.vote.decision }}</div>
+          {% comment %} Element needs to be here to fetch text in js {% endcomment %}
+          <span class="head-comment-decision" style="display:none;">{{ head_comment.owner.vote.decision }}</span>
+          {% if head_comment.owner.vote.decision == "positive" %}
+              <img class="decision-thumb" src="{% static 'img/thumbup.png' %}">
+          {% else %}
+              <img class="decision-thumb" src="{% static 'img/thumbdown.png' %}">
+          {% endif %}
+          <span class="head-comment-text">{{ head_comment.text|markdown }}</span>
         </div>
         <div class="head-id" style="display:none;">{{ head_comment.id }}</div>             
         <button class="head-edit-button btn btn-default" style="display:none;" type="button">

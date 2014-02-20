@@ -10,10 +10,9 @@ body {
 }
 
 /* footer for pages with little content */
-.home,.github-signin .foot {
-  position:fixed;
+.home .foot, .github-signin .foot {
+  position: absolute;
   bottom: 3%;
-  /* center horizontally */ 
   left: 0px;
   right: 0px; 
 }

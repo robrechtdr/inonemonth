@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+
+{% block body_class %}github-signin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row outer-vertical-center">
+      <div class="col-md-12 text-center inner-vertical-center centered">
+        <h1>Sign in via Github</h1>
+        <a href="{% url 'github_login' %}"><img title="Github account signin" src="{% static 'img/github-256.png' %}"></a>
+      </div>
+
+      {% comment %}
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-4 ">
+      </div>
+      {% endcomment %}
+    </div><!-- end div.row -->
+</div><!-- end div.container -->
+{% endblock content %}

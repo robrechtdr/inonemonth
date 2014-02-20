@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^basic/$', TemplateView.as_view(template_name='home2.html')),
 
     url(r'^glossary/$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
+    url(r'^account/signin-github/$', TemplateView.as_view(template_name='github_signin.html'), name="github_signin"),
     url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),
 

@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover() # To enable the admin:
 
-from core.views import UserRetrieveAPIView, JurorChallengeSigninView
+from core.views import UserRetrieveAPIView, JurorChallengeSigninView, BindEmailView
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView)
@@ -17,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^basic/$', TemplateView.as_view(template_name='home2.html')),
 
     url(r'^glossary/$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
+    # How to customize url? Would need setting as LOGIN_URL for Allauth
+    url(r'^accounts/social/signup/$', BindEmailView.as_view(), name="socialaccount_signup"),#bind_email"),
     url(r'^account/signin-github/$', TemplateView.as_view(template_name='github_signin.html'), name="github_signin"),
     url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),

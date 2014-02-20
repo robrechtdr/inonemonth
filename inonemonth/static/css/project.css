@@ -10,7 +10,7 @@ body {
 }
 
 /* footer for pages with little content */
-.home .foot, .github-signin .foot {
+.home .foot, .github-signin .foot, .bind-email .foot {
   position: absolute;
   bottom: 3%;
   left: 0px;
@@ -98,6 +98,15 @@ body {
 /* github_signin.html 
 -------------------------------------------------- */
 
+
+
+/* bind_email.html 
+-------------------------------------------------- */
+
+#email-bind-form .textInput {
+  width: 400px; 
+  display: inline-block;
+}
 
 
 /* carousel.html 

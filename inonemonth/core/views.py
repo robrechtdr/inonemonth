@@ -4,6 +4,7 @@ import allauth.socialaccount.views
 import allauth.account.views
 
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from rest_framework import generics
 
@@ -35,3 +36,9 @@ class ConfirmEmailView(allauth.account.views.ConfirmEmailView):
             return ["email_confirmed.html"]
         else:
             return ["email_confirm.html"]
+
+
+class ConnectionsView(allauth.socialaccount.views.ConnectionsView):
+    template_name = "bind_github.html"
+
+connections = login_required(ConnectionsView.as_view())

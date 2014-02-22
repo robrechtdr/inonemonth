@@ -12,7 +12,7 @@ body {
 /* footer for pages with little content */
 .home .foot, .github-signin .foot, .bind-email .foot, 
 .bind-github .foot, .email-confirm .foot, .email-confirmed .foot,
-.verification-sent .foot, .logout .foot {
+.verification-sent .foot, .logout .foot, .login .foot {
   position: absolute;
   bottom: 3%;
   left: 0px;
@@ -101,7 +101,7 @@ body {
 -------------------------------------------------- */
 
 
-/* bind_email.html 
+/* bind_github.html 
 -------------------------------------------------- */
 
 .bind-github ul {
@@ -113,6 +113,15 @@ body {
 -------------------------------------------------- */
 
 #email-bind-form .textInput {
+  width: 400px; 
+  display: inline-block;
+}
+
+
+/* login.html 
+-------------------------------------------------- */
+
+.login form.login .textInput {
   width: 400px; 
   display: inline-block;
 }

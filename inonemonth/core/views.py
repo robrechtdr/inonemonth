@@ -48,3 +48,9 @@ class LogoutView(allauth.account.views.LogoutView):
     template_name = "logout.html"
 
 logout = LogoutView.as_view()
+
+
+class LoginView(allauth.account.views.LoginView):
+    template_name = "login.html"
+
+login = LoginView.as_view()

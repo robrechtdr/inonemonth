@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% load account %}
+
+{% block body_class %}email-confirm{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row outer-vertical-center">
+      <div class="col-md-12 text-center inner-vertical-center centered">
+        <h1>Confirm email address</h1>
+        {% if confirmation %}
+          <p>Please confirm if {{ confirmation.email_address }} is your email address:</p>
+
+          <form method="post" action="{% url 'confirm_email' confirmation.key %}" role="form">
+          {% csrf_token %}
+            <button type="submit" class="btn btn-default">Confirm</button>
+          </form>
+
+        {% else %}
+          <p>This e-mail confirmation link expired or is invalid. Please <a href="{% url 'account_email' %}">issue a new e-mail confirmation request</a>.</p>
+        {% endif %} 
+      </div>
+
+      {% comment %}
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-4 ">
+      </div>
+      {% endcomment %}
+    </div><!-- end div.row -->
+</div><!-- end div.container -->
+{% endblock content %}

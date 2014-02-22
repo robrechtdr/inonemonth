@@ -27,3 +27,11 @@ class JurorChallengeSigninView(allauth.account.views.LoginView):
 
 class BindEmailView(allauth.socialaccount.views.SignupView):
     template_name = "bind_email.html"
+
+
+class ConfirmEmailView(allauth.account.views.ConfirmEmailView):
+    def get_template_names(self):
+        if self.request.method == 'POST':
+            return ["email_confirmed.html"]
+        else:
+            return ["email_confirm.html"]

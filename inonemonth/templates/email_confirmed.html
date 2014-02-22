@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% load account %}
+
+{% block body_class %}email-confirmed{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row outer-vertical-center">
+      <div class="col-md-12 text-center inner-vertical-center centered">
+        {% comment %}
+          See allauth's email_confirmed.html, should not show this page unless 
+          LOGIN_URL is not set in settings.
+        {% endcomment %}
+        <h1>Confirm email address</h1>
+        <p>You have confirmed that <a href="mailto:{{ confirmation.email }}">{{ confirmation.email }}</a> is your e-mail address</p>
+      </div>
+
+      {% comment %}
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-4 ">
+      </div>
+      {% endcomment %}
+    </div><!-- end div.row -->
+</div><!-- end div.container -->
+{% endblock content %}

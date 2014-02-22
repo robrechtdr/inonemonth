@@ -1,5 +1,6 @@
 """Development settings and globals."""
 
+from __future__ import absolute_import
 
 from os.path import join, normpath
 
@@ -28,7 +29,8 @@ CACHES = {
 
 
 ########## INONEMONTH CONFIGURATION
-CHALLENGE_PERIOD_DURATION = relativedelta(days=40)
+#CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
+CHALLENGE_PERIOD_DURATION = relativedelta(months=0)
 VOTING_PERIOD_DURATION = relativedelta(weeks=1)
 ########## END INONEMONTH CONFIGURATION
 

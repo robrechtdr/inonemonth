@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .base import *
 
 # Instead of duplicating data from local, just import one by one

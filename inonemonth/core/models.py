@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.db import models
 from django.contrib.auth import get_user_model
 

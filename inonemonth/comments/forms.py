@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django import forms
 from pagedown.widgets import PagedownWidget
 from challenges.models import Vote

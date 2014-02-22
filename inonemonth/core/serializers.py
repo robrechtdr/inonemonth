@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 #from challenges.serializers import RoleSerializer

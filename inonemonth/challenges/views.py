@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test

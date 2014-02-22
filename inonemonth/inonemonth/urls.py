@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^glossary/$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
     # How to customize url? Would need setting as LOGIN_URL for Allauth
     url(r'^accounts/social/signup/$', BindEmailView.as_view(), name="socialaccount_signup"),#bind_email"),
+    url(r'^accounts/confirm-email/$', TemplateView.as_view(template_name="verification_sent.html"), name="verification_sent"), #bind_email"),
     url(r'^account/signin-github/$', TemplateView.as_view(template_name='github_signin.html'), name="github_signin"),
     url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),

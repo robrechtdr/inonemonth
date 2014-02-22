@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body_class %}verification-sent{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row outer-vertical-center">
+      <div class="col-md-12 text-center inner-vertical-center centered">
+        <h1>Verify your email address</h1>
+        <p>A mail was sent to your email address for verification. Follow the link in that email to confirm your address.</p>
+      </div>
+
+      {% comment %}
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-4 ">
+      </div>
+      {% endcomment %}
+    </div><!-- end div.row -->
+</div><!-- end div.container -->
+{% endblock content %}

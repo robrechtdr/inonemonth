@@ -12,7 +12,7 @@ body {
 /* footer for pages with little content */
 .home .foot, .github-signin .foot, .bind-email .foot, 
 .bind-github .foot, .email-confirm .foot, .email-confirmed .foot,
-.verification-sent .foot {
+.verification-sent .foot, .logout .foot {
   position: absolute;
   bottom: 3%;
   left: 0px;

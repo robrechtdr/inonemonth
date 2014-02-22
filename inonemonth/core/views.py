@@ -42,3 +42,9 @@ class ConnectionsView(allauth.socialaccount.views.ConnectionsView):
     template_name = "bind_github.html"
 
 connections = login_required(ConnectionsView.as_view())
+
+
+class LogoutView(allauth.account.views.LogoutView):
+    template_name = "logout.html"
+
+logout = LogoutView.as_view()

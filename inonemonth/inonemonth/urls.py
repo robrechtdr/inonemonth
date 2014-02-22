@@ -6,7 +6,8 @@ from django.contrib import admin
 admin.autodiscover() # To enable the admin:
 
 from core.views import (UserRetrieveAPIView, JurorChallengeSigninView,
-                       BindEmailView, ConfirmEmailView, connections)
+                        BindEmailView, ConfirmEmailView, connections,
+                        logout)
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView)
@@ -25,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^accounts/confirm-email/$', TemplateView.as_view(template_name="verification_sent.html"), name="verification_sent"),
     url(r'^accounts/confirm-email/(?P<key>\w+)/$', ConfirmEmailView.as_view(), name="confirm_email"),
     url(r'^accounts/social/connections/$', connections, name="socialaccount_connections"),
+    url(r'^accounts/logout/$', logout, name="account_logout"),
     url(r'^account/signin-github/$', TemplateView.as_view(template_name='github_signin.html'), name="github_signin"),
     url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),

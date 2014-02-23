@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
@@ -27,7 +27,7 @@ from .github_utils import get_last_commit_on_branch
 User = get_user_model()
 
 
-#!! @user_has_profile
+@login_required(login_url=reverse_lazy("github_signin"))
 def challenge_create_view(request):
     if request.method == "POST":
         form = ChallengeCreateModelForm(request.user, data=request.POST)
@@ -52,6 +52,7 @@ def challenge_create_view(request):
                   dictionary={"form": form})
 
 
+@login_required(login_url=reverse_lazy("github_signin"))
 def invite_jurors_view(request, **kwargs):
     JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     challenge = Challenge.objects.get(pk=kwargs["pk"])

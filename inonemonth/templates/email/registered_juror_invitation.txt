@@ -1,0 +1,6 @@
+{{ sender }} has invited you to be a juror for the following challenge:
+
+{{ challenge_title }}
+
+Go to this challenge via {{ link }}
+

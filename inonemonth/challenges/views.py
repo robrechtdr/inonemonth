@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse_lazy
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.generic import DetailView
 from django.forms.formsets import formset_factory
@@ -21,6 +22,9 @@ from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 from .github_utils import get_last_commit_on_branch
 #!! from .decorators import user_has_profile
+
+
+User = get_user_model()
 
 
 #!! @user_has_profile
@@ -56,24 +60,36 @@ def invite_jurors_view(request, **kwargs):
         if formset.is_valid():
             for form in formset:
                 # TODO: should check if user already exists
-                password = generate_password()
-                user = create_allauth_user(email=form.cleaned_data["email"],
-                                           password=password)
-                print password
+                email = form.cleaned_data["email"]
+                # Email juror is of already registered user
+                try:
+                    user = User.objects.get(email=email)
+                    juror = Role.objects.create(user=user, challenge=challenge,
+                                                type=Role.JUROR)
+                    send_invitation_mail_to_juror(juror=juror,
+                                                  request=request,
+                                                  juror_registered=True)
 
-                # hashed passwords can't be retrieved, so they'll need to be
-                # stored somewhere to send that temporary password to the user.
-                # The user can then change the password by himself later on.
-                UserExtension.objects.create(user=user, temp_password=password)
+                # Email is not of already registered user
+                except DoesNotExist:
+                    password = generate_password()
+                    user = create_allauth_user(email=email,
+                                               password=password)
+                    print password
 
-                juror = Role.objects.create(user=user, challenge=challenge,
-                                            type=Role.JUROR)
-                # Here, Send invitation email to user to challenge (probably need to
-                # deactivate mailing email confirmation)
-                send_invitation_mail_to_juror(juror, request)
-                # Could also be created with celery, at moment juror period
-                # starts
-                #vote = Vote.objects.create(juror=juror)
+                    # hashed passwords can't be retrieved, so they'll need to be
+                    # stored somewhere to send that temporary password to the user.
+                    # The user can then change the password by himself later on.
+                    UserExtension.objects.create(user=user, temp_password=password)
+
+                    juror = Role.objects.create(user=user, challenge=challenge,
+                                                type=Role.JUROR)
+                    send_invitation_mail_to_juror(juror=juror,
+                                                  request=request,
+                                                  juror_registered=False)
+                    # Could also be created with celery, at moment juror period
+                    # starts
+                    #vote = Vote.objects.create(juror=juror)
 
             """
             model = form.instance.__class__

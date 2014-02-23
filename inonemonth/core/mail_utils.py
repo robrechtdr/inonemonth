@@ -7,22 +7,27 @@ from django.template import Context
 from django.template.loader import get_template
 
 
-def send_invitation_mail_to_juror(juror, request):
+def send_invitation_mail_to_juror(juror, request, juror_registered=False):
     subject = 'Invitation to be a juror of my challenge'
     from_role = juror.challenge.get_clencher()
     from_email = from_role.user.email
     to_email = juror.user.email
     link = request.build_absolute_uri(reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
-
-    text = get_template('email/juror_invitation.txt')
-    html = get_template('email/juror_invitation.html')
-    email_context = Context({
+    context = {
         'sender': from_email,
         'challenge_title': from_role.challenge.title,
         'link': link,
-        'account_email': to_email,
-        'account_password': juror.user.userextension.temp_password
-    })
+    }
+    if juror_registered:
+        text = get_template('email/registered_juror_invitation.txt')
+        html = get_template('email/registered_juror_invitation.html')
+    else:
+        text = get_template('email/new_juror_invitation.txt')
+        html = get_template('email/new_juror_invitation.html')
+        context["account_email"] = to_email
+        context["account_password"] = juror.user.userextension.temp_password
+
+    email_context = Context(context)
     text_content = text.render(email_context)
     html_content = html.render(email_context)
 

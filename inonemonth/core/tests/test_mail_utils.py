@@ -11,13 +11,44 @@ from ..mail_utils import send_invitation_mail_to_juror
 
 
 class EmailUtilsTestCase(django.test.TestCase):
-    def test_send_invitation_mail_to_juror(self):
+    def setUp(self):
         request_factory = django.test.RequestFactory()
-        request = request_factory.get(reverse("challenge_invite_jurors_view", kwargs={"pk":1}))
+        self.request = request_factory.get(reverse("challenge_invite_jurors_view", kwargs={"pk":1}))
         challenge = GargantuanChallengeFactory()
-        juror = challenge.get_jurors()[0] # Gets juror andy.slacker@gmail.com
-        send_invitation_mail_to_juror(juror, request)
+        self.juror = challenge.get_jurors()[0]
+
+
+    def test_send_invitation_mail_to_juror_new(self):
+        text = ('de.rouck.robrecht@gmail.com has invited you to be a juror '
+                'for the following challenge:\n\n'
+                'Gargantuan project challenge\n\n'
+                'Go to this challenge via '
+                'http://testserver/account/signin-juror/challenge/1/\n\n'
+                'Login credentials:\n'
+                'Email: andy.slacker@gmail.com\n'
+                'Password: temp_password\n\n'
+                'Note that it is advised to change your password.\n')
+
+        send_invitation_mail_to_juror(juror=self.juror, request=self.request,
+                                      juror_registered=False)
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
         self.assertEqual(email.to,["andy.slacker@gmail.com"])
         self.assertEqual(email.from_email,"de.rouck.robrecht@gmail.com")
+        self.assertEqual(email.body, text)
+
+
+    def test_send_invitation_mail_to_juror_registered(self):
+        text = ('de.rouck.robrecht@gmail.com has invited you to be a juror '
+                'for the following challenge:\n\n'
+                'Gargantuan project challenge\n\n'
+                'Go to this challenge via '
+                'http://testserver/account/signin-juror/challenge/1/\n\n')
+
+        send_invitation_mail_to_juror(juror=self.juror, request=self.request,
+                                      juror_registered=True)
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(email.to,["andy.slacker@gmail.com"])
+        self.assertEqual(email.from_email,"de.rouck.robrecht@gmail.com")
+        self.assertEqual(email.body, text)

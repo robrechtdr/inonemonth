@@ -21,12 +21,14 @@ from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 from .github_utils import get_last_commit_on_branch
+from .decorators import user_has_github_account
 
 
 User = get_user_model()
 
 
 @login_required(login_url=reverse_lazy("github_signin"))
+@user_has_github_account
 def challenge_create_view(request):
     if request.method == "POST":
         form = ChallengeCreateModelForm(request.user, data=request.POST)
@@ -52,6 +54,7 @@ def challenge_create_view(request):
 
 
 @login_required(login_url=reverse_lazy("github_signin"))
+@user_has_github_account
 def invite_jurors_view(request, **kwargs):
     JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     challenge = Challenge.objects.get(pk=kwargs["pk"])
@@ -106,7 +109,6 @@ def invite_jurors_view(request, **kwargs):
                   dictionary={"formset": formset, "challenge": challenge})
 
 
-#@user_passes_test(role_check, login_url=reverse_lazy("challenge_403"))
 def challenge_detail_view(request, **kwargs):
     challenge = Challenge.objects.get(pk=kwargs["pk"])
     # Should try to do check with decorator, but how to

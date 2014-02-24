@@ -7,7 +7,7 @@ admin.autodiscover() # To enable the admin:
 
 from core.views import (UserRetrieveAPIView, JurorChallengeSigninView,
                         BindEmailView, ConfirmEmailView, connections,
-                        logout, login)
+                        logout, login, github_signin)
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView, challenge_detail_403_view)
@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^accounts/social/connections/$', connections, name="socialaccount_connections"),
     url(r'^accounts/logout/$', logout, name="account_logout"),
     url(r"^accounts/login/$", login, name="account_login"),
-    url(r'^account/signin-github/$', TemplateView.as_view(template_name='github_signin.html'), name="github_signin"),
+    url(r'^account/signin-github/$', github_signin, name="github_signin"),
     url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
     url(r'^accounts/', include('allauth.urls')),
 

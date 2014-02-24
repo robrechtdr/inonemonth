@@ -3,12 +3,14 @@ from __future__ import absolute_import
 import allauth.socialaccount.views
 import allauth.account.views
 
+from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from rest_framework import generics
 
 from .serializers import UserSerializer
+from challenges.decorators import auth_user_has_github_account
 
 
 User = get_user_model()
@@ -54,3 +56,9 @@ class LoginView(allauth.account.views.LoginView):
     template_name = "login.html"
 
 login = LoginView.as_view()
+
+
+class GithubSigninView(TemplateView):
+    template_name = "github_signin.html"
+
+github_signin = auth_user_has_github_account(GithubSigninView.as_view())

@@ -56,8 +56,15 @@ def challenge_create_view(request):
 @login_required(login_url=reverse_lazy("github_signin"))
 @auth_user_has_github_account
 def invite_jurors_view(request, **kwargs):
-    JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     challenge = Challenge.objects.get(pk=kwargs["pk"])
+    # Try to implement this via decorator
+    # In case any authenticated user but the clencher to this page visits the
+    # page.
+    if request.user != challenge.get_clencher().user:
+        return HttpResponseRedirect(reverse_lazy("challenge_create_view"))
+    # Also bar revisiting this page as a clencher after already having
+    # invited jurors?
+    JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     if request.method == "POST":
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():

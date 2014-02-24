@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from fabric.api import local
 import os
 import inonemonth.settings.base
@@ -63,32 +65,32 @@ def ftest(app_name="", option="", setting="test"):
           "--settings=inonemonth.settings.%s --traceback" % (app_name, option, setting))
 
 
-def utest(app_name=""):
+def utest(app_name="", setting="test"):
     """
     E.g. utest:accounts
     """
     #local("django-admin.py %s "
     #  "--settings=inonemonth.settings.test" % command)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test %s "
-          "--settings=inonemonth.settings.test -v2 --traceback" % app_name)
+    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
+          "--settings=inonemonth.settings.{1} -v2 --traceback".format(app_name, setting))
 
-def utestff(app_name=""):
+def utestff(app_name="", setting="test"):
     """
     utest with failfast option
     """
     #local("django-admin.py %s "
     #  "--settings=inonemonth.settings.test" % command)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test %s "
-          "--failfast --settings=inonemonth.settings.test -v2 --traceback" % app_name)
+    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
+          "--failfast --settings=inonemonth.settings.{1} -v2 --traceback".format(app_name, setting))
 
 
-def utest_all():
+def utest_all(setting="test"):
     """
     Test all local(=project) apps.
     """
     local_apps = " ".join(inonemonth.settings.base.LOCAL_APPS)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test %s "
-          "--settings=inonemonth.settings.test --traceback" % local_apps)
+    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
+          "--settings=inonemonth.settings.{1} --traceback".format(local_apps, setting))
 
 def cov():
     """
@@ -142,7 +144,8 @@ def setup_heroku_after_fresh_db(envi="staging",
     You must run this once on fresh db in heroku!
     """
     setup_heroku_env(envi, env_file)
-    setup_allauth_social(domain, envi)
+    # This is just running locally, must run on heroku
+    #setup_allauth_social(domain, envi)
 
 
 def setup_heroku_env(envi="staging", env_file="heroku_env.txt"):

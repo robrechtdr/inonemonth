@@ -15,6 +15,9 @@ from .github_utils import (get_main_branch_url, get_last_commit_on_branch,
                            get_commit_comparison_url)
 
 
+User = get_user_model()
+
+
 class Challenge(models.Model):
     """
     """
@@ -189,7 +192,7 @@ class Role(models.Model):
     ROLE_CHOICES = ((CLENCHER, CLENCHER.capitalize()),
                     (JUROR, JUROR.capitalize()))
 
-    user = models.ForeignKey(get_user_model())
+    user = models.ForeignKey(User)
     type = models.CharField(max_length=10, choices=ROLE_CHOICES)
     challenge = models.ForeignKey(Challenge)
 

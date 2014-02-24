@@ -10,7 +10,7 @@ from core.views import (UserRetrieveAPIView, JurorChallengeSigninView,
                         logout, login)
 from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
-                              RoleRetrieveAPIView)
+                              RoleRetrieveAPIView, challenge_detail_403_view)
 from comments.views import TailCommentDestroyAPIView
 #                            ListCreateAPIView,
 #                            CommentRetrieveUpdateDestroyAPIView)
@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
     url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
     url(r'^challenge/(?P<pk>\d+)/detail/$', challenge_detail_view, name="challenge_detail_view"),
+    url(r'^challenge/(?P<pk>\d+)/detail/403/$', challenge_detail_403_view, name="challenge_detail_403"),#TemplateView.as_view(template_name='challenge_403.html')
 
     url(r'^api/users/(?P<pk>[0-9]+)/$', UserRetrieveAPIView.as_view(), name="user_api_retrieve"),
     url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeRetrieveAPIView.as_view(), name="challenge_api_retrieve"),

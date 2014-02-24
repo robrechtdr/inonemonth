@@ -21,7 +21,6 @@ from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 from .github_utils import get_last_commit_on_branch
-#!! from .decorators import user_has_profile
 
 
 User = get_user_model()
@@ -107,10 +106,12 @@ def invite_jurors_view(request, **kwargs):
                   dictionary={"formset": formset, "challenge": challenge})
 
 
+#@user_passes_test(role_check, login_url=reverse_lazy("challenge_403"))
 def challenge_detail_view(request, **kwargs):
     challenge = Challenge.objects.get(pk=kwargs["pk"])
     role = request.user.role_set.get(challenge=challenge)
     role_api_url = role.get_absolute_url()
+
     if request.method == "POST":
         head_comment_form = HeadCommentForm(request.POST)
         tail_comment_form = TailCommentForm(request.POST)
@@ -175,6 +176,11 @@ def challenge_detail_view(request, **kwargs):
                               "tail_comment_form": tail_comment_form
                               }
     )
+
+
+def challenge_detail_403_view(request, **kwargs):
+    return render(request=request, template_name='challenge_detail_403.html',
+                  status=403)
 
 
 class ChallengeRetrieveAPIView(generics.RetrieveAPIView):

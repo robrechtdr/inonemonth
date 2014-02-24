@@ -109,6 +109,12 @@ def invite_jurors_view(request, **kwargs):
 #@user_passes_test(role_check, login_url=reverse_lazy("challenge_403"))
 def challenge_detail_view(request, **kwargs):
     challenge = Challenge.objects.get(pk=kwargs["pk"])
+    # Should try to do check with decorator, but how to
+    # pass the pk of challenge url to it?
+    if not challenge.user_has_role(request.user):
+        return HttpResponseRedirect(reverse_lazy("challenge_detail_403",
+                                                 kwargs={"pk": challenge.pk}))
+
     role = request.user.role_set.get(challenge=challenge)
     role_api_url = role.get_absolute_url()
 

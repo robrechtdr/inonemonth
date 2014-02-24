@@ -140,6 +140,11 @@ class ChallengeTestCase(django.test.TestCase):
         self.assertEqual(challenge.is_last_commit_different_from_start_commit(),
                          True)
 
+    def test_user_has_role(self):
+        challenge = GargantuanChallengeFactory()
+        rob = challenge.get_clencher().user
+        self.assertEqual(challenge.user_has_role(rob), True)
+
 
 class RoleTestCase(django.test.TestCase):
     def setUp(self):

@@ -43,7 +43,7 @@ class Challenge(models.Model):
             return self.role_set.get(type=self.role_set.model.CLENCHER)
         except ObjectDoesNotExist:
             raise Exception("No user has been assigned as clencher "
-                                  "for this challenge yet.")
+                            "for this challenge yet.")
 
     # Make manager method out of it, but will I then be able to use it in
     # serializer?
@@ -56,7 +56,7 @@ class Challenge(models.Model):
             return jurors
         else:
             raise self.Exception("No Juror has been assigned as juror "
-                                     "for this challenge yet.")
+                                 "for this challenge yet.")
 
     def get_juror_representation_number(self, juror):
         jurors = self.get_jurors()
@@ -156,7 +156,6 @@ class Challenge(models.Model):
         start_commit = self.start_commit
         return get_commit_comparison_url(github_login, self.repo_name, start_commit, last_commit)
 
-
     # Note, each time get_last_commit_on_branch is called, makes a request,
     # change later on!
     def is_last_commit_different_from_start_commit(self):
@@ -168,6 +167,15 @@ class Challenge(models.Model):
         if self.start_commit != last_commit:
             return True
         else:
+            return False
+
+    def user_has_role(self, user):
+        try:
+            # Must be id because request.user is a SimpleLazyObject
+            # http://stackoverflow.com/questions/17623234/django-simplelazyobject
+            self.role_set.get(user=user.id)
+            return True
+        except ObjectDoesNotExist:
             return False
 
 

@@ -21,14 +21,14 @@ from .forms import ChallengeCreateModelForm, JurorInviteForm
 from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 from .github_utils import get_last_commit_on_branch
-from .decorators import user_has_github_account
+from .decorators import auth_user_has_github_account
 
 
 User = get_user_model()
 
 
 @login_required(login_url=reverse_lazy("github_signin"))
-@user_has_github_account
+@auth_user_has_github_account
 def challenge_create_view(request):
     if request.method == "POST":
         form = ChallengeCreateModelForm(request.user, data=request.POST)
@@ -54,7 +54,7 @@ def challenge_create_view(request):
 
 
 @login_required(login_url=reverse_lazy("github_signin"))
-@user_has_github_account
+@auth_user_has_github_account
 def invite_jurors_view(request, **kwargs):
     JurorInviteFormset = formset_factory(JurorInviteForm, RequiredFormSet)
     challenge = Challenge.objects.get(pk=kwargs["pk"])

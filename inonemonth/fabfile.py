@@ -5,13 +5,48 @@ import os
 import inonemonth.settings.base
 
 
-def setup_allauth_social(domain, setting):
+LOCAL = "local"
+LOCAL_DOMAIN = "http://localhost"
+LOCAL_SETTING = LOCAL
+LOCAL_DB_NAME = "inonemonth"
+
+TEST = "test"
+TEST_DOMAIN = LOCAL_DOMAIN
+TEST_SETTING = TEST
+
+STAGING = "staging"
+STAGING_DOMAIN = "https://inonemonth.staging.herokuapp.com"
+STAGING_HEROKU_APP = "inonemonth-staging"
+STAGING_ENV_FILE = "heroku_env.txt"
+STAGING_REMOTE = STAGING
+STAGING_SETTING = STAGING
+
+PRODUCTION = "production"
+PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
+PRODUCTION_HEROKU_APP = "inonemonth"
+PRODUCTION_ENV_FILE = "heroku_env.txt"
+PRODUCTION_REMOTE = PRODUCTION
+PRODUCTION_SETTING = PRODUCTION
+
+DEFAULT_REMOTE = "heroku"
+
+
+def local_manage(django_command="shell", setting=LOCAL_SETTING):
+    local("python manage.py {0} --settings=inonemonth.settings.{1} --traceback".format(django_command, setting))
+
+
+def cov_run(app_name="core", options="", setting=TEST_SETTING):
+    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
+          "{1} --settings=inonemonth.settings.{2} --traceback".format(app_name, options, setting))
+
+
+def setup_allauth_social(domain=LOCAL_DOMAIN, setting=LOCAL_SETTING):
     """
     E.g. setup_allauth_social:"http://localhost","local"
     """
-    local("python manage.py setup_allauth_social github --domain='{0}' "
-          "--social_app_name='github_social_app' --settings=inonemonth.settings.{1} "
-          "--traceback".format(domain, setting))
+    local_manage(django_command="setup_allauth_social github --domain='{0}' "
+                                "--social_app_name='github_social_app'".format(domain),
+                 setting=setting)
 
 
 # Simply in the hope that this works with Lettuce
@@ -23,12 +58,13 @@ def remake_fixtures():#domain, setting):
     local("python manage.py dumpdata sites socialaccount --indent 4 > core/initial_data.json")
 
 
-def loc(command="runserver"):
+# Shortcut
+def loc(command="runserver", setting=LOCAL_SETTING):
     """
     E.g. loc:"runserver 8004"
     """
-    local("django-admin.py %s "
-      "--settings=inonemonth.settings.local --traceback" % command)
+    local_manage(django_command=command,
+                 setting=setting)
 
 
 def loc_new_db(create_superuser=False):
@@ -36,21 +72,22 @@ def loc_new_db(create_superuser=False):
     E.g. loc_new_db:True
     Remove old Postgresql db and set it up all necessary initial data.
     """
-    local("dropdb inonemonth")
-    local("createdb inonemonth")
-    local("django-admin.py syncdb --settings=inonemonth.settings.local --noinput")
+    local("dropdb {0}".format(LOCAL_DB_NAME))
+    local("createdb {0}".format(LOCAL_DB_NAME))
+    local_manage(django_command="syncdb --noinput",
+                 setting=LOCAL_SETTING)
     if create_superuser:
-        local("django-admin.py createsuperuser --username='inonemonth' "
-              "--email='de.rouck.robrecht@gmail.com' "
-              "--settings=inonemonth.settings.local")
-    local("django-admin.py migrate --settings=inonemonth.settings.local")
-    setup_allauth_social("http://localhost", "local")
-    remake_fixtures()
+        local_manage(django_command="createsuperuser",
+                     setting=LOCAL_SETTING)
+    local_manage(django_command="migrate",
+                 setting=LOCAL_SETTING)
+    setup_allauth_social(LOCAL_DOMAIN, setting=LOCAL_SETTING)
+    #remake_fixtures()
 
 
-def ftest(app_name="", option="", setting="test"):
+def ftest(app_name="", option="", setting=TEST_SETTING):
     """
-    E.g. ftest:'core,challenges', '-S'
+    E.g. ftest:'core,challenges','-S'
          ftest:core,'--pdb"
          ftest:app_name=core,option='--pdb',setting=local
 
@@ -61,36 +98,33 @@ def ftest(app_name="", option="", setting="test"):
     likely caused by Lettuce or Django.
     Error reported : https://github.com/gabrielfalcao/lettuce/issues/391
     """
-    local("python manage.py harvest -T -d --failfast --apps=%s %s "
-          "--settings=inonemonth.settings.%s --traceback" % (app_name, option, setting))
+    local_manage(django_command="harvest -T -d --failfast --apps={0} {1}".format(app_name, option),
+                 setting=setting)
 
 
-def utest(app_name="", setting="test"):
+def utest(app_name="core", setting=TEST_SETTING):
     """
-    E.g. utest:accounts
+    E.g. utest:challenges
     """
-    #local("django-admin.py %s "
-    #  "--settings=inonemonth.settings.test" % command)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
-          "--settings=inonemonth.settings.{1} -v2 --traceback".format(app_name, setting))
+    cov_run(app_name=app_name, options="-v2", setting=setting)
 
-def utestff(app_name="", setting="test"):
+
+def utestff(app_name="core", setting=TEST_SETTING):
     """
     utest with failfast option
     """
-    #local("django-admin.py %s "
-    #  "--settings=inonemonth.settings.test" % command)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
-          "--failfast --settings=inonemonth.settings.{1} -v2 --traceback".format(app_name, setting))
+    cov_run(app_name=app_name, options="--failfast -v2", setting=setting)
 
 
-def utest_all(setting="test"):
+def utest_all(setting=TEST_SETTING):
     """
     Test all local(=project) apps.
     """
     local_apps = " ".join(inonemonth.settings.base.LOCAL_APPS)
     local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
           "--settings=inonemonth.settings.{1} --traceback".format(local_apps, setting))
+    cov_run(app_name=local_apps, options="", setting=setting)
+
 
 def cov():
     """
@@ -100,80 +134,39 @@ def cov():
     local("coverage html")
     local("coverage xml")
 
-
-def stag(command="shell"):
-    """
-    E.g. stag:syncdb
-    """
-    local("django-admin.py %s "
-      "--settings=inonemonth.settings.staging" % command)
-
-
-def prod(command="shell"):
-    """
-    E.g. prod:syncdb
-    """
-    local("django-admin.py %s "
-      "--settings=inonemonth.settings.production" % command)
+"""
+PRODUCTION = "production"
+PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
+PRODUCTION_HEROKU_APP = "inonemonth"
+STAGING_ENV_FILE = "heroku_env.txt"
+"""
 
 
-
-def setup_local_env(envi="local", env_file="local_env.txt"):
-    """
-    E.g. setup_local_env:local
-    This should be one command with setup_heroku_env
-    For local command, should only add a command line if that line isn't already there!
-    """
-    virtual_env_path = os.environ.get("VIRTUAL_ENV")
-    activate_path = os.path.join(virtual_env_path, 'bin/activate')
-    with open(env_file) as f:
-        env_lines_list = f.readlines()
-    with open(activate_path, "r") as activate_f:
-        activate_lines_list = activate_f.readlines()
-    for line in env_lines_list:
-        if line not in activate_lines_list:
-            with open(activate_path, "a") as activate_f:
-                activate_f.write(line.strip() + '\n')
-    # Now reread the activate file so the new env variables are read.
-    local("bash {0}".format(activate_path)) # 'bash' should be made os independant
-
-
-def heroku_command(heroku_command="run bash", heroku_remote="heroku"):
+def heroku_command(heroku_command="run bash", heroku_remote=DEFAULT_REMOTE):
     local("cd ..; heroku {0} --remote {1}".format(heroku_command, heroku_remote))
 
 
-def heroku_django_manage(django_command="shell", setting="staging", heroku_remote="heroku"):
+def heroku_manage(django_command="shell", setting=STAGING_SETTING, heroku_remote=STAGING_REMOTE):
     heroku_command(heroku_command="run python inonemonth/manage.py {0} --settings=inonemonth.settings.{1} --traceback".format(django_command, setting),
                    heroku_remote=heroku_remote)
 
 
-def setup_heroku_allauth_social(domain="http://inonemonth-staging.herokuapp.com", setting="staging", heroku_remote="staging"):
+def setup_heroku_allauth_social(domain=STAGING_DOMAIN, setting=STAGING_SETTING, heroku_remote=STAGING_REMOTE):
     """
     E.g. setup_heroku_allauth_social:"https://inonemonth-staging.herokuapp.com","staging", "staging"
     """
-    heroku_django_manage(django_command="setup_allauth_social github --domain='{0}' --social_app_name='github_social_app'".format(domain),
-                         setting=setting,
-                         heroku_remote=heroku_remote)
-
-
-'''
-def setup_heroku_allauth_social(domain, setting, heroku_remote="staging"):
-    """
-    E.g. setup_heroku_allauth_social:"https://inonemonth-staging.herokuapp.com","staging"
-    """
-    # Inside heroku, must use cd inonemonth first
-    local("cd ..; heroku run --remote {0} python inonemonth/manage.py setup_allauth_social github --domain='{1}' "
-          "--social_app_name='github_social_app' --settings=inonemonth.settings.{2} "
-          "--traceback".format(domain, setting, heroku_remote))
-'''
+    heroku_manage(django_command="setup_allauth_social github --domain='{0}' --social_app_name='github_social_app'".format(domain),
+                  setting=setting,
+                  heroku_remote=heroku_remote)
 
 
 
-def setup_heroku_env(heroku_remote="staging", env_file="heroku_env.txt"):
+
+def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     """
     Reads from a heroku_env.txt file
     Run this command each time you add new env_variables to heroku_env.txt
-    E.g. setup_heroku_env:staging
+    E.g. setup_heroku_env:heroku_remote='staging'
     """
     # To enable 1 Procfile for staging and production
     heroku_command(heroku_command="config:set DEPLOYMENT_ENV={0}".format(heroku_remote),
@@ -185,77 +178,78 @@ def setup_heroku_env(heroku_remote="staging", env_file="heroku_env.txt"):
         heroku_command(heroku_command="config:set {0}".format(line.strip()),
                        heroku_remote=heroku_remote)
 
-'''
-def setup_heroku_env(envi="staging", env_file="heroku_env.txt"):
-    """
-    Reads from a heroku_env.txt file
-    Run this command each time you add new env_variables to heroku_env.txt
-    E.g. setup_heroku_env:staging
-    """
-    prefix = "cd .. ;"
-    # To enable 1 Procfile for staging and production
-    local("{0} heroku config:set DEPLOYMENT_ENV={1} --remote {1}".format(prefix, envi))
 
-    with open(env_file) as f:
-        env_lines_list = f.readlines()
-    for line in env_lines_list:
-        local(prefix + line.strip() + " --remote {0}".format(envi))
-'''
-
-
-
-
-def setup_heroku_after_fresh_db(domain="http://inonemonth.com",
-                                envi="staging",
-                                env_file="heroku_env.txt"):
+def setup_heroku_after_fresh_db(domain=STAGING_DOMAIN,
+                                env_file=STAGING_ENV_FILE,
+                                heroku_remote=STAGING_REMOTE):
     """
     You must run this once on fresh db in heroku!
-    e.g. : setup_heroku_after_fresh_db: "https://inonemonth-staging.herokuapp.com", "staging"
+    e.g. : setup_heroku_after_fresh_db: domain="https://inonemonth-staging.herokuapp.com",heroku_remote="staging"
     """
-    setup_heroku_env(envi, env_file)
-    setup_heroku_allauth_social(domain, envi)
-    # This is just running locally, must run on heroku
-    #setup_allauth_social(domain, envi)
-    #local("cd .. ; heroku run --remote staging python inonemonth/manage.py shell --settings=inonemonth.settings.production")
+    setup_heroku_env(env_file, heroku_remote)
+    setup_heroku_allauth_social(domain, heroku_remote)
 
 
-def heroku_new_db(envi="staging", domain="https://inonemonth.staging.herokuapp.com", app_name="inonemonth-staging", create_superuser=False):
+
+def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
+                  domain=STAGING_DOMAIN, env_file=STAGING_ENV_FILE,
+                  create_superuser=False, setting=STAGING_SETTING,
+                  heroku_remote=STAGING_REMOTE):
     """
-    E.g. loc_new_db:True
-    Remove old Postgresql db and set it up all necessary initial data.
-    How to do with Heroku?
     """
-    local("git push {0} master".format(envi))
-    local("cd .. ; heroku pg:reset DATABASE --confirm {0} "
-          "--remote {1}".format(app_name, envi))
-    local("cd .. ; heroku run --remote {0} python inonemonth/manage.py syncdb "
-          "--settings=inonemonth.settings.{0} --noinput --traceback".format(envi))
+    local("git push {0} {1}".format(heroku_remote, branch))
+    # reset db
+    heroku_command(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
+                   heroku_remote=heroku_remote)
+    heroku_manage(django_command="syncdb --noinput",
+                         setting=setting)
     if create_superuser:
-        local("cd .. ; heroku run --remote {0} python inonemonth/manage.py createsuperuser "
-              "--username=inonemonth --email='de.rouck.robrecht@gmail.com' "
-              "--settings=inonemonth.settings.{0} --traceback".format(envi))
-    local("cd .. ; heroku run --remote {0} python inonemonth/manage.py migrate "
-          "--settings=inonemonth.settings.{0} --noinput --traceback".format(envi))
-    setup_heroku_after_fresh_db(domain, envi)
+        heroku_manage(django_command="createsuperuser",
+                             setting=setting)
+    heroku_manage(django_command="migrate --noinput",
+                         setting=setting)
+    setup_heroku_after_fresh_db(domain, env_file, heroku_remote)
 
 
-def stag_new_db(create_superuser=False):
-    heroku_new_db(envi="staging", domain="https://inonemonth.staging.herokuapp.com", app_name="inonemonth-staging", create_superuser=create_superuser)
+def stag_new_db(create_superuser=False, heroku_app=PRODUCTION_HEROKU_APP):
+    heroku_new_db(heroku_app=heroku_app,
+                  branch="master",
+                  domain=STAGING_DOMAIN,
+                  env_file=STAGING_ENV_FILE,
+                  create_superuser=create_superuser,
+                  setting=STAGING_SETTING,
+                  heroku_remote=STAGING_REMOTE)
 
 
-def prod_new_db(create_superuser=False):
-    heroku_new_db(envi="production", domain="https://inonemonth.herokuapp.com", app_name="inonemonth", create_superuser=create_superuser)
+
+def prod_new_db(create_superuser=False, heroku_app=PRODUCTION_HEROKU_APP):
+    heroku_new_db(heroku_app=heroku_app,
+                  branch="master",
+                  domain=PRODUCTION_DOMAIN,
+                  env_file=PRODUCTION_ENV_FILE,
+                  create_superuser=create_superuser,
+                  setting=PRODUCTION_SETTING,
+                  heroku_remote=PRODUCTION_REMOTE)
+
 
 # Create remote env
 # heroku create --remote production
+# also implement delete
 
-
-def initial_deploy_production(heroku_app="inonemonth"):
+def stag_initial_deploy(heroku_app=STAGING_HEROKU_APP):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
-    local("cd .. ; heroku create {0} --remote production".format(heroku_app))
-    prod_new_db()
+    heroku_command(heroku_command="create {0}".format(heroku_app),
+                   heroku_remote=STAGING_REMOTE)
+    prod_new_db(heroku_app=heroku_app)
 
+
+def prod_initial_deploy(heroku_app=PRODUCTION_HEROKU_APP):
+    # Creates a heroku app called "inonemonth" and creates a git remote tied to
+    # that location
+    heroku_command(heroku_command="create {0}".format(heroku_app),
+                   heroku_remote=PRODUCTION_REMOTE)
+    prod_new_db(heroku_app=heroku_app)
 
 
 '''

@@ -59,7 +59,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ########## ALLAUTH CONFIGURATION
 # See: http://django-allauth.readthedocs.org/en/latest/#github
-ALLAUTH_SOCIAL_APP_GITHUB_ID = "189e9b562c8b67cb17bb"
+ALLAUTH_SOCIAL_APP_GITHUB_ID = "af663c7dd83f7ab8ee74"
 ########## END ALLAUTH CONFIGURATION
 
 

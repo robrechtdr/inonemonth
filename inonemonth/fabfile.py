@@ -72,8 +72,10 @@ def loc_new_db(create_superuser=False):
     E.g. loc_new_db:True
     Remove old Postgresql db and set it up all necessary initial data.
     """
-    local("dropdb {0}".format(LOCAL_DB_NAME))
-    local("createdb {0}".format(LOCAL_DB_NAME))
+    try:
+        local("dropdb {0}".format(LOCAL_DB_NAME))
+    except:
+        local("createdb {0}".format(LOCAL_DB_NAME))
     local_manage(django_command="syncdb --noinput",
                  setting=LOCAL_SETTING)
     if create_superuser:

@@ -178,6 +178,9 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
             if line.startswith("#"):
                 # Ignore comments
                 pass
+            elif line.strip() == "":
+                # Ignore empty lines
+                pass
             elif line.startswith("-r "):
                 base_file_pre_clean = line.strip("-r ")
                 # To strip \n

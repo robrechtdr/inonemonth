@@ -101,5 +101,5 @@ INSTALLED_APPS += (
 
 ########## ALLAUTH CONFIGURATION
 # See: http://django-allauth.readthedocs.org/en/latest/#github
-ALLAUTH_SOCIAL_APP_GITHUB_ID = "189e9b562c8b67cb17bb"
+ALLAUTH_SOCIAL_APP_GITHUB_ID = "d620d1cebf6f5ed095b4"
 ########## END ALLAUTH CONFIGURATION

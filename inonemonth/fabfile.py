@@ -185,7 +185,7 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
                 base_file = os.path.join(env_dir_name, base_file_base_name)
                 # Yay, recursion!
                 execute_heroku_env_file(base_file)
-            else:
+           else:
                 heroku_command(heroku_command="config:set {0}".format(line.strip()),
                                heroku_remote=heroku_remote)
 

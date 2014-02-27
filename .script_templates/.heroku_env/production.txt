@@ -1,2 +1,6 @@
 -r base.txt
+
+# Copy the `Client Secret` value after you've set up your own github app.
+# Generate a Github app on https://github.com/settings/applications
+# The following value is not of an existing github app, but it should look like this:
 ALLAUTH_SOCIAL_APP_GITHUB_SECRET=kjkOJ35bc0OJOFo7a9cc18966JOo90162JK5

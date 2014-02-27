@@ -17,14 +17,14 @@ TEST_SETTING = TEST
 STAGING = "staging"
 STAGING_DOMAIN = "https://inonemonth.staging.herokuapp.com"
 STAGING_HEROKU_APP = "inonemonth-staging"
-STAGING_ENV_FILE = "heroku_env.txt"
+STAGING_ENV_FILE = ".heroku_env.txt"
 STAGING_REMOTE = STAGING
 STAGING_SETTING = STAGING
 
 PRODUCTION = "production"
 PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
 PRODUCTION_HEROKU_APP = "inonemonth"
-PRODUCTION_ENV_FILE = "heroku_env.txt"
+PRODUCTION_ENV_FILE = ".heroku_env.txt"
 PRODUCTION_REMOTE = PRODUCTION
 PRODUCTION_SETTING = PRODUCTION
 
@@ -140,9 +140,8 @@ def cov():
 PRODUCTION = "production"
 PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
 PRODUCTION_HEROKU_APP = "inonemonth"
-STAGING_ENV_FILE = "heroku_env.txt"
+STAGING_ENV_FILE = ".heroku_env.txt"
 """
-
 
 def heroku_command(heroku_command="run bash", heroku_remote=DEFAULT_REMOTE):
     local("cd ..; heroku {0} --remote {1}".format(heroku_command, heroku_remote))
@@ -166,8 +165,8 @@ def setup_heroku_allauth_social(domain=STAGING_DOMAIN, setting=STAGING_SETTING, 
 
 def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     """
-    Reads from a heroku_env.txt file
-    Run this command each time you add new env_variables to heroku_env.txt
+    Reads from a .heroku_env.txt file
+    Run this command each time you add new env_variables to .heroku_env.txt
     E.g. setup_heroku_env:heroku_remote='staging'
     """
     # To enable 1 Procfile for staging and production
@@ -213,9 +212,9 @@ def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
     setup_heroku_after_fresh_db(domain, env_file, heroku_remote)
 
 
-def stag_new_db(create_superuser=False, heroku_app=PRODUCTION_HEROKU_APP):
+def stag_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superuser=False):
     heroku_new_db(heroku_app=heroku_app,
-                  branch="master",
+                  branch=branch,
                   domain=STAGING_DOMAIN,
                   env_file=STAGING_ENV_FILE,
                   create_superuser=create_superuser,
@@ -224,9 +223,9 @@ def stag_new_db(create_superuser=False, heroku_app=PRODUCTION_HEROKU_APP):
 
 
 
-def prod_new_db(create_superuser=False, heroku_app=PRODUCTION_HEROKU_APP):
+def prod_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superuser=False):
     heroku_new_db(heroku_app=heroku_app,
-                  branch="master",
+                  branch=branch,
                   domain=PRODUCTION_DOMAIN,
                   env_file=PRODUCTION_ENV_FILE,
                   create_superuser=create_superuser,
@@ -260,7 +259,7 @@ def prod_initial_deploy(heroku_app=PRODUCTION_HEROKU_APP):
 
 # Heroku staging setup run:
 #heroku apps:create my-heroku-app --remote staging
-#setup_heroku_env:staging
+#setup.heroku_env.txt:staging
 #git push staging master
 
 # Run a command in heroku staging:

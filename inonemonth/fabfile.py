@@ -17,14 +17,14 @@ TEST_SETTING = TEST
 STAGING = "staging"
 STAGING_DOMAIN = "https://inonemonth.staging.herokuapp.com"
 STAGING_HEROKU_APP = "inonemonth-staging"
-STAGING_ENV_FILE = ".heroku_env.txt"
+STAGING_ENV_FILE = ".heroku_env/staging.txt"
 STAGING_REMOTE = STAGING
 STAGING_SETTING = STAGING
 
 PRODUCTION = "production"
 PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
 PRODUCTION_HEROKU_APP = "inonemonth"
-PRODUCTION_ENV_FILE = ".heroku_env.txt"
+PRODUCTION_ENV_FILE = ".heroku_env/production.txt"
 PRODUCTION_REMOTE = PRODUCTION
 PRODUCTION_SETTING = PRODUCTION
 
@@ -136,12 +136,6 @@ def cov():
     local("coverage html")
     local("coverage xml")
 
-"""
-PRODUCTION = "production"
-PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
-PRODUCTION_HEROKU_APP = "inonemonth"
-STAGING_ENV_FILE = ".heroku_env.txt"
-"""
 
 def heroku_command(heroku_command="run bash", heroku_remote=DEFAULT_REMOTE):
     local("cd ..; heroku {0} --remote {1}".format(heroku_command, heroku_remote))
@@ -161,8 +155,6 @@ def setup_heroku_allauth_social(domain=STAGING_DOMAIN, setting=STAGING_SETTING, 
                   heroku_remote=heroku_remote)
 
 
-
-
 def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     """
     Reads from a .heroku_env.txt file
@@ -172,12 +164,40 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     # To enable 1 Procfile for staging and production
     heroku_command(heroku_command="config:set DEPLOYMENT_ENV={0}".format(heroku_remote),
                    heroku_remote=heroku_remote)
+
     # Set env variables from heroku env file
-    with open(env_file) as f:
-        env_lines_list = f.readlines()
-    for line in env_lines_list:
-        heroku_command(heroku_command="config:set {0}".format(line.strip()),
-                       heroku_remote=heroku_remote)
+
+    # Execute a heroku env file with pip style syntax
+    # However, put comments on a seperate line!!
+    def execute_heroku_env_file(env_file):
+        env_file
+        env_dir_name = os.path.dirname(env_file)
+        with open(env_file) as f:
+            env_lines_list = f.readlines()
+        for line in env_lines_list:
+            if line.startswith("#"):
+                # Ignore comments
+                pass
+            elif line.startswith("-r "):
+                base_file_pre_clean = line.strip("-r ")
+                # To strip \n
+                base_file_base_name = base_file_pre_clean.strip()
+                base_file = os.path.join(env_dir_name, base_file_base_name)
+                # Yay, recursion!
+                execute_heroku_env_file(base_file)
+            else:
+                heroku_command(heroku_command="config:set {0}".format(line.strip()),
+                               heroku_remote=heroku_remote)
+
+                # Call back implementation for easier testing of logic
+                # but how to implement it if it uses the line parameter?
+                #heroku_frozen_env_command(line) #
+
+    #import functools
+    #part_her = functools.partial(heroku_command, **{"heroku_command": "config:set{0}".format(line.strip()),
+    #                                  "heroku_remote": heroku_remote})
+    #execute_heroku_env_file(env_file, part_her)
+    execute_heroku_env_file(env_file)
 
 
 def setup_heroku_after_fresh_db(domain=STAGING_DOMAIN,
@@ -196,8 +216,6 @@ def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
                   domain=STAGING_DOMAIN, env_file=STAGING_ENV_FILE,
                   create_superuser=False, setting=STAGING_SETTING,
                   heroku_remote=STAGING_REMOTE):
-    """
-    """
     local("git push {0} {1}".format(heroku_remote, branch))
     # reset db
     heroku_command(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
@@ -220,7 +238,6 @@ def stag_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superu
                   create_superuser=create_superuser,
                   setting=STAGING_SETTING,
                   heroku_remote=STAGING_REMOTE)
-
 
 
 def prod_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superuser=False):

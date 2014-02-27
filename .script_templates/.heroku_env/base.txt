@@ -1,0 +1,7 @@
+SECRET_KEY=my_secret_key
+DBUSER=robrecht
+DBPASSWORD=my_password
+EMAIL_HOST_USER=some_email@gmail.com
+EMAIL_HOST_PASSWORD=some_password
+AWS_ACCESS_KEY_ID=APOAJFM6MFLHHO4SRDOQ
+AWS_SECRET_ACCESS_KEY=KljldwPXYggGcnbR2UL0x8tHmpMRUkOoAzql7mTk

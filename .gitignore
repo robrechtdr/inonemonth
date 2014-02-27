@@ -3,7 +3,7 @@
 *.swo
 coverage.xml
 */htmlcov/*
-.heroku_env.txt
+inonemonth/.heroku_env/*
 local_env.txt
 .env
 */media/*

@@ -104,6 +104,11 @@ def ftest(app_name="", option="", setting=TEST_SETTING):
                  setting=setting)
 
 
+def ftest_all(setting=TEST_SETTING):
+    # Confer utest_all
+    pass
+
+
 def utest(app_name="core", setting=TEST_SETTING):
     """
     E.g. utest:challenges

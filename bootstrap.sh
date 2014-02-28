@@ -49,7 +49,7 @@ cd /vagrant
 # Set up environment files
 ###########################
 # ¢opy .env file from .script_templates if it doesn't exist
-if [ ! -f .env ]; then
+if [ ! -f inonemonth/.env ]; then
     echo ".env not found!"
     cp .script_templates/.env inonemonth/.env  
     echo "Copied .env from .script_templates"
@@ -63,7 +63,7 @@ mkdir -p inonemonth/.heroku_env
 
 # ¢opy .heroku_env/base.txt file from .script_templates if it doesn't exist
 # Careful, this file is read differently then .env! Don't put comments in there 
-if [ ! -f .heroku_env/base.txt ]; then
+if [ ! -f inonemonth/.heroku_env/base.txt ]; then
     echo ".heroku_env/base.txt not found!"
     cp .script_templates/.heroku_env/base.txt inonemonth/.heroku_env/base.txt
     echo "Copied .heroku_env/base.txt from .script_templates"
@@ -73,7 +73,7 @@ fi
 
 # ¢opy .heroku_env/staging.txt file from .script_templates if it doesn't exist
 # Careful, this file is read differently then .env! Don't put comments in there 
-if [ ! -f .heroku_env/staging.txt ]; then
+if [ ! -f inonemonth/.heroku_env/staging.txt ]; then
     echo ".heroku_env/staging.txt not found!"
     cp .script_templates/.heroku_env/staging.txt inonemonth/.heroku_env/staging.txt
     echo "Copied .heroku_env/staging.txt from .script_templates"
@@ -83,7 +83,7 @@ fi
 
 # ¢opy .heroku_env/production.txt file from .script_templates if it doesn't exist
 # Careful, this file is read differently then .env! Don't put comments in there 
-if [ ! -f .heroku_env/production.txt ]; then
+if [ ! -f inonemonth/.heroku_env/production.txt ]; then
     echo ".heroku_env/production.txt not found!"
     cp .script_templates/.heroku_env/production.txt inonemonth/.heroku_env/production.txt
     echo "Copied .heroku_env/production.txt from .script_templates"

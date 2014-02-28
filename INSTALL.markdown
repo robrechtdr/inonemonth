@@ -14,7 +14,7 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   `git clone https://github.com/RobrechtDR/inonemonth.git`
 2. Go to the project dir:  
   `cd inonemonth`
-3. Set up vagrant for inonemonth, this takes about 11 mins 42 secs with a connection of 54 Mb/s:   
+3. Set up vagrant for inonemonth, this takes about 12 mins 25 secs with a connection of 54 Mb/s:   
   `vagrant up`
 4. Crawl into your vagrant box:  
    `vagrant ssh`  
@@ -50,7 +50,8 @@ If you are still in the `inonemonth_local` env, first run `deactivate`
 
 1. Get on the test environment:   
   `workon inonemonth_test`  
-2. * Run all unit tests:  
+2.  
+   * Run all unit tests:  
      `fab utest_all`   
    * Run all functional tests:   
      `fab ftest_all` 
@@ -95,8 +96,11 @@ Have a [Heroku](https://id.heroku.com/signup) and an [Amazon S3 account](http://
     3. Copy the value of `Access Key ID` to the value of `AWS_ACCESS_KEY_ID` in `.heroku_env/staging.txt`
     4. Copy the value of `Secret Access Key` to the value of `AWS_SECRET_ACCESS_KEY` in `.heroku_env/staging.txt`
 
-5. heroku login
-6. heroku keys:add
+5. Login with heroku credentionals:   
+  `heroku login`
+6. Add [ssh key to heroku](https://devcenter.heroku.com/articles/keys):   
+ `heroku keys:add`  
+  If you don't already have a ssh public/private key pair yet, run `ssh-keygen -t rsa`
 7. Create the `my-staging-app` heroku app and push code to heroku:   
   `fab stag_initial_deploy:branch=master`
 

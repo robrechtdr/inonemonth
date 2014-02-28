@@ -15,15 +15,15 @@ TEST_DOMAIN = LOCAL_DOMAIN
 TEST_SETTING = TEST
 
 STAGING = "staging"
-STAGING_DOMAIN = "https://inonemonth.staging.herokuapp.com"
 STAGING_HEROKU_APP = "inonemonth-staging"
+STAGING_DOMAIN = "https://{0}.herokuapp.com".format(STAGING_HEROKU_APP)
 STAGING_ENV_FILE = ".heroku_env/staging.txt"
 STAGING_REMOTE = STAGING
 STAGING_SETTING = STAGING
 
 PRODUCTION = "production"
-PRODUCTION_DOMAIN = "https://inonemonth.herokuapp.com"
 PRODUCTION_HEROKU_APP = "inonemonth"
+PRODUCTION_DOMAIN = "https://{0}.herokuapp.com".format(PRODUCTION_HEROKU_APP)
 PRODUCTION_ENV_FILE = ".heroku_env/production.txt"
 PRODUCTION_REMOTE = PRODUCTION
 PRODUCTION_SETTING = PRODUCTION
@@ -106,7 +106,7 @@ def ftest(app_name="", option="", setting=TEST_SETTING):
 
 def ftest_all(setting=TEST_SETTING):
     # Confer utest_all
-    pass
+    print "Not implemented yet"
 
 
 def utest(app_name="core", setting=TEST_SETTING):
@@ -193,7 +193,7 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
                 base_file = os.path.join(env_dir_name, base_file_base_name)
                 # Yay, recursion!
                 execute_heroku_env_file(base_file)
-           else:
+            else:
                 heroku_command(heroku_command="config:set {0}".format(line.strip()),
                                heroku_remote=heroku_remote)
 
@@ -226,8 +226,13 @@ def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
                   heroku_remote=STAGING_REMOTE):
     local("git push {0} {1}".format(heroku_remote, branch))
     # reset db
-    heroku_command(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
+    try:
+        heroku_command(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
                    heroku_remote=heroku_remote)
+    except:
+        # Create db
+        # Does this happen autom?
+        pass
     heroku_manage(django_command="syncdb --noinput",
                          setting=setting)
     if create_superuser:
@@ -262,20 +267,20 @@ def prod_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superu
 # heroku create --remote production
 # also implement delete
 
-def stag_initial_deploy(heroku_app=STAGING_HEROKU_APP):
+def stag_initial_deploy(heroku_app=STAGING_HEROKU_APP, branch="master"):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
     heroku_command(heroku_command="create {0}".format(heroku_app),
                    heroku_remote=STAGING_REMOTE)
-    prod_new_db(heroku_app=heroku_app)
+    prod_new_db(heroku_app=heroku_app, branch=branch)
 
 
-def prod_initial_deploy(heroku_app=PRODUCTION_HEROKU_APP):
+def prod_initial_deploy(heroku_app=PRODUCTION_HEROKU_APP, branch="master"):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
     heroku_command(heroku_command="create {0}".format(heroku_app),
                    heroku_remote=PRODUCTION_REMOTE)
-    prod_new_db(heroku_app=heroku_app)
+    prod_new_db(heroku_app=heroku_app, branch=branch)
 
 
 '''

@@ -208,16 +208,18 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     execute_heroku_env_file(env_file)
 
 
+'''
 def setup_heroku_after_fresh_db(domain=STAGING_DOMAIN,
                                 env_file=STAGING_ENV_FILE,
+                                setting=STAGING_SETTING,
                                 heroku_remote=STAGING_REMOTE):
     """
     You must run this once on fresh db in heroku!
     e.g. : setup_heroku_after_fresh_db: domain="https://inonemonth-staging.herokuapp.com",heroku_remote="staging"
     """
     setup_heroku_env(env_file, heroku_remote)
-    setup_heroku_allauth_social(domain, heroku_remote)
-
+    setup_heroku_allauth_social(domain, setting, heroku_remote)
+'''
 
 
 def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
@@ -233,18 +235,21 @@ def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
         # Create db
         # Does this happen autom?
         pass
+    # Must set env variables before doing syncdb
+    setup_heroku_env(env_file, heroku_remote)
     heroku_manage(django_command="syncdb --noinput",
-                         setting=setting)
+                         setting=setting, heroku_remote=heroku_remote)
     if create_superuser:
         heroku_manage(django_command="createsuperuser",
-                             setting=setting)
+                             setting=setting, heroku_remote=heroku_remote)
     heroku_manage(django_command="migrate --noinput",
-                         setting=setting)
-    setup_heroku_after_fresh_db(domain, env_file, heroku_remote)
+                         setting=setting, heroku_remote=heroku_remote)
+    setup_heroku_allauth_social(domain, setting, heroku_remote)
+    #setup_heroku_after_fresh_db(domain, env_file, setting, heroku_remote)
 
 
-def stag_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superuser=False):
-    heroku_new_db(heroku_app=heroku_app,
+def stag_new_db(branch="master", create_superuser=False):
+    heroku_new_db(heroku_app=STAGING_HEROKU_APP,
                   branch=branch,
                   domain=STAGING_DOMAIN,
                   env_file=STAGING_ENV_FILE,
@@ -253,8 +258,8 @@ def stag_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superu
                   heroku_remote=STAGING_REMOTE)
 
 
-def prod_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superuser=False):
-    heroku_new_db(heroku_app=heroku_app,
+def prod_new_db(branch="master", create_superuser=False):
+    heroku_new_db(heroku_app=PRODUCTION_HEROKU_APP,
                   branch=branch,
                   domain=PRODUCTION_DOMAIN,
                   env_file=PRODUCTION_ENV_FILE,
@@ -267,20 +272,20 @@ def prod_new_db(heroku_app=PRODUCTION_HEROKU_APP, branch="master", create_superu
 # heroku create --remote production
 # also implement delete
 
-def stag_initial_deploy(heroku_app=STAGING_HEROKU_APP, branch="master"):
+def stag_initial_deploy(branch="master"):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
-    heroku_command(heroku_command="create {0}".format(heroku_app),
+    heroku_command(heroku_command="create {0}".format(STAGING_HEROKU_APP),
                    heroku_remote=STAGING_REMOTE)
-    prod_new_db(heroku_app=heroku_app, branch=branch)
+    stag_new_db(branch=branch)
 
 
-def prod_initial_deploy(heroku_app=PRODUCTION_HEROKU_APP, branch="master"):
+def prod_initial_deploy(branch="master"):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
-    heroku_command(heroku_command="create {0}".format(heroku_app),
+    heroku_command(heroku_command="create {0}".format(PRODUCTION_HEROKU_APP),
                    heroku_remote=PRODUCTION_REMOTE)
-    prod_new_db(heroku_app=heroku_app, branch=branch)
+    prod_new_db(branch=branch)
 
 
 '''

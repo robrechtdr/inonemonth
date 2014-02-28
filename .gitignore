@@ -5,11 +5,10 @@ coverage.xml
 */htmlcov/*
 inonemonth/.heroku_env/*
 local_env.txt
-.env
+inonemonth/.env
 */media/*
 .dump/*
 .coverage
 git_hidden/*
 inonemonth/core/initial_data.json
 inonemonth/static/css/.bstr_dump/*
-

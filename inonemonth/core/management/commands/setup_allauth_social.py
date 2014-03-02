@@ -81,11 +81,11 @@ class Command(BaseCommand):
                 domain=options["domain"],
                 social_app_name=options["social_app_name"]
             )
-            self.stdout.write("Set up Github social app '{0}' to "
-                              "domain '{1}'!".format(options["social_app_name"],
-                                                     options["domain"]
-                                             )
-            )
+            #self.stdout.write("Set up Github social app '{0}' to "
+            #                  "domain '{1}'!".format(options["social_app_name"],
+            #                                             options["domain"]
+            #                 )
+            #)
         elif args[0] != social_providers[0]:
             raise CommandError("only the following social providers are currently supported: "
                                "{0}".format(", ".join(social_providers)))

@@ -30,15 +30,22 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   6. Copy the value of `Client ID` to the value of `ALLAUTH_SOCIAL_APP_GITHUB_ID` in `inonemonth/settings/local.py`.
 7. Create a [gmail address which can send automated mails](https://support.google.com/mail/answer/14257?hl=en):   
    Copy the email address and password to the values of `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` in `.env`. 
-8. Load local environment variables:   
+8. Activate tmux to enable running multiple shells and conveniently switch between them:    
+   `tmux` 
+9. Load local environment variables:   
    `source .env`
-9. Get into the local virtual environment:    
+10. Get into the local virtual environment:   
    `workon inonemonth_local`
+11. Run the celery worker:   
+   `celery -A inonemonth worker -l info`
+12. Open a new tmux window:  
+   `tmux new-window`
+13. Repeat step *9* and *10* in the new window    
 
 **Running the server**  
 1. Run the local server on your guest machine as the db is already set up with syncdb and migrate:  
   `fab loc:"runserver 0.0.0.0:8000"`  
-2. View the site in the browser of your host machine by visiting `http://localhost:8009`.
+2. View the site in the browser of your host machine by visiting `http://localhost:8009`
 
 > If you want to view the site on the browser of your host machine then you NEED 
 > to use runserver `0.0.0.0:8000` instead of the default `127.0.0.1:8000`. This is because 

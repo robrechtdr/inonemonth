@@ -58,7 +58,7 @@ class LoginView(allauth.account.views.LoginView):
 login = LoginView.as_view()
 
 
-class GithubSigninView(TemplateView):
+class GithubSigninView(allauth.account.views.LoginView):
     template_name = "github_signin.html"
 
 github_signin = auth_user_has_github_account(GithubSigninView.as_view())

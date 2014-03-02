@@ -128,8 +128,6 @@ def utest_all(setting=TEST_SETTING):
     Test all local(=project) apps.
     """
     local_apps = " ".join(inonemonth.settings.base.LOCAL_APPS)
-    local("coverage run --rcfile=.coveragerc --source='.' manage.py test {0} "
-          "--settings=inonemonth.settings.{1} --traceback".format(local_apps, setting))
     cov_run(app_name=local_apps, options="", setting=setting)
 
 

@@ -2,17 +2,32 @@ from __future__ import absolute_import
 
 from django.conf import settings
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
+from django.core.urlresolvers import reverse
 
 
-def send_invitation_mail_to_juror(juror, request, juror_registered=False):
+# There is no scheme attribute yet in Django 1.5
+# https://github.com/django/django/blob
+# /4607c7325dca510428f8e67a97bd73d647ffb35f/django/http/request.py#L102-L114
+def build_url_base(request):
+    if request.is_secure():
+        scheme = "https"
+    else:
+        scheme = "http"
+    return "{0}://{1}".format(scheme, request.get_host())
+
+
+def build_absolute_url(url_base, path):
+    return "{0}{1}".format(url_base, path)
+
+
+def send_invitation_mail_to_juror(juror, url_base, juror_registered=False):
     subject = 'Invitation to be a juror of my challenge'
     from_role = juror.challenge.get_clencher()
     from_email = from_role.user.email
     to_email = juror.user.email
-    link = request.build_absolute_uri(reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
+    link = build_absolute_url(url_base, reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
     context = {
         'sender': from_email,
         'challenge_title': from_role.challenge.title,

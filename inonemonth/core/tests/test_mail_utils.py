@@ -7,13 +7,30 @@ from django.core.urlresolvers import reverse
 from django.core import mail
 
 from .setups import GargantuanChallengeFactory
-from ..mail_utils import send_invitation_mail_to_juror
+from ..mail_utils import (send_invitation_mail_to_juror,
+                          build_url_base, build_absolute_url)
 
 
 class EmailUtilsTestCase(django.test.TestCase):
     def setUp(self):
         request_factory = django.test.RequestFactory()
-        self.request = request_factory.get(reverse("challenge_invite_jurors_view", kwargs={"pk":1}))
+        self.path = reverse("challenge_invite_jurors_view", kwargs={"pk":1})
+        self.request = request_factory.get(self.path)
+
+    def test_build_url_base(self):
+        self.assertEqual(build_url_base(self.request), "http://testserver")
+
+
+    def test_build_absolute_url(self):
+        url_base = build_url_base(self.request)
+        self.assertEqual(build_absolute_url(url_base, self.path), "http://testserver/challenge/1/invite-jurors/")
+
+
+class SendInvitationMailToJurorTestCase(django.test.TestCase):
+    def setUp(self):
+        request_factory = django.test.RequestFactory()
+        request = request_factory.get(reverse("challenge_invite_jurors_view", kwargs={"pk":1}))
+        self.url_base = build_url_base(request)
         challenge = GargantuanChallengeFactory()
         self.juror = challenge.get_jurors()[0]
 
@@ -29,7 +46,7 @@ class EmailUtilsTestCase(django.test.TestCase):
                 'Password: temp_password\n\n'
                 'Note that it is advised to change your password.\n')
 
-        send_invitation_mail_to_juror(juror=self.juror, request=self.request,
+        send_invitation_mail_to_juror(juror=self.juror, url_base=self.url_base,
                                       juror_registered=False)
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
@@ -45,7 +62,7 @@ class EmailUtilsTestCase(django.test.TestCase):
                 'Go to this challenge via '
                 'http://testserver/account/signin-juror/challenge/1/\n\n')
 
-        send_invitation_mail_to_juror(juror=self.juror, request=self.request,
+        send_invitation_mail_to_juror(juror=self.juror, url_base=self.url_base,
                                       juror_registered=True)
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]

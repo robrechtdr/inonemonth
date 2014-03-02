@@ -20,7 +20,6 @@ class EmailUtilsTestCase(django.test.TestCase):
     def test_build_url_base(self):
         self.assertEqual(build_url_base(self.request), "http://testserver")
 
-
     def test_build_absolute_url(self):
         url_base = build_url_base(self.request)
         self.assertEqual(build_absolute_url(url_base, self.path), "http://testserver/challenge/1/invite-jurors/")
@@ -33,7 +32,6 @@ class SendInvitationMailToJurorTestCase(django.test.TestCase):
         self.url_base = build_url_base(request)
         challenge = GargantuanChallengeFactory()
         self.juror = challenge.get_jurors()[0]
-
 
     def test_send_invitation_mail_to_juror_new(self):
         text = ('de.rouck.robrecht@gmail.com has invited you to be a juror '
@@ -53,7 +51,6 @@ class SendInvitationMailToJurorTestCase(django.test.TestCase):
         self.assertEqual(email.to,["andy.slacker@gmail.com"])
         self.assertEqual(email.from_email,"de.rouck.robrecht@gmail.com")
         self.assertEqual(email.body, text)
-
 
     def test_send_invitation_mail_to_juror_registered(self):
         text = ('de.rouck.robrecht@gmail.com has invited you to be a juror '

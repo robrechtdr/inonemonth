@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse_lazy
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.generic import DetailView
 from django.forms.formsets import formset_factory
@@ -13,8 +12,8 @@ from rest_framework import generics
 
 from core.models import UserExtension
 from core.forms import RequiredFormSet
-from core.allauth_utils import create_allauth_user, generate_password
-from core.mail_utils import send_invitation_mail_to_juror
+#from core.allauth_utils import create_allauth_user, generate_password
+#from core.mail_utils import send_invitation_mail_to_juror
 from comments.forms import HeadCommentForm, TailCommentForm
 from comments.models import HeadComment, TailComment
 from .forms import ChallengeCreateModelForm, JurorInviteForm
@@ -22,6 +21,8 @@ from .models import Challenge, Role, Vote
 from .serializers import ChallengeSerializer, RoleSerializer
 from .github_utils import get_last_commit_on_branch
 from .decorators import auth_user_has_github_account
+from core.mail_utils import build_url_base
+from .tasks import invite_juror
 
 
 User = get_user_model()
@@ -69,44 +70,11 @@ def invite_jurors_view(request, **kwargs):
         formset = JurorInviteFormset(request.POST)
         if formset.is_valid():
             for form in formset:
-                # TODO: should check if user already exists
                 email = form.cleaned_data["email"]
-                # Email juror is of already registered user
-                try:
-                    user = User.objects.get(email=email)
-                    juror = Role.objects.create(user=user, challenge=challenge,
-                                                type=Role.JUROR)
-                    send_invitation_mail_to_juror(juror=juror,
-                                                  request=request,
-                                                  juror_registered=True)
+                url_base = build_url_base(request)
+                # Invite jurors via celery queue
+                invite_juror.delay(email, challenge, url_base)
 
-                # Email is not of already registered user
-                except DoesNotExist:
-                    password = generate_password()
-                    user = create_allauth_user(email=email,
-                                               password=password)
-                    print password
-
-                    # hashed passwords can't be retrieved, so they'll need to be
-                    # stored somewhere to send that temporary password to the user.
-                    # The user can then change the password by himself later on.
-                    UserExtension.objects.create(user=user, temp_password=password)
-
-                    juror = Role.objects.create(user=user, challenge=challenge,
-                                                type=Role.JUROR)
-                    send_invitation_mail_to_juror(juror=juror,
-                                                  request=request,
-                                                  juror_registered=False)
-                    # Could also be created with celery, at moment juror period
-                    # starts
-                    #vote = Vote.objects.create(juror=juror)
-
-            """
-            model = form.instance.__class__
-            #cleaned_dic.pop(field_name)  # If frm field not def in model
-            inst = model.objects.create(**cleaned_dic)
-            inst.save()
-            """
             return HttpResponseRedirect(reverse_lazy("challenge_detail_view",
                                         kwargs={"pk": challenge.pk}))
     else:

@@ -406,3 +406,9 @@ INSTALLED_APPS += (
 'rest_framework',
 )
 ########## END RESTFRAMEWORK CONFIGURATION
+
+
+########## CELERY CONFIGURATION
+# https://github.com/celery/celery/tree/master/examples/django
+BROKER_URL = 'amqp://localhost:5672//'
+########## END CELERY CONFIGURATION

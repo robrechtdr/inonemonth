@@ -11,6 +11,14 @@ sudo apt-get install -y vim
 sudo apt-get install -y postgresql
 sudo apt-get install -y libpq-dev
 
+# Install the rabbitmq-server for celery
+sudo apt-get install -y rabbitmq-server
+sudo rabbitmqctl add_user myuser mypassword
+sudo rabbitmqctl add_vhost myvhost
+sudo rabbitmqctl set_permissions -p myvhost myuser ".*" ".*" ".*"
+# Necessary to fix host name?
+# http://docs.celeryproject.org/en/latest/getting-started/brokers/rabbitmq.html#configuring-the-system-host-name
+
 # Install development stuff (Python).
 sudo apt-get -y install python-pip 
 

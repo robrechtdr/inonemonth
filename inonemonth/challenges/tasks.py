@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from celery import shared_task
+from celery import Celery #shared_task
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -9,13 +9,13 @@ from core.allauth_utils import create_allauth_user, generate_password
 from core.models import UserExtension
 
 from .models import Role
-
+from inonemonth.celery import app
 
 User = get_user_model()
 
 
 # Celery tasks can't accept a request object
-@shared_task
+@app.task
 def invite_juror(email, challenge, url_base):
     # Email juror is of already registered user
     try:

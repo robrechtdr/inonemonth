@@ -2,7 +2,7 @@ Django==1.5.1
 ipython==1.1.0
 django-model-utils==1.4.0
 logutils==0.3.3
-psycopg2==2.5.1
+psycopg2==2.5.2
 South==0.8.1
 Fabric==1.8.0
 django-pagedown==0.0.5

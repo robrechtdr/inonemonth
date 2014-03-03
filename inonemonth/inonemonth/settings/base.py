@@ -410,5 +410,7 @@ INSTALLED_APPS += (
 
 ########## CELERY CONFIGURATION
 # https://github.com/celery/celery/tree/master/examples/django
+# http://docs.celeryproject.org/en/latest/configuration.html#example-configuration-file
 BROKER_URL = 'amqp://localhost:5672//'
+BROKER_POOL_LIMIT = 3
 ########## END CELERY CONFIGURATION

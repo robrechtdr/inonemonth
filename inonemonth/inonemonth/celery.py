@@ -6,9 +6,11 @@ from celery import Celery
 
 from django.conf import settings
 
-# set the default Django settings module for the 'celery' program.
-#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inonemonth.settings.local')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inonemonth.settings.base')
+from .settings.base import get_env_setting
+
+# The settings must be loaded into the worker! (also the correct db settings etc. in case your
+# tasks performs a db query)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', '{0}'.format(get_env_setting('DJANGO_SETTINGS_MODULE')))
 
 app = Celery('inonemonth')
 

@@ -4,3 +4,4 @@
 # Generate a Github app on https://github.com/settings/applications
 # The following value is not of an existing github app, but it should look like this:
 ALLAUTH_SOCIAL_APP_GITHUB_SECRET=els29bf5bc0c98e0fc7a9fjcc189f88b89016225
+DJANGO_SETTINGS_MODULE=inonemonth.settings.staging

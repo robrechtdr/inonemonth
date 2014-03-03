@@ -103,3 +103,9 @@ INSTALLED_APPS += (
 # See: http://django-allauth.readthedocs.org/en/latest/#github
 ALLAUTH_SOCIAL_APP_GITHUB_ID = "d620d1cebf6f5ed095b4"
 ########## END ALLAUTH CONFIGURATION
+
+
+########## CELERY CONFIGURATION
+# http://docs.celeryproject.org/en/latest/configuration.html#example-configuration-file
+BROKER_URL = get_env_setting("CLOUDAMQP_URL")
+########## END CELERY CONFIGURATION

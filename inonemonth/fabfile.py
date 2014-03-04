@@ -49,6 +49,10 @@ def setup_allauth_social(domain=LOCAL_DOMAIN, setting=LOCAL_SETTING):
                  setting=setting)
 
 
+def celery_worker():
+    local("celery -A inonemonth worker -l info")
+
+
 # Simply in the hope that this works with Lettuce
 def remake_fixtures():#domain, setting):
     """
@@ -140,13 +144,29 @@ def cov():
     local("coverage xml")
 
 
-def heroku_command(heroku_command="run bash", heroku_remote=DEFAULT_REMOTE):
+def heroku(heroku_command="run bash", heroku_remote=DEFAULT_REMOTE):
     local("cd ..; heroku {0} --remote {1}".format(heroku_command, heroku_remote))
 
 
+def stag_heroku(heroku_command="run bash"):
+    heroku(heroku_command=heroku_command, heroku_remote=STAGING_REMOTE)
+
+
+def prod_heroku(heroku_command="run bash"):
+    heroku(heroku_command=heroku_command, heroku_remote=PRODUCTION_REMOTE)
+
+
 def heroku_manage(django_command="shell", setting=STAGING_SETTING, heroku_remote=STAGING_REMOTE):
-    heroku_command(heroku_command="run python inonemonth/manage.py {0} --settings=inonemonth.settings.{1} --traceback".format(django_command, setting),
+    heroku(heroku_command="run python inonemonth/manage.py {0} --settings=inonemonth.settings.{1} --traceback".format(django_command, setting),
                    heroku_remote=heroku_remote)
+
+
+def stag_manage(django_command="shell"):
+    heroku_manage(django_command=django_command, setting=STAGING_SETTING, heroku_remote=STAGING_REMOTE)
+
+
+def prod_manage(django_command="shell"):
+    heroku_manage(django_command=django_command, setting=PRODUCTION_SETTING, heroku_remote=PRODUCTION_REMOTE)
 
 
 def setup_heroku_allauth_social(domain=STAGING_DOMAIN, setting=STAGING_SETTING, heroku_remote=STAGING_REMOTE):
@@ -165,7 +185,7 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
     E.g. setup_heroku_env:heroku_remote='staging'
     """
     # To enable 1 Procfile for staging and production
-    heroku_command(heroku_command="config:set DEPLOYMENT_ENV={0}".format(heroku_remote),
+    heroku(heroku_command="config:set DEPLOYMENT_ENV={0}".format(heroku_remote),
                    heroku_remote=heroku_remote)
 
     # Set env variables from heroku env file
@@ -192,7 +212,7 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
                 # Yay, recursion!
                 execute_heroku_env_file(base_file)
             else:
-                heroku_command(heroku_command="config:set {0}".format(line.strip()),
+                heroku(heroku_command="config:set {0}".format(line.strip()),
                                heroku_remote=heroku_remote)
 
                 # Call back implementation for easier testing of logic
@@ -200,7 +220,7 @@ def setup_heroku_env(env_file=STAGING_ENV_FILE, heroku_remote=STAGING_REMOTE):
                 #heroku_frozen_env_command(line) #
 
     #import functools
-    #part_her = functools.partial(heroku_command, **{"heroku_command": "config:set{0}".format(line.strip()),
+    #part_her = functools.partial(heroku, **{"heroku_command": "config:set{0}".format(line.strip()),
     #                                  "heroku_remote": heroku_remote})
     #execute_heroku_env_file(env_file, part_her)
     execute_heroku_env_file(env_file)
@@ -219,22 +239,34 @@ def setup_heroku_after_fresh_db(domain=STAGING_DOMAIN,
     setup_heroku_allauth_social(domain, setting, heroku_remote)
 '''
 
+def heroku_deploy(branch="master", heroku_remote=STAGING_REMOTE, env_file=STAGING_ENV_FILE):
+    # Must set env variables before doing syncdb
+    setup_heroku_env(env_file, heroku_remote)
+    # Forcing to push amends to heroku repo
+    local("git push {0} {1} --force".format(heroku_remote, branch))
+
+
+def stag_deploy(branch="master"):
+    heroku_deploy(branch=branch, heroku_remote=STAGING_REMOTE, env_file=STAGING_ENV_FILE)
+
+
+def prod_deploy(branch="master"):
+    heroku_deploy(branch=branch, heroku_remote=PRODUCTION_REMOTE, env_file=PRODUCTION_ENV_FILE)
+
 
 def heroku_new_db(heroku_app=STAGING_HEROKU_APP, branch="master",
                   domain=STAGING_DOMAIN, env_file=STAGING_ENV_FILE,
                   create_superuser=False, setting=STAGING_SETTING,
                   heroku_remote=STAGING_REMOTE):
-    local("git push {0} {1}".format(heroku_remote, branch))
+    heroku_deploy(branch, heroku_remote, env_file)
     # reset db
     try:
-        heroku_command(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
+        heroku(heroku_command="pg:reset DATABASE --confirm {0}".format(heroku_app),
                    heroku_remote=heroku_remote)
     except:
         # Create db
         # Does this happen autom?
         pass
-    # Must set env variables before doing syncdb
-    setup_heroku_env(env_file, heroku_remote)
     heroku_manage(django_command="syncdb --noinput",
                          setting=setting, heroku_remote=heroku_remote)
     if create_superuser:
@@ -266,24 +298,33 @@ def prod_new_db(branch="master", create_superuser=False):
                   heroku_remote=PRODUCTION_REMOTE)
 
 
-# Create remote env
-# heroku create --remote production
-# also implement delete
-
-def stag_initial_deploy(branch="master"):
+def heroku_initial_deploy(branch="master",
+                          heroku_app=STAGING_HEROKU_APP,
+                          heroku_remote=STAGING_REMOTE):
     # Creates a heroku app called "inonemonth" and creates a git remote tied to
     # that location
-    heroku_command(heroku_command="create {0}".format(STAGING_HEROKU_APP),
-                   heroku_remote=STAGING_REMOTE)
-    stag_new_db(branch=branch)
+    heroku(heroku_command="create {0}".format(heroku_app),
+                   heroku_remote=heroku_remote)
+    heroku(heroku_command="addons:add cloudamqp:lemur {0}".format(heroku_app),
+                   heroku_remote=heroku_remote)
+    if heroku_remote == STAGING_REMOTE:
+        stag_new_db(branch=branch)
+    elif heroku_remote == PRODUCTION_HEROKU_REMOTE:
+        prod_new_db(branch=branch)
+    else:
+        raise Exception("Else Die")
+
+
+def stag_initial_deploy(branch="master"):
+    heroku_initial_deploy(branch=branch,
+                          heroku_app=STAGING_HEROKU_APP,
+                          heroku_remote=STAGING_REMOTE)
 
 
 def prod_initial_deploy(branch="master"):
-    # Creates a heroku app called "inonemonth" and creates a git remote tied to
-    # that location
-    heroku_command(heroku_command="create {0}".format(PRODUCTION_HEROKU_APP),
-                   heroku_remote=PRODUCTION_REMOTE)
-    prod_new_db(branch=branch)
+    heroku_initial_deploy(branch=branch,
+                          heroku_app=PRODUCTION_HEROKU_APP,
+                          heroku_remote=PRODUCTION_HEROKU_REMOTE)
 
 
 '''

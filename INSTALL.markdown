@@ -14,7 +14,7 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   `git clone https://github.com/RobrechtDR/inonemonth.git`
 2. Go to the project dir:  
   `cd inonemonth`
-3. Set up vagrant for inonemonth, this takes about 12 mins 25 secs with a connection of 54 Mb/s:   
+3. Set up vagrant for inonemonth, this takes about 13 mins 45 secs with a connection of 54 Mb/s:   
   `vagrant up`
 4. Crawl into your vagrant box:  
    `vagrant ssh`  
@@ -80,7 +80,7 @@ If you are still in the `inonemonth_local` env, first run `deactivate`
 
 ## Deploy
 
-The following deploys the app to a staging environment on Heroku. It is assumed you 've just finished the last step of the *local setup*. This guide uses `my-staging-app` as Heroku app name.
+The following deploys the app to a staging environment on Heroku. It is assumed you've just finished the last step of the *local setup*. This guide uses `my-staging-app` as Heroku app name.
 
 **Requirements**   
 Have a [Heroku](https://id.heroku.com/signup) and an [Amazon S3 account](http://aws.amazon.com/s3/).
@@ -111,13 +111,16 @@ Have a [Heroku](https://id.heroku.com/signup) and an [Amazon S3 account](http://
 7. Create the `my-staging-app` heroku app and push code to heroku:   
   `fab stag_initial_deploy:branch=master`
 
-
-**Handy comamnds**
-
-* Make command for regular push
+For subsequent deploys use `fab stag_deploy`. Steps for production are similar, see `fabfile.py`.
 
 
+**Handy comammands**
 
-
-Similar for production. 
-
+* Reload environment variables and push to heroku:   
+  `fab stag_deploy`  
+* Do the same as the deploy command but rebuild the database from scratch:  
+  `fab stag_new_db`  
+* Run a heroku command:   
+  `fab stag_heroku:config`
+* Run a management command on heroku:   
+  `fab stag_manage:shell`

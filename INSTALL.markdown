@@ -18,7 +18,7 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   `vagrant up`
 4. Crawl into your vagrant box:  
    `vagrant ssh`  
-5. Go to the toplevel django dir of the project:   
+5. Go to the django dir that contains the `manage.py` file of the project:   
   `cd /vagrant/inonemonth`     
    It doesn't matter what you answer when prompted to source `.env` at this stage.
 6. Make a Github app for local developent on https://github.com/settings/applications:
@@ -30,17 +30,22 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   6. Copy the value of `Client ID` to the value of `ALLAUTH_SOCIAL_APP_GITHUB_ID` in `inonemonth/settings/local.py`.
 7. Create a [gmail address which can send automated mails](https://support.google.com/mail/answer/14257?hl=en):   
    Copy the email address and password to the values of `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` in `.env`. 
-8. Activate tmux to enable running multiple shells and conveniently switch between them:    
-   `tmux` 
-9. Load local environment variables:   
-   `source .env`
-10. Get into the local virtual environment:   
-   `workon inonemonth_local`
-11. Run the celery worker:   
-   `celery -A inonemonth worker -l info`
-12. Open a new tmux window:  
-   `tmux new-window`
-13. Repeat step *9* and *10* in the new window    
+8. Run the Celery worker in a seperate shell:    
+  1. Activate tmux to enable running multiple shells and switching between them:     
+    `tmux` 
+  2. Load local environment variables:   
+    `source .env`
+  3. Get into the local virtual environment:    
+    `workon inonemonth_local`
+  4. Get into a new tmux window:      
+    `tmux new-window`
+  5. Start the Celery worker in tmux window nr 0:    
+    `tmux send -t:0 "fab celery_worker" ENTER`
+
+  > To go back to tmux window 0 run `tmux select-window -t:0`.    
+  > You can also use [hotkeys](http://www.dayid.org/os/notes/tm.html) instead of typing tmux commands. 
+9. Prepare for running further manage commands by repeating steps *8.2* and *8.3* 
+
 
 **Running the server**  
 1. Run the local server on your guest machine as the db is already set up with syncdb and migrate:  
@@ -106,15 +111,22 @@ Have a [Heroku](https://id.heroku.com/signup) and an [Amazon S3 account](http://
 5. Login with heroku credentionals:   
   `heroku login`
 6. Add [ssh key to heroku](https://devcenter.heroku.com/articles/keys):   
- `heroku keys:add`  
-  If you don't already have a ssh public/private key pair yet, run `ssh-keygen -t rsa`
+ `heroku keys:add`   
+
+  > If you don't already have an ssh public/private key pair yet, run `ssh-keygen -t rsa`
 7. Create the `my-staging-app` heroku app and push code to heroku:   
   `fab stag_initial_deploy:branch=master`
+8. Spin up a heroku worker dyno for the Celery worker:    
+  `fab stag_heroku:'ps:scale worker\=1'`    
 
-For subsequent deploys use `fab stag_deploy`. Steps for production are similar, see `fabfile.py`.
+  > You will get billed for the time the worker dyno remains up!
+
+For subsequent deploys use `fab stag_deploy`. 
+
+Steps for production deployment are similar, see `fabfile.py`.
 
 
-**Handy comammands**
+**Handy commands**
 
 * Reload environment variables and push to heroku:   
   `fab stag_deploy`  

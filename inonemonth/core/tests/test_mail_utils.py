@@ -22,7 +22,7 @@ class EmailUtilsTestCase(django.test.TestCase):
 
     def test_build_absolute_url(self):
         url_base = build_url_base(self.request)
-        self.assertEqual(build_absolute_url(url_base, self.path), "http://testserver/challenge/1/invite-jurors/")
+        self.assertEqual(build_absolute_url(url_base, self.path), "http://testserver/challenges/1/invite-jurors/")
 
 
 class SendInvitationMailToJurorTestCase(django.test.TestCase):
@@ -38,7 +38,7 @@ class SendInvitationMailToJurorTestCase(django.test.TestCase):
                 'for the following challenge:\n\n'
                 'Gargantuan project challenge\n\n'
                 'Go to this challenge via '
-                'http://testserver/account/signin-juror/challenge/1/\n\n'
+                'http://testserver/accounts/signin-juror/challenges/1/\n\n'
                 'Login credentials:\n'
                 'Email: andy.slacker@gmail.com\n'
                 'Password: temp_password\n\n'
@@ -57,7 +57,7 @@ class SendInvitationMailToJurorTestCase(django.test.TestCase):
                 'for the following challenge:\n\n'
                 'Gargantuan project challenge\n\n'
                 'Go to this challenge via '
-                'http://testserver/account/signin-juror/challenge/1/\n\n')
+                'http://testserver/accounts/signin-juror/challenges/1/\n\n')
 
         send_invitation_mail_to_juror(juror=self.juror, url_base=self.url_base,
                                       juror_registered=True)

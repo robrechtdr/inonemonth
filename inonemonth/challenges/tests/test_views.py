@@ -56,7 +56,7 @@ class ChallengeDetailViewTestCase(django.test.TestCase):
     """
     def test_url_resolves_to_view(self):
         """
-        found = resolve("/challenge/1/detail/")
+        found = resolve("/challenges/1/detail/")
         #self.assertEqual(found.func, challenge_detail_view)
         self.assertEqual(found.func.func_name, ChallengeDetailView.as_view().func_name)
         """

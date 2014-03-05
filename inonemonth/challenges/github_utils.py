@@ -58,9 +58,9 @@ def get_commit_comparison_url(owner, repo, start_commit, end_commit):
 
 
 '''
-1. On challenge/create/ call get_branch_last_commit and save this to Branch.start_commit.
+1. On challenges/create/ call get_branch_last_commit and save this to Branch.start_commit.
 (in Challenge: branch = OneToOneField(Branch)).
 2. On challenge period end (using celery)(but also at the end of each day during challenge period so jurors can see progress),
  call get_branch_last_commit again and save to Branch.end_commit.
-3. Use get_github_comparison_url in challenge/detail/1/ view to generate comparison url to see current state of challenge.
+3. Use get_github_comparison_url in challenges/detail/1/ view to generate comparison url to see current state of challenge.
 '''

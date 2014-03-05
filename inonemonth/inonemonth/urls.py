@@ -12,30 +12,29 @@ from challenges.views import (challenge_create_view, invite_jurors_view,
                               challenge_detail_view, ChallengeRetrieveAPIView,
                               RoleRetrieveAPIView, challenge_detail_403_view)
 from comments.views import TailCommentDestroyAPIView
-#                            ListCreateAPIView,
-#                            CommentRetrieveUpdateDestroyAPIView)
+
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='home.html'), name="home_view"),
-    url(r'^carousel/$', TemplateView.as_view(template_name='carousel.html'), name="home_view"),
-    url(r'^basic/$', TemplateView.as_view(template_name='home2.html')),
-
     url(r'^glossary/$', TemplateView.as_view(template_name='glossary.html'), name="glossary"),
-    # How to customize url? Would need setting as LOGIN_URL for Allauth
-    url(r'^accounts/social/signup/$', BindEmailView.as_view(), name="socialaccount_signup"),#bind_email"),
+
+    # How to customize allauth based url? Would need to create a URL setting for Allauth
+    url(r'^accounts/social/signup/$', BindEmailView.as_view(), name="socialaccount_signup"),
     url(r'^accounts/confirm-email/$', TemplateView.as_view(template_name="verification_sent.html"), name="verification_sent"),
     url(r'^accounts/confirm-email/(?P<key>\w+)/$', ConfirmEmailView.as_view(), name="confirm_email"),
     url(r'^accounts/social/connections/$', connections, name="socialaccount_connections"),
     url(r'^accounts/logout/$', logout, name="account_logout"),
     url(r"^accounts/login/$", login, name="account_login"),
-    url(r'^account/signin-github/$', github_signin, name="github_signin"),
-    url(r'^account/signin-juror/challenge/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
+    # Can set with custom url:
+    url(r'^accounts/signin-github/$', github_signin, name="github_signin"),
+    url(r'^accounts/signin-juror/challenges/(?P<pk>\d+)/$', JurorChallengeSigninView.as_view() , name="juror_challenge_signin"),
+
     url(r'^accounts/', include('allauth.urls')),
 
-    url(r'^challenge/create/$', challenge_create_view, name="challenge_create_view"),
-    url(r'^challenge/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
-    url(r'^challenge/(?P<pk>\d+)/detail/$', challenge_detail_view, name="challenge_detail_view"),
-    url(r'^challenge/(?P<pk>\d+)/detail/403/$', challenge_detail_403_view, name="challenge_detail_403"),
+    url(r'^challenges/create/$', challenge_create_view, name="challenge_create_view"),
+    url(r'^challenges/(?P<pk>\d+)/invite-jurors/$', invite_jurors_view, name="challenge_invite_jurors_view"),
+    url(r'^challenges/(?P<pk>\d+)/detail/$', challenge_detail_view, name="challenge_detail_view"),
+    url(r'^challenges/(?P<pk>\d+)/detail/403/$', challenge_detail_403_view, name="challenge_detail_403"),
 
     url(r'^api/users/(?P<pk>[0-9]+)/$', UserRetrieveAPIView.as_view(), name="user_api_retrieve"),
     url(r'^api/challenges/(?P<pk>[0-9]+)/$', ChallengeRetrieveAPIView.as_view(), name="challenge_api_retrieve"),
@@ -58,22 +57,3 @@ from django.conf import settings
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ################################################################################
-
-########### Sandbox mini view start ################
-from django.http import HttpResponse
-from django.shortcuts import render
-
-def sandbox_mini(request):
-    from allauth.socialaccount.models import SocialLogin, SocialAccount
-    from django.contrib.auth import get_user_model
-
-    html = 'Heeey!'
-    import pdb; pdb.set_trace()
-    return HttpResponse(content=html)
-    #return render(request=request, template_name='my_template.html',
-    #  dictionary={"message": "Heeeey!"})
-
-urlpatterns += patterns('',
-    url(regex=r'sbvm/$', view=sandbox_mini, name="sandbox_mini"),
-)
-########### Sandbox mini view end ################

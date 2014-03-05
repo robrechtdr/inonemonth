@@ -391,7 +391,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # potentially placing him/her in an embarressing situation.
 SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory" #"none"
 
-LOGIN_URL = "/challenge/create/"
+LOGIN_URL = "/challenges/create/"
 LOGIN_REDIRECT_URL = LOGIN_URL
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL
 

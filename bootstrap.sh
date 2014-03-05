@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#VAGRANT_HOME = "/home/vagrant"
-
 sudo apt-get update
 
 sudo apt-get install -y git
@@ -27,7 +25,6 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install python-dev
 
 sudo pip install -U fabric
-
 sudo pip install -U ipython
 
 # Install the Heroku toolbelt.
@@ -40,14 +37,11 @@ sudo apt-get -y install curl
 
 git clone git://github.com/kennethreitz/autoenv.git ~/.autoenv
 
-# shld work (or use /home/vagrant)
 echo 'source ~/.autoenv/activate.sh' >> ~/.profile
 
 # install with wget
 curl -s https://raw.github.com/brainsik/virtualenv-burrito/master/virtualenv-burrito.sh | $SHELL
 
-# This should be appended to ~/.profile or ~/.bashrc
-# + /root/.venvburrito/startup.sh should be made executable 
 echo 'source ~/.venvburrito/startup.sh' >> ~/.profile
 
 source ~/.profile
@@ -106,8 +100,6 @@ mkvirtualenv inonemonth_local
 
 pip install -r requirements/local.txt 
 
-# Why doesn't port forwarding work?
-
 cd inonemonth 
 echo "y"
 
@@ -118,8 +110,5 @@ fab loc_new_db
 deactivate
 
 mkvirtualenv inonemonth_test
-pip install -r ../requirements/test.txt
-# I don't have permission in vagrant ssh to run mkvirtualenv though
 
-# when doing `vagrant ssh` you get
-# -bash: /home/vagrant/.autoenv/activate.sh: No such file or directory
+pip install -r ../requirements/test.txt

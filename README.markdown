@@ -16,7 +16,7 @@ The user who creates a challenge is called the [clencher](https://inonemonth.her
 who get invited are called [jurors](https://inonemonth.herokuapp.com/glossary/#juror).
 
 On the [challenge detail page](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/challenges_detail_challenge_period_clencher.png?token=2156349__eyJzY29wZSI6IlJhd0Jsb2I6Um9icmVjaHREUi9pbm9uZW1vbnRoL21hc3Rlci8ubWlzYy9jaGFsbGVuZ2VzX2RldGFpbF9jaGFsbGVuZ2VfcGVyaW9kX2NsZW5jaGVyLnBuZyIsImV4cGlyZXMiOjEzOTQ2Mzc0MDl9--0b0e0b189b73ea403cc0a2ec2828120a18d6b802) there is a link to a [Github compare](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/github_compare.png?token=2156349__eyJzY29wZSI6IlJhd0Jsb2I6Um9icmVjaHREUi9pbm9uZW1vbnRoL21hc3Rlci8ubWlzYy9naXRodWJfY29tcGFyZS5wbmciLCJleHBpcmVzIjoxMzk0NjMzMDA3fQ%3D%3D--96449f1bdcfcc75962dd666345fddd24fd603d2f) which shows all the changes made on the designated challenge 
-branch since the challenge started. After a period of one month jurors get one week to comment and cast their votes about the attempt. The clencher is able to see the identity of the jurors but the jurors identity remain anonymous for eachother.
+branch since the challenge started. After a period of one month jurors get one week to comment and cast their votes about the attempt. The clencher is able to see the identity of each juror but the jurors cannot see each other's identities.
 
 Currently this webapp is especially lacking features which stimulate 
 the learning experience from a failed attempt. However, [features are 

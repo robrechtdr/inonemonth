@@ -5,7 +5,7 @@ Inonemonth
 **What is it?**   
 A webapp that stimulates power users to set challenges for themselves by aiming to minimize the negative consequences of and maximize the learning experience from a failed attempt.
 
-Core concepts: [Git(hub) branch](http://git-scm.com/book/ch3-1.html), Github compare, SMART objective, minimizing risk, maximizing learning from mistakes, reducing influence of factors other than performance in voting behavior. 
+Core concepts: [Git(hub) branch](http://git-scm.com/book/ch3-1.html), [Github compare](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/github_compare.png?token=2156349__eyJzY29wZSI6IlJhd0Jsb2I6Um9icmVjaHREUi9pbm9uZW1vbnRoL21hc3Rlci8ubWlzYy9naXRodWJfY29tcGFyZS5wbmciLCJleHBpcmVzIjoxMzk0NjMzMDA3fQ%3D%3D--96449f1bdcfcc75962dd666345fddd24fd603d2f), [SMART objective](http://en.wikipedia.org/wiki/SMART_criteria#Developing_SMART_goals), minimizing risk, maximizing learning from mistakes, reducing influence of factors other than performance in voting behavior. 
 
 **How does it work?**  
 To start a challenge a user must [define one and indicate a branch of a project 
@@ -19,7 +19,7 @@ On the [challenge detail page](https://raw.github.com/RobrechtDR/inonemonth/mast
 branch since the challenge started. After a period of one month jurors get one week to comment and cast their votes about the attempt. The clencher is able to see the identity of each juror but the jurors cannot see each other's identities.
 
 Currently this webapp is especially lacking features which stimulate 
-the learning experience from a failed attempt. However, [a features is 
+the learning experience from a failed attempt. However, [a feature is 
 planned to improve that](https://github.com/RobrechtDR/inonemonth/blob/master/TODO.rst#likely-coming-in-future-releases).
 
 **Plans for releasing the code?**   

@@ -19,8 +19,8 @@ On the [challenge detail page](https://raw.github.com/RobrechtDR/inonemonth/mast
 branch since the challenge started. After a period of one month jurors get one week to comment and cast their votes about the attempt. The clencher is able to see the identity of each juror but the jurors cannot see each other's identities.
 
 Currently this webapp is especially lacking features which stimulate 
-the learning experience from a failed attempt. However, [features are 
-planned to improve that](Link to planned features).
+the learning experience from a failed attempt. However, [a features is 
+planned to improve that](https://github.com/RobrechtDR/inonemonth/blob/master/TODO.rst#likely-coming-in-future-releases).
 
 
 **Development stage**  

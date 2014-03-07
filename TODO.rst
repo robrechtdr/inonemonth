@@ -47,7 +47,7 @@ Likely coming in future releases
 * Implement other time periods for a challenge such as two days (weekend) and 
   two weeks. I'll have to rename the application when I choose to do this.
 
-* Implement a notification system for accounts so they get notification whenever a new 
+* Implement a notification system for accounts so they get notified whenever a new 
   comment is made on a challenge page they are the clencher or juror of.
 
 * Allow users full privacy control over their profile. By default, a user profile

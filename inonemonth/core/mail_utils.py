@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 
-from django.conf import settings
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
-from django.core.urlresolvers import reverse
 
 
-# There is no scheme attribute yet in Django 1.5
+# There is no scheme attribute of request yet in Django 1.5
 # https://github.com/django/django/blob
 # /4607c7325dca510428f8e67a97bd73d647ffb35f/django/http/request.py#L102-L114
 def build_url_base(request):
@@ -27,7 +26,9 @@ def send_invitation_mail_to_juror(juror, url_base, juror_registered=False):
     from_role = juror.challenge.get_clencher()
     from_email = from_role.user.email
     to_email = juror.user.email
-    link = build_absolute_url(url_base, reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
+    link = build_absolute_url(
+        url_base,
+        reverse("juror_challenge_signin", kwargs={"pk": juror.challenge.id}))
     context = {
         'sender': from_email,
         'challenge_title': from_role.challenge.title,
@@ -46,6 +47,9 @@ def send_invitation_mail_to_juror(juror, url_base, juror_registered=False):
     text_content = text.render(email_context)
     html_content = html.render(email_context)
 
-    mail = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    mail = EmailMultiAlternatives(subject,
+                                  text_content,
+                                  from_email,
+                                  [to_email])
     mail.attach_alternative(html_content, "text/html")
     mail.send()

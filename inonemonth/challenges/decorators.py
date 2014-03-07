@@ -1,5 +1,5 @@
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
-from django.core.urlresolvers import reverse, reverse_lazy
 
 
 def authenticated_user_has_github_account(user):
@@ -13,5 +13,6 @@ def authenticated_user_has_github_account(user):
     except AttributeError:
         return True
 
-auth_user_has_github_account = user_passes_test(authenticated_user_has_github_account,
-                                                         login_url=reverse_lazy("socialaccount_connections"))
+auth_user_has_github_account = user_passes_test(
+    authenticated_user_has_github_account,
+    login_url=reverse_lazy("socialaccount_connections"))

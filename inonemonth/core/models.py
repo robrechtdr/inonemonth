@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 
 User = get_user_model()
+
 
 # Not convienient to implement a custom user model
 # a.t.m. with allauth.

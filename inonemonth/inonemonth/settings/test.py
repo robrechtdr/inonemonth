@@ -13,7 +13,7 @@ from .local import ALLAUTH_SOCIAL_APP_GITHUB_ID
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
 #TEMPLATE_DEBUG = DEBUG
 ########## END DEBUG CONFIGURATION
-#ALLOWED_HOSTS = ['127.0.0.1']
+
 
 ########## IN-MEMORY TEST DATABASE CONFIGURATION
 # Time diff for 1 testcase, with PostgreSQL 9.4 secs, SQLite 0.5 secs.
@@ -28,14 +28,6 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/robrecht/src/my_projects/inonemonth/inonemonth/test.db',
-    }
-}
-'''
 ########## END IN-MEMORY TEST DATABASE CONFIGURATION
 
 

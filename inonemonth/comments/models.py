@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from django.db import models
+
 from challenges.models import Role
 from challenges.models import Challenge
 
@@ -20,11 +21,13 @@ class HeadComment(CommentBase):
     pass
 
     def __unicode__(self):
-        return "Head comment from {0} on {1}".format(self.owner, self.posted_on)
+        return "Head comment from {0} on {1}".format(self.owner,
+                                                     self.posted_on)
 
 
 class TailComment(CommentBase):
-    head = models.ForeignKey(HeadComment) # The head comment it belongs to
+    head = models.ForeignKey(HeadComment)  # The head comment it belongs to
 
     def __unicode__(self):
-        return "Tail comment from {0} on {1}".format(self.owner, self.posted_on)
+        return "Tail comment from {0} on {1}".format(self.owner,
+                                                     self.posted_on)

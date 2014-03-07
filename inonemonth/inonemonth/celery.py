@@ -3,14 +3,15 @@ from __future__ import absolute_import
 import os
 
 from celery import Celery
-
 from django.conf import settings
 
 from .settings.base import get_env_setting
 
-# The settings must be loaded into the worker! (also the correct db settings etc. in case your
+# The settings must be loaded into the worker!
+# (Has to use the correct db settings etc. in case your
 # tasks performs a db query)
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', '{0}'.format(get_env_setting('DJANGO_SETTINGS_MODULE')))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      '{0}'.format(get_env_setting('DJANGO_SETTINGS_MODULE')))
 
 app = Celery('inonemonth')
 

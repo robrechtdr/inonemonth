@@ -45,7 +45,8 @@ SECRET_KEY = get_env_setting('SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = 'inonemonth'
 
 # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
-STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/{0}/'.format(AWS_STORAGE_BUCKET_NAME)
+STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/{0}/'.format(
+    AWS_STORAGE_BUCKET_NAME)
 
 # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

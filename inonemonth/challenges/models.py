@@ -2,14 +2,12 @@ from __future__ import absolute_import
 
 import datetime
 
-from dateutil.relativedelta import relativedelta
-
 from django.conf import settings
-from django.utils.timezone import utc
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse
+from django.db import models
+from django.utils.timezone import utc
 
 from .github_utils import (get_main_branch_url, get_last_commit_on_branch,
                            get_commit_comparison_url)
@@ -19,9 +17,6 @@ User = get_user_model()
 
 
 class Challenge(models.Model):
-    """
-    """
-    # Use placeholder: one line description of what you want to achieve
     title = models.CharField(max_length=200)
     body = models.TextField()
     repo_name = models.CharField(max_length=200)
@@ -54,7 +49,8 @@ class Challenge(models.Model):
         # `filter` call with no results returns an empty list (vs `get`)
         # Also, the order_by id is probably default, but want to explicit that
         # ordering by id is important here (other model method relies on it).
-        jurors = self.role_set.filter(type=self.role_set.model.JUROR).order_by("id")
+        jurors = self.role_set.filter(
+            type=self.role_set.model.JUROR).order_by("id")
         if jurors:
             return jurors
         else:
@@ -73,7 +69,8 @@ class Challenge(models.Model):
         return (self.creation_datetime + settings.CHALLENGE_PERIOD_DURATION)
 
     def get_voting_period_end_datetime(self):
-        return (self.get_challenge_period_end_datetime() + settings.VOTING_PERIOD_DURATION)
+        return (self.get_challenge_period_end_datetime()
+                + settings.VOTING_PERIOD_DURATION)
 
     def in_challenge_period(self):
         now = datetime.datetime.utcnow().replace(tzinfo=utc)
@@ -84,7 +81,8 @@ class Challenge(models.Model):
 
     def in_voting_period(self):
         now = datetime.datetime.utcnow().replace(tzinfo=utc)
-        if self.get_challenge_period_end_datetime() < now < self.get_voting_period_end_datetime():
+        if (self.get_challenge_period_end_datetime() < now <
+                self.get_voting_period_end_datetime()):
             return True
         else:
             return False
@@ -129,7 +127,7 @@ class Challenge(models.Model):
             if self.has_majority_vote():
                 return True
             # When no jurors voted for a given challenge
-            elif self.has_majority_vote() == None:
+            elif self.has_majority_vote() is None:
                 return None
             else:
                 return False
@@ -143,8 +141,10 @@ class Challenge(models.Model):
         clencher = self.get_clencher()
         # Every clencher has a github socialaccount
         github_social_account = clencher.user.socialaccount_set.get(id=1)
-        github_login =  github_social_account.extra_data["login"]
-        return get_main_branch_url(github_login, self.repo_name, self.branch_name)
+        github_login = github_social_account.extra_data["login"]
+        return get_main_branch_url(github_login,
+                                   self.repo_name,
+                                   self.branch_name)
 
     # Later store latest github commit to branch to the end_commit
     # model field. Let this saving to field be done using celery, e.g.
@@ -153,19 +153,26 @@ class Challenge(models.Model):
     def get_commit_comparison_url(self):
         clencher = self.get_clencher()
         github_social_account = clencher.user.socialaccount_set.get(id=1)
-        github_login =  github_social_account.extra_data["login"]
-        last_commit = get_last_commit_on_branch(github_login, self.repo_name, self.branch_name)
+        github_login = github_social_account.extra_data["login"]
+        last_commit = get_last_commit_on_branch(github_login,
+                                                self.repo_name,
+                                                self.branch_name)
 
         start_commit = self.start_commit
-        return get_commit_comparison_url(github_login, self.repo_name, start_commit, last_commit)
+        return get_commit_comparison_url(github_login,
+                                         self.repo_name,
+                                         start_commit,
+                                         last_commit)
 
     # Note, each time get_last_commit_on_branch is called, makes a request,
     # change later on!
     def is_last_commit_different_from_start_commit(self):
         clencher = self.get_clencher()
         github_social_account = clencher.user.socialaccount_set.get(id=1)
-        github_login =  github_social_account.extra_data["login"]
-        last_commit = get_last_commit_on_branch(github_login, self.repo_name, self.branch_name)
+        github_login = github_social_account.extra_data["login"]
+        last_commit = get_last_commit_on_branch(github_login,
+                                                self.repo_name,
+                                                self.branch_name)
 
         if self.start_commit != last_commit:
             return True
@@ -187,7 +194,7 @@ class Role(models.Model):
     Role for a given challenge: Clencher or Juror.
     A role instance for a given challenge is attached to one user at maximum.
     """
-    CLENCHER = "clencher" # is more descriptive than a single capital in js
+    CLENCHER = "clencher"  # is more descriptive than a single capital in js
     JUROR = "juror"
     ROLE_CHOICES = ((CLENCHER, CLENCHER.capitalize()),
                     (JUROR, JUROR.capitalize()))
@@ -197,7 +204,9 @@ class Role(models.Model):
     challenge = models.ForeignKey(Challenge)
 
     def __unicode__(self):
-        return "{0} '{1}' of '{2}'".format(self.type.capitalize(), self.user, self.challenge)
+        return "{0} '{1}' of '{2}'".format(self.type.capitalize(),
+                                           self.user,
+                                           self.challenge)
 
     def get_absolute_url(self):
         return reverse("role_api_retrieve", kwargs={"pk": self.pk})
@@ -226,14 +235,17 @@ class Role(models.Model):
 
 class Vote(models.Model):
     """
-    Vote if challenge is deemed successful or not by a juror for a given challenge.
+    Vote if challenge is deemed successful or not
+    by a juror for a given challenge.
     """
     POSITIVE = "positive"
     NEGATIVE = "negative"
     DECISION_CHOICES = ((POSITIVE, POSITIVE), (NEGATIVE, NEGATIVE))
 
-    decision = models.CharField(max_length=10, choices=DECISION_CHOICES, default="")
-    juror = models.OneToOneField(Role) # only use for jurors!
+    decision = models.CharField(max_length=10,
+                                choices=DECISION_CHOICES,
+                                default="")
+    juror = models.OneToOneField(Role)  # only use for jurors!
 
     def __unicode__(self):
         return "{0} vote of {1}".format(self.decision, self.juror)

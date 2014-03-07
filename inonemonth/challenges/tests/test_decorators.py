@@ -1,4 +1,5 @@
-import unittest
+from __future__ import absolute_import
+
 import django.test
 
 from django.contrib.auth.models import AnonymousUser

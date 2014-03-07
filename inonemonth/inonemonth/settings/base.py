@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from os import environ
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
-from dateutil.relativedelta import relativedelta
 
+from dateutil.relativedelta import relativedelta
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
@@ -49,7 +49,7 @@ TEMPLATE_DEBUG = DEBUG
 ########## MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-('Robrecht', 'de.rouck.robrecht@gmail.com'),
+    ('Robrecht', 'de.rouck.robrecht@gmail.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -112,13 +112,13 @@ STATIC_URL = '/static/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = (
-normpath(join(SITE_ROOT, 'static')),
+    normpath(join(SITE_ROOT, 'static')),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
-'django.contrib.staticfiles.finders.FileSystemFinder',
-'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 ########## END STATIC FILE CONFIGURATION
 
@@ -140,7 +140,7 @@ ALLOWED_HOSTS = []
 ########## FIXTURE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
-normpath(join(SITE_ROOT, 'fixtures')),
+    normpath(join(SITE_ROOT, 'fixtures')),
 )
 ########## END FIXTURE CONFIGURATION
 
@@ -148,25 +148,25 @@ normpath(join(SITE_ROOT, 'fixtures')),
 ########## TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
 TEMPLATE_CONTEXT_PROCESSORS = (
-'django.contrib.auth.context_processors.auth',
-'django.core.context_processors.debug',
-'django.core.context_processors.i18n',
-'django.core.context_processors.media',
-'django.core.context_processors.static',
-'django.core.context_processors.tz',
-'django.contrib.messages.context_processors.messages',
-'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
 TEMPLATE_LOADERS = (
-'django.template.loaders.filesystem.Loader',
-'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
 TEMPLATE_DIRS = (
-normpath(join(SITE_ROOT, 'templates')),
+    normpath(join(SITE_ROOT, 'templates')),
 )
 ########## END TEMPLATE CONFIGURATION
 
@@ -174,13 +174,13 @@ normpath(join(SITE_ROOT, 'templates')),
 ########## MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
-# Default Django middleware.
-'django.middleware.common.CommonMiddleware',
-'django.contrib.sessions.middleware.SessionMiddleware',
-'django.middleware.csrf.CsrfViewMiddleware',
-'django.contrib.auth.middleware.AuthenticationMiddleware',
-'django.contrib.messages.middleware.MessageMiddleware',
-'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Default Django middleware.
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -193,27 +193,27 @@ ROOT_URLCONF = '%s.urls' % SITE_NAME
 
 ########## APP CONFIGURATION
 DJANGO_APPS = (
-# Default Django apps:
-'django.contrib.auth',
-'django.contrib.contenttypes',
-'django.contrib.sessions',
-'django.contrib.sites',
-'django.contrib.messages',
-'django.contrib.staticfiles',
+    # Default Django apps:
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 
-# Useful template tags:
-# 'django.contrib.humanize',
+    # Useful template tags:
+    # 'django.contrib.humanize',
 
-# Admin panel and documentation:
-'django.contrib.admin',
-# 'django.contrib.admindocs',
+    # Admin panel and documentation:
+    'django.contrib.admin',
+    # 'django.contrib.admindocs',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-'core',
-'challenges',
-'comments',
+    'core',
+    'challenges',
+    'comments',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -229,27 +229,27 @@ INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-'version': 1,
-'disable_existing_loggers': False,
-'filters': {
-    'require_debug_false': {
-        '()': 'django.utils.log.RequireDebugFalse'
-    }
-},
-'handlers': {
-    'mail_admins': {
-        'level': 'ERROR',
-        'filters': ['require_debug_false'],
-        'class': 'django.utils.log.AdminEmailHandler'
-    }
-},
-'loggers': {
-    'django.request': {
-        'handlers': ['mail_admins'],
-        'level': 'ERROR',
-        'propagate': True,
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
     },
-}
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
 }
 ########## END LOGGING CONFIGURATION
 
@@ -290,7 +290,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ########## AUTHENTICATION BACKENDS CONFIGURATION
 # See: https://docs.djangoproject.com/en/1.5/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
-'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 ########## END AUTHENTICATION BACKENDS CONFIGURATION
 
@@ -303,7 +303,7 @@ VOTING_PERIOD_DURATION = relativedelta(weeks=1)
 
 ########## CRISPY FORMS CONFIGURATION
 INSTALLED_APPS += (
-'crispy_forms',
+    'crispy_forms',
 )
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ########## END CRISPY FORMS CONFIGURATION
@@ -311,14 +311,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 ########## SOUTH CONFIGURATION
 INSTALLED_APPS += (
-'south',
+    'south',
 )
 ########## END SOUTH CONFIGURATION
 
 
 ########## PAGEDOWN CONFIGURATION
 INSTALLED_APPS += (
-'pagedown',
+    'pagedown',
 )
 ########## END PAGEDOWN CONFIGURATION
 
@@ -326,7 +326,7 @@ INSTALLED_APPS += (
 ########## MARKDOWN-DEUX CONFIGURATION
 # https://github.com/trentm/django-markdown-deux#django-project-setup
 INSTALLED_APPS += (
-'markdown_deux',
+    'markdown_deux',
 )
 ########## END MARKDOWN-DEUX CONFIGURATION
 
@@ -364,7 +364,7 @@ INSTALLED_APPS += (
 # See: http://stackoverflow.com/questions/19683179/remove-username-field-from-django-allauth
 # Specifies the login method to use -- whether the
 # user logs in by entering his username, e-mail address, or either one of both.
-ACCOUNT_AUTHENTICATION_METHOD = "email" #("email",)
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 # Allauth fails if this is not set to true and
 # ACCOUNT_AUTHENTICATION_METHOD is set to "email"
@@ -376,7 +376,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 ##### end
 
 # http://django-allauth.readthedocs.org/en/latest/#github
-ALLAUTH_SOCIAL_APP_GITHUB_SECRET = get_env_setting('ALLAUTH_SOCIAL_APP_GITHUB_SECRET')
+ALLAUTH_SOCIAL_APP_GITHUB_SECRET = get_env_setting(
+    'ALLAUTH_SOCIAL_APP_GITHUB_SECRET')
 
 # http://django-allauth.readthedocs.org/en/latest/#configuration
 # Since a user can only sign up via Github and only jurors
@@ -389,7 +390,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # Otherwise someone could create a challenge with someone
 # else's email address and send this out to employers,
 # potentially placing him/her in an embarressing situation.
-SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory" #"none"
+SOCIALACCOUNT_EMAIL_VERIFICATION = "mandatory"  #"none"
 
 LOGIN_URL = "/challenges/create/"
 LOGIN_REDIRECT_URL = LOGIN_URL
@@ -403,7 +404,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL
 
 ########## RESTFRAMEWORK CONFIGURATION
 INSTALLED_APPS += (
-'rest_framework',
+    'rest_framework',
 )
 ########## END RESTFRAMEWORK CONFIGURATION
 

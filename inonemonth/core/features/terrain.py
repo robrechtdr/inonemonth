@@ -1,16 +1,15 @@
 import time
 
+from django.core.management import call_command
+from fabric.api import local
 from lettuce import step, world, before, after
 from lettuce.django import django_url, mail
-#from nose.tools import assert_equals
 from splinter import Browser
-from fabric.api import local
-from django.core.management import call_command
+
 
 ####################
 # Setup and teardown
 ####################
-
 @before.all
 def setup():
     """
@@ -62,7 +61,6 @@ def teardown(total):
 ######################################################
 # Type T steps - These should only be used temporarily
 ######################################################
-
 @step(u'I debug')
 @step(u'I wait')
 def i_debug(step):
@@ -73,7 +71,6 @@ def i_debug(step):
 # Type A steps - These should be the only functions that directly use
 #   splinter's `Browser` in their body
 #####################################################################
-
 @step(u'I go to the URL "(.*)"')
 def i_go_to_the_url(step, url):
     # Wtf, fixtures are loaded, yet still when world.browser... line

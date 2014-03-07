@@ -1,4 +1,7 @@
+from __future__ import absolute_import
+
 import requests
+
 
 ###############################################################################
 #                            Github api utilities                             #
@@ -17,7 +20,7 @@ def get_api_repo_url(owner, repo):
 
 # http://developer.github.com/v3/repos/#list-user-repositories
 def get_api_repos_url(owner):
-    return "{0}/users/{1}/repos".format(API_ROOT_URL, owner, repo)
+    return "{0}/users/{1}/repos".format(API_ROOT_URL, owner)
 
 
 # http://developer.github.com/v3/repos/#list-branches
@@ -27,7 +30,10 @@ def get_api_repo_branches_url(owner, repo):
 
 # http://developer.github.com/v3/repos/#get-branch
 def get_api_repo_branch_url(owner, repo, branch):
-    return "{0}/repos/{1}/{2}/branches/{3}".format(API_ROOT_URL, owner, repo, branch)
+    return "{0}/repos/{1}/{2}/branches/{3}".format(API_ROOT_URL,
+                                                   owner,
+                                                   repo,
+                                                   branch)
 
 
 ###############################################################################
@@ -55,12 +61,3 @@ def get_commit_comparison_url(owner, repo, start_commit, end_commit):
     return "{0}/{1}/{2}/compare/{3}...{4}".format(SITE_ROOT_URL, owner,
                                                   repo, start_commit,
                                                   end_commit)
-
-
-'''
-1. On challenges/create/ call get_branch_last_commit and save this to Branch.start_commit.
-(in Challenge: branch = OneToOneField(Branch)).
-2. On challenge period end (using celery)(but also at the end of each day during challenge period so jurors can see progress),
- call get_branch_last_commit again and save to Branch.end_commit.
-3. Use get_github_comparison_url in challenges/detail/1/ view to generate comparison url to see current state of challenge.
-'''

@@ -3,14 +3,14 @@ from __future__ import absolute_import
 import allauth.socialaccount.views
 import allauth.account.views
 
-from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from rest_framework import generics
 
-from .serializers import UserSerializer
 from challenges.decorators import auth_user_has_github_account
+
+from .serializers import UserSerializer
 
 
 User = get_user_model()
@@ -25,7 +25,8 @@ class JurorChallengeSigninView(allauth.account.views.LoginView):
     template_name = "juror_challenge_signin.html"
 
     def get_success_url(self):
-        return reverse("challenge_detail_view", kwargs={"pk": self.kwargs["pk"]})
+        return reverse("challenge_detail_view",
+                       kwargs={"pk": self.kwargs["pk"]})
 
 
 class BindEmailView(allauth.socialaccount.views.SignupView):

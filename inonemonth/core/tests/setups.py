@@ -3,13 +3,10 @@ from __future__ import absolute_import
 import datetime
 import factory
 import factory.fuzzy
-import random
 
 from dateutil.relativedelta import relativedelta
-from hashlib import sha1
 
 from django.utils.timezone import utc
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
 
 from core.models import UserExtension
@@ -22,6 +19,7 @@ from allauth.socialaccount.models import SocialAccount
 
 User = get_user_model()
 
+
 class UserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = User
     email = factory.Sequence(lambda n: 'john.doe{0}@gmail.com'.format(n))
@@ -31,7 +29,7 @@ class UserFactory(factory.DjangoModelFactory):
     @factory.post_generation
     def set_email_address_object(self, create, extracted, **kwargs):
         EmailAddress.objects.create(user=self,
-                                    email= self.email)
+                                    email=self.email)
 
 
 class RobrechtUserFactory(UserFactory):
@@ -54,19 +52,26 @@ class SocialUserFactory(factory.DjangoModelFactory):
     FACTORY_FOR = SocialAccount
     user = factory.SubFactory(UserFactory)
     provider = u"github"
-    uid= u"1382556"
-    extra_data = {u'avatar_url': u'https://gravatar.com/avatar/a13f182fbfe06570501700a310b5cf45?d=https%3A%2F%2Fidenticons.github.com%2F14e49a04ed384e716fcd708995faa62b.png&r=x',
+    uid = u"1382556"
+    extra_data = {u'avatar_url': (u'https://gravatar.com/avatar/a13f182fbfe065'
+                                  '70501700a310b5cf45?d=https%3A%2F%2F'
+                                  'identicons.github.com%2F14e49a04ed3'
+                                  '84e716fcd708995faa62b.png&r=x'),
                   u'bio': None,
                   u'blog': None,
                   u'company': None,
                   u'created_at': u'2012-08-15T10:56:03Z',
                   u'email': u'robrecht.de.rouck at gmail dot com',
-                  u'events_url': u'https://api.github.com/users/RobrechtDR/events{/privacy}',
+                  u'events_url': (u'https://api.github.com/users/RobrechtDR'
+                                  '/events{/privacy}'),
                   u'followers': 0,
-                  u'followers_url': u'https://api.github.com/users/RobrechtDR/followers',
+                  u'followers_url': (u'https://api.github.com/users/RobrechtDR'
+                                     '/followers'),
                   u'following': 0,
-                  u'following_url': u'https://api.github.com/users/RobrechtDR/following{/other_user}',
-                  u'gists_url': u'https://api.github.com/users/RobrechtDR/gists{/gist_id}',
+                  u'following_url': (u'https://api.github.com/users/RobrechtDR'
+                                     '/following{/other_user}'),
+                  u'gists_url': (u'https://api.github.com/users/RobrechtDR'
+                                 '/gists{/gist_id}'),
                   u'gravatar_id': u'a13f182fbfe06570501700a310b5cf45',
                   u'hireable': False,
                   u'html_url': u'https://github.com/RobrechtDR',
@@ -74,18 +79,22 @@ class SocialUserFactory(factory.DjangoModelFactory):
                   u'location': u'Belgium',
                   u'login': u'RobrechtDR',
                   u'name': u'Robrecht De Rouck',
-                  u'organizations_url': u'https://api.github.com/users/RobrechtDR/orgs',
+                  u'organizations_url': (u'https://api.github.com/users'
+                                         '/RobrechtDR/orgs'),
                   u'public_gists': 1,
                   u'public_repos': 10,
-                  u'received_events_url': u'https://api.github.com/users/RobrechtDR/received_events',
-                  u'repos_url': u'https://api.github.com/users/RobrechtDR/repos',
+                  u'received_events_url': (u'https://api.github.com/users'
+                                           '/RobrechtDR/received_events'),
+                  u'repos_url': (u'https://api.github.com/users/RobrechtDR'
+                                 '/repos'),
                   u'site_admin': False,
-                  u'starred_url': u'https://api.github.com/users/RobrechtDR/starred{/owner}{/repo}',
-                  u'subscriptions_url': u'https://api.github.com/users/RobrechtDR/subscriptions',
+                  u'starred_url': (u'https://api.github.com/users/RobrechtDR'
+                                   '/starred{/owner}{/repo}'),
+                  u'subscriptions_url': (u'https://api.github.com/users'
+                                         '/RobrechtDR/subscriptions'),
                   u'type': u'User',
                   u'updated_at': u'2014-01-29T22:27:37Z',
                   u'url': u'https://api.github.com/users/RobrechtDR'}
-
 
     @classmethod
     def _create(cls, target_class, *args, **kwargs):
@@ -98,7 +107,7 @@ class SocialUserFactory(factory.DjangoModelFactory):
 
 class RobrechtSocialUserFactory(SocialUserFactory):
     user = factory.SubFactory(RobrechtUserFactory)
-    uid= u"2156349"
+    uid = u"2156349"
 
 
 class UserExtensionFactory(factory.DjangoModelFactory):
@@ -109,24 +118,29 @@ class UserExtensionFactory(factory.DjangoModelFactory):
 
 class ChallengeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Challenge
-    title = factory.Sequence(lambda n: "This is the title of the challenge{0}.".format(n))
-    body = factory.Sequence(lambda n: "This is the body of the challenge{0}.".format(n))
+    title = factory.Sequence(
+        lambda n: "This is the title of the challenge{0}.".format(n))
+    body = factory.Sequence(
+        lambda n: "This is the body of the challenge{0}.".format(n))
     repo_name = factory.Sequence(lambda n: "project{0}.".format(n))
     branch_name = factory.Sequence(lambda n: "branch{0}.".format(n))
-    start_commit = factory.Sequence(lambda n: "2f6c381f1a9b2bac57cc1650182498c2c8fe8bc{0}.".format(n))
-    end_commit = factory.Sequence(lambda n: "4k3k381f1a9b3bac57cc1650182498c2c8fe3b7{0}.".format(n))
-    # For some reason the following doesn't overwrite models.DateTimeField(auto_now_add=True)
-    #creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
+    start_commit = factory.Sequence(
+        lambda n: "2f6c381f1a9b2bac57cc1650182498c2c8fe8bc{0}.".format(n))
+    end_commit = factory.Sequence(
+        lambda n: "4k3k381f1a9b3bac57cc1650182498c2c8fe3b7{0}.".format(n))
+    # For some reason the following doesn't overwrite
+    # models.DateTimeField(auto_now_add=True)
+    #creation_datetime = datetime.datetime(
+    #    year=2014, month=2, day=4, hour=9, minute=15)
 
-    '''
     # Note that this forces a save, you can't use the build
     # method anymore on the factory because of this.
-    # Fix auto_now_add behavior
-    @factory.post_generation
-    def overwrite_creation_datetime(self, create, extracted, **kwargs):
-        self.creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
-        self.save()
-    '''
+    #@factory.post_generation
+    #def overwrite_creation_datetime(self, create, extracted, **kwargs):
+    #    self.creation_datetime = datetime.datetime(
+    #        year=2014, month=2, day=4, hour=9, minute=15)
+    #    self.save()
+
 
 class GargantuanRepoChallengeFactory(ChallengeFactory):
     repo_name = "gargantuan"
@@ -212,8 +226,8 @@ class GargantuanChallengeFactory(ChallengeFactory):
                            owner=juror_fred,
                            challenge=self,
                            head=head_juror_andy)
-
-        juror_jason = JurorRoleFactory(challenge=self, user=jason) # A juror that hasn't voted yet
+        # A juror that hasn't voted yet
+        juror_jason = JurorRoleFactory(challenge=self, user=jason)
 
 
 # Note:
@@ -227,7 +241,8 @@ class TimeFixedGargantuanChallengeFactory(GargantuanChallengeFactory):
 
     @factory.post_generation
     def overwrite_creation_datetime(self, create, extracted, **kwargs):
-        self.creation_datetime = datetime.datetime(year=2014, month=2, day=4, hour=9, minute=15)
+        self.creation_datetime = datetime.datetime(
+            year=2014, month=2, day=4, hour=9, minute=15)
         self.save()
 
 
@@ -251,4 +266,3 @@ class EndedGargantuanChallengeFactory(GargantuanChallengeFactory):
         now = datetime.datetime.utcnow().replace(tzinfo=utc)
         self.creation_datetime = now - relativedelta(months=2)
         self.save()
-

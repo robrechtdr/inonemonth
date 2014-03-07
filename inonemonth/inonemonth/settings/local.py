@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import
 
-from os.path import join, normpath
-
 from .base import *
 
 
@@ -29,8 +27,7 @@ CACHES = {
 
 
 ########## INONEMONTH CONFIGURATION
-#CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
-CHALLENGE_PERIOD_DURATION = relativedelta(months=0)
+CHALLENGE_PERIOD_DURATION = relativedelta(months=1)
 VOTING_PERIOD_DURATION = relativedelta(weeks=1)
 ########## END INONEMONTH CONFIGURATION
 

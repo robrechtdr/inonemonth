@@ -187,7 +187,9 @@ class RoleTestCase(django.test.TestCase):
         GargantuanChallengeFactory()
         challenge = Challenge.objects.get(id=1)
         juror = challenge.get_jurors()[0]
-        self.assertEqual(juror.is_juror(), True)
+        self.assertTrue(juror.is_juror())
+        clencher = challenge.get_clencher()
+        self.assertFalse(clencher.is_juror())
 
     def test_clencher_cant_make_head_comment(self):
         GargantuanChallengeFactory()

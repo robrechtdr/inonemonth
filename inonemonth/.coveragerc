@@ -1,5 +1,7 @@
 [run]
-omit = fabfile.py, manage.py, */settings/*, */wsgi.py, */urls.py
+#omit = fabfile.py, manage.py, */settings/*, */wsgi.py, */urls.py
 
 [report]
 exclude_lines= 100%
+omit = fabfile.py, manage.py, */settings/*, */wsgi.py, */urls.py, */tests/*
+

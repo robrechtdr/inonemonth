@@ -22,11 +22,8 @@ Currently this webapp is especially lacking features which stimulate
 the learning experience from a failed attempt. However, [a feature is 
 planned to improve that](https://github.com/RobrechtDR/inonemonth/blob/master/TODO.rst#likely-coming-in-future-releases).
 
-**Plans for releasing the code?**   
-Yes, I plan to make the code public at some point.
-
 **Development stage**  
-Private alpha
+Alpha
 
 
 Urls

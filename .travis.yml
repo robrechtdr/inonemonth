@@ -1,0 +1,8 @@
+language: python
+python: "2.7"
+before_install: 
+  - "sudo apt-get update"
+  - "sudo -u postgres createuser $USER --superuser"
+install: "pip install -r requirements/test.txt"
+before_script: "cp .script_templates/.env inonemonth/.env"
+script: "cd inonemonth; source .env; fab utest_all"

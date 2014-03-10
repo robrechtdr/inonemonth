@@ -3,6 +3,7 @@ Inonemonth
 > Fail wisely
 
 [![Build Status](https://travis-ci.org/RobrechtDR/inonemonth.png?branch=master)](https://travis-ci.org/RobrechtDR/inonemonth)
+[![Coverage Status](https://coveralls.io/repos/RobrechtDR/inonemonth/badge.png?branch=master)](https://coveralls.io/r/RobrechtDR/inonemonth?branch=master)
 
 **What is it?**   
 A webapp that stimulates power users to set challenges for themselves by aiming to minimize the negative consequences of and maximize the learning experience from a failed attempt.

@@ -17,10 +17,6 @@ Likely coming in future releases
 
 * Abstract the currently hideous vote-comment system into a reuseable app.
 
-* Implement hosted continuous integration via Travis.
-
-* Implement hosted code coverage via Coveralls.
-
 * Make a public API to create a challenge, get a list of challenges were the 
   user was a clencher, get a list of challenges were the user was a juror, ... .
 
@@ -55,3 +51,5 @@ Likely coming in future releases
 
 * Implement a message system so users can send eachother messages without them necessarily 
   knowing each other's email address.
+
+* Revamp design

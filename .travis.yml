@@ -7,4 +7,4 @@ before_script: "cp .script_templates/.env inonemonth/.env"
 script: "cd inonemonth; source .env; fab utest_all"
 after_success:
   - "cd inonemonth; fab cov"
-  - "cd inonemonth; coveralls"
+  - "coveralls"

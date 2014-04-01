@@ -14,7 +14,7 @@ Have [vagrant](http://www.vagrantup.com/downloads) and [virtualbox](https://www.
   `git clone https://github.com/RobrechtDR/inonemonth.git`
 2. Go to the project dir:  
   `cd inonemonth`
-3. Set up vagrant for inonemonth, this takes about 13 mins 45 secs with a connection of 17.1 Mb/s:   
+3. Set up vagrant for inonemonth, this takes about 15 mins and 30 secs with a [connection of 6.3 Mb/s](http://www.speedtest.net/) on a [Lenovo E531](http://www.ubuntu.com/certification/hardware/201304-13465/):   
   `vagrant up`
 4. Crawl into your vagrant box:  
    `vagrant ssh`  

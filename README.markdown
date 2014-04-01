@@ -79,10 +79,6 @@ Urls
   ![accounts_social_connections](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/accounts_social_connections.png)
 
 
-* `/accounts/logout/`
-
-  ![accounts_logout](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/accounts_logout.png)
-
 * `/glossary/`
 
   ![glossary](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/glossary.png)

@@ -244,7 +244,13 @@ def heroku_deploy(branch="master",
     # Must set env variables before doing syncdb
     setup_heroku_env(env_file, heroku_remote)
     # Forcing to push amends to heroku repo
-    local("git push {0} {1} --force".format(heroku_remote, branch))
+    if branch == "master":
+        local("git push {0} {1} --force".format(heroku_remote, branch))
+    # Heroku by default ignores pushes from non-master branches
+    # To enable pushing from non-master branch, needs different format
+    # https://devcenter.heroku.com/articles/git#deploying-code
+    else:
+        local("git push {0} {1}:master --force".format(heroku_remote, branch))
 
 
 def stag_deploy(branch="master"):

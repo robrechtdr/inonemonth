@@ -51,8 +51,6 @@ Urls
 
   ![accounts_confirm_email](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/accounts_confirm_email.png)
 
-  ![accounts_confirm_email2](https://raw.github.com/RobrechtDR/inonemonth/master/.misc/accounts_confirm_email2.png)
-
 
 * `/challenges/create/`
 

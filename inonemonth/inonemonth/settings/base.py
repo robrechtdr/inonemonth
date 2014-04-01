@@ -396,6 +396,9 @@ LOGIN_URL = "/challenges/create/"
 LOGIN_REDIRECT_URL = LOGIN_URL
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_URL
 
+# Skip the 'Please confirm if me@gmail.com is your email address' page.
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
 # Doesn't seem to work for Github:
 # https://github.com/pennersr/django-allauth/issues/369
 #SOCIALACCOUNT_QUERY_EMAIL = True

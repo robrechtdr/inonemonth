@@ -1,3 +1,11 @@
+> Steps have been taking to prevent further exploitation of the [Heartbleed bug](http://heartbleed.com):    
+> * Heroku has been [patched against the Heartbleed bug](http://heartbleed.com/).     
+> * Inonemonth's [SECRET_KEY](https://www.djangoproject.com/weblog/2014/apr/07/security-advisory-openssl-101g/) has been changed.     
+> * Inonemonth's [Database credentials have been rotated](https://status.heroku.com/incidents/606#update-1972).      
+> * An [SSL-endpoint update](https://status.heroku.com/incidents/606#update-1970) was not necessary or even possible since this is [only applicable to webapps that use a custom domain](https://devcenter.heroku.com/articles/ssl-endpoint).      
+> 
+> Users who have a Judge role or users with a Clencher role who have bound their account to a site password are advised to reset it on `/accounts/password/reset/` if those passwords were created before 10/04/2014, 12:30.     
+
 Inonemonth
 ==========
 > Fail wisely

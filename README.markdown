@@ -1,4 +1,4 @@
-> Steps have been taking to prevent further exploitation of the [Heartbleed bug](http://heartbleed.com):    
+> Steps have been taken to prevent further exploitation of the [Heartbleed bug](http://heartbleed.com):    
 > * Heroku has been [patched against the Heartbleed bug](https://status.heroku.com/incidents/606/).     
 > * Inonemonth's [SECRET_KEY](https://www.djangoproject.com/weblog/2014/apr/07/security-advisory-openssl-101g/) has been changed.     
 > * Inonemonth's [Database credentials have been rotated](https://status.heroku.com/incidents/606#update-1972).      
